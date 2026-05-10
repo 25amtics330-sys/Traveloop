@@ -80,9 +80,10 @@ class LoginPage extends StatelessWidget {
                         foregroundColor: AppColors.card,
                         minimumSize: Size(double.infinity, 0),
                         padding: EdgeInsets.symmetric(vertical: 15),
+                      
                       ),
                       onPressed: () {
-                        // Handle login logic here
+                          Navigator.pushNamed(context, '/home');
                       },
                       child: Text('Login'),
                     ),
