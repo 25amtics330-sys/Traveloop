@@ -3,8 +3,8 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Traveloop | Web App</title>
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+    <title>Traveloop | Premium App</title>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=Outfit:wght@500;700;800&display=swap" rel="stylesheet">
     <style>
         :root {
             --primary: #1A1A2E;
@@ -13,13 +13,19 @@
             --accent-light: #FFF0D9;
             --teal: #2EC4B6;
             --teal-light: #E0F7F5;
-            --bg: #F8F7F4;
+            --bg: #F5F7FA;
             --card: #FFFFFF;
             --text: #1A1A2E;
             --text-light: #7B7B9A;
             --border: #EAEAF0;
             --danger: #E05C5C;
             --danger-light: #FDECEA;
+            
+            /* Shadows for premium feel */
+            --shadow-sm: 0 4px 12px rgba(0,0,0,0.05);
+            --shadow-md: 0 12px 24px rgba(0,0,0,0.08);
+            --shadow-lg: 0 24px 48px rgba(0,0,0,0.12);
+            --shadow-accent: 0 12px 24px rgba(217, 139, 44, 0.25);
         }
 
         * {
@@ -35,17 +41,23 @@
             display: flex;
             align-items: center;
             justify-content: center;
+            overflow-x: hidden;
+        }
+        
+        /* Typography overrides */
+        h1, h2, h3, .nav-brand {
+            font-family: 'Outfit', sans-serif;
         }
 
         /* -------------------------------------
-           AUTH VIEW (Login & Register)
+           AUTH VIEW (Unchanged core, enhanced shadows)
         ------------------------------------- */
         .auth-container {
             width: 100%;
             max-width: 950px;
             background: var(--card);
             border-radius: 24px;
-            box-shadow: 0 20px 40px rgba(0, 0, 0, 0.3);
+            box-shadow: var(--shadow-lg);
             display: flex;
             overflow: hidden;
             min-height: 600px;
@@ -60,62 +72,66 @@
             display: flex;
             flex-direction: column;
             justify-content: center;
+            position: relative;
+            overflow: hidden;
         }
-
-        .brand-logo {
-            width: 60px;
-            height: 60px;
-            background: rgba(255, 255, 255, 0.2);
-            border-radius: 16px;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            font-size: 32px;
-            margin-bottom: 32px;
+        
+        .brand-panel::before {
+            content: "";
+            position: absolute;
+            top: 0; left: 0; right: 0; bottom: 0;
+            background-image: url('https://images.unsplash.com/photo-1469854523086-cc02fe5d8800?auto=format&fit=crop&w=800&q=80');
+            background-size: cover;
+            background-position: center;
+            opacity: 0.15;
+            z-index: 0;
         }
+        .brand-panel > * { position: relative; z-index: 1; }
 
-        .brand-panel h1 { font-size: 36px; font-weight: 800; margin-bottom: 12px; }
-        .brand-panel p { color: rgba(255, 255, 255, 0.85); font-size: 16px; line-height: 1.5; margin-bottom: 40px; }
+        .brand-logo { width: 60px; height: 60px; background: rgba(255, 255, 255, 0.2); backdrop-filter: blur(10px); border-radius: 16px; display: flex; align-items: center; justify-content: center; font-size: 32px; margin-bottom: 32px; }
+        .brand-panel h1 { font-size: 40px; font-weight: 800; margin-bottom: 12px; }
+        .brand-panel p { color: rgba(255, 255, 255, 0.9); font-size: 16px; line-height: 1.6; margin-bottom: 40px; }
         
         .feature { display: flex; align-items: center; margin-bottom: 16px; }
         .feature-icon { width: 36px; height: 36px; background: rgba(255, 255, 255, 0.15); border-radius: 10px; display: flex; align-items: center; justify-content: center; margin-right: 12px; font-size: 18px; }
-        .feature-text { color: rgba(255, 255, 255, 0.9); font-weight: 500; font-size: 14px; }
+        .feature-text { color: rgba(255, 255, 255, 0.95); font-weight: 500; font-size: 14px; }
 
         .form-panel { flex: 5; padding: 40px; display: flex; flex-direction: column; position: relative; }
-        .toggle-tabs { background: var(--bg); border-radius: 12px; padding: 4px; display: flex; margin-bottom: 30px; }
-        .tab { flex: 1; text-align: center; padding: 12px 0; border-radius: 10px; font-size: 14px; font-weight: 500; color: var(--text-light); cursor: pointer; transition: all 0.3s ease; }
-        .tab.active { background: white; color: var(--text); font-weight: 700; box-shadow: 0 2px 8px rgba(0, 0, 0, 0.06); }
+        .toggle-tabs { background: var(--bg); border-radius: 12px; padding: 6px; display: flex; margin-bottom: 30px; }
+        .tab { flex: 1; text-align: center; padding: 12px 0; border-radius: 10px; font-size: 14px; font-weight: 600; color: var(--text-light); cursor: pointer; transition: all 0.3s ease; }
+        .tab.active { background: white; color: var(--text); box-shadow: var(--shadow-sm); }
 
         .form-header { margin-bottom: 24px; }
-        .form-header h2 { font-size: 24px; color: var(--text); margin-bottom: 6px; }
-        .form-header p { font-size: 13px; color: var(--text-light); }
+        .form-header h2 { font-size: 28px; color: var(--text); margin-bottom: 6px; }
+        .form-header p { font-size: 14px; color: var(--text-light); }
 
         .auth-form { display: none; flex-direction: column; animation: fadeIn 0.4s ease forwards; }
         .auth-form.active { display: flex; }
 
         @keyframes fadeIn { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
 
-        .form-row { display: flex; gap: 12px; margin-bottom: 14px; }
-        .form-group { flex: 1; margin-bottom: 14px; }
+        .form-row { display: flex; gap: 16px; margin-bottom: 16px; }
+        .form-group { flex: 1; margin-bottom: 16px; }
         .form-row .form-group { margin-bottom: 0; }
 
-        label { display: block; font-size: 13px; font-weight: 500; color: var(--text-light); margin-bottom: 6px; }
-        input { width: 100%; padding: 12px 16px; background: var(--bg); border: 1px solid var(--border); border-radius: 12px; font-size: 14px; color: var(--text); outline: none; }
-        input:focus { border-color: var(--accent); }
+        label { display: block; font-size: 13px; font-weight: 600; color: var(--text-light); margin-bottom: 8px; text-transform: uppercase; letter-spacing: 0.5px; }
+        input { width: 100%; padding: 14px 16px; background: var(--bg); border: 1px solid transparent; border-radius: 12px; font-size: 15px; color: var(--text); outline: none; transition: all 0.2s; }
+        input:focus { background: white; border-color: var(--accent); box-shadow: 0 0 0 4px var(--accent-light); }
 
-        button.submit-btn { background: var(--accent); color: white; border: none; padding: 14px; border-radius: 12px; font-size: 15px; font-weight: 600; cursor: pointer; margin-top: 8px; transition: background 0.2s; }
-        button.submit-btn:hover { background: var(--accent-hover); }
-        button.submit-btn:disabled { background: #e0b686; cursor: not-allowed; }
+        button.submit-btn { background: var(--accent); color: white; border: none; padding: 16px; border-radius: 12px; font-size: 16px; font-weight: 700; cursor: pointer; margin-top: 12px; transition: all 0.2s; box-shadow: var(--shadow-accent); }
+        button.submit-btn:hover { background: var(--accent-hover); transform: translateY(-2px); box-shadow: 0 16px 30px rgba(217, 139, 44, 0.3); }
+        button.submit-btn:active { transform: translateY(0); }
+        button.submit-btn:disabled { background: #e0b686; cursor: not-allowed; box-shadow: none; transform: none; }
 
-        .switch-prompt { text-align: center; margin-top: 20px; font-size: 13px; color: var(--text-light); }
+        .switch-prompt { text-align: center; margin-top: 24px; font-size: 14px; color: var(--text-light); }
         .switch-prompt span { color: var(--accent); font-weight: 700; cursor: pointer; }
 
-        .status-msg { padding: 12px 14px; border-radius: 10px; font-size: 13px; margin-bottom: 16px; display: none; align-items: center; }
+        .status-msg { padding: 14px; border-radius: 12px; font-size: 14px; font-weight: 500; margin-bottom: 16px; display: none; align-items: center; }
         .status-msg.error { background: var(--danger-light); color: var(--danger); display: flex; }
         .status-msg.success { background: var(--teal-light); color: var(--teal); display: flex; }
 
         /* -------------------------------------
-           HOME VIEW (Dashboard)
+           HOME VIEW (Premium Dashboard)
         ------------------------------------- */
         .home-view {
             display: none;
@@ -133,173 +149,297 @@
 
         /* Navbar */
         .navbar {
-            background: var(--primary);
-            padding: 16px 24px;
+            background: rgba(255, 255, 255, 0.9);
+            backdrop-filter: blur(12px);
+            padding: 16px 32px;
             display: flex;
             justify-content: space-between;
             align-items: center;
-            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
             position: sticky;
             top: 0;
             z-index: 100;
+            border-bottom: 1px solid var(--border);
         }
 
         .nav-left { display: flex; align-items: center; gap: 16px; }
-        .nav-logo { color: var(--card); font-size: 20px; font-weight: 600; }
-        .nav-right { display: flex; align-items: center; gap: 16px; }
-        .nav-brand { color: var(--accent-light); font-size: 22px; font-weight: 700; }
-        .nav-avatar { width: 40px; height: 40px; border-radius: 50%; background: var(--accent); color: white; display: flex; align-items: center; justify-content: center; font-weight: 700; cursor: pointer; border: 2px solid var(--accent-light); }
+        .nav-logo { color: var(--text-light); font-size: 18px; font-weight: 600; cursor: pointer; }
+        .nav-logo:hover { color: var(--text); }
+        .nav-right { display: flex; align-items: center; gap: 24px; }
+        .nav-brand { color: var(--accent); font-size: 24px; font-weight: 800; letter-spacing: -0.5px; }
+        .nav-avatar { width: 44px; height: 44px; border-radius: 50%; background: linear-gradient(135deg, var(--accent), #B06A1C); color: white; display: flex; align-items: center; justify-content: center; font-weight: 700; font-size: 18px; cursor: pointer; box-shadow: var(--shadow-sm); transition: transform 0.2s; }
+        .nav-avatar:hover { transform: scale(1.05); }
 
         /* Main Content Container */
         .home-content {
-            max-width: 1000px;
+            max-width: 1100px;
             margin: 0 auto;
-            padding: 30px 24px;
+            padding: 40px 24px;
             width: 100%;
         }
 
         /* Welcome Section */
-        .welcome-sub { color: var(--text-light); font-size: 16px; margin-bottom: 8px; }
-        .welcome-title { color: var(--text); font-size: 32px; font-weight: 800; margin-bottom: 24px; }
-
-        /* Featured Banner */
-        .featured-banner {
-            background: var(--accent);
-            border-radius: 24px;
-            padding: 30px;
-            color: white;
-            display: flex;
-            flex-direction: column;
-            justify-content: space-between;
-            height: 200px;
-            margin-bottom: 30px;
-            box-shadow: 0 10px 20px rgba(217, 139, 44, 0.2);
-            position: relative;
-            overflow: hidden;
-        }
-        
-        .featured-banner::after {
-            content: "🌴";
-            position: absolute;
-            right: 20px;
-            bottom: -20px;
-            font-size: 150px;
-            opacity: 0.2;
-            pointer-events: none;
-        }
-
-        .featured-label { color: var(--accent-light); font-size: 14px; font-weight: 600; letter-spacing: 1px; text-transform: uppercase; }
-        .featured-content h3 { font-size: 32px; font-weight: 800; margin-bottom: 16px; }
-        .btn-view { background: var(--primary); color: white; border: none; padding: 12px 24px; border-radius: 12px; font-size: 14px; font-weight: 600; cursor: pointer; display: inline-block; }
+        .welcome-sub { color: var(--text-light); font-size: 16px; margin-bottom: 8px; font-weight: 500; }
+        .welcome-title { color: var(--text); font-size: 36px; font-weight: 800; margin-bottom: 32px; line-height: 1.2; }
 
         /* Search Bar */
         .search-bar {
             display: flex;
-            gap: 12px;
-            margin-bottom: 32px;
+            gap: 16px;
+            margin-bottom: 40px;
         }
 
         .search-input-wrap {
             flex: 1;
             background: white;
-            border-radius: 16px;
-            padding: 0 16px;
+            border-radius: 20px;
+            padding: 0 20px;
             display: flex;
             align-items: center;
-            border: 1px solid var(--border);
-            transition: all 0.2s;
+            box-shadow: var(--shadow-sm);
+            transition: all 0.3s;
         }
         
         .search-input-wrap:focus-within {
-            border-color: var(--accent);
-            box-shadow: 0 0 0 4px rgba(217, 139, 44, 0.1);
+            box-shadow: 0 0 0 4px var(--accent-light), var(--shadow-md);
+            transform: translateY(-2px);
         }
 
-        .search-input-wrap span { font-size: 20px; color: var(--text-light); margin-right: 12px; }
-        .search-input-wrap input { border: none; padding: 16px 0; background: transparent; font-size: 16px; }
-        .search-input-wrap input:focus { border-color: transparent; }
+        .search-input-wrap span { font-size: 20px; color: var(--text-light); margin-right: 16px; }
+        .search-input-wrap input { border: none; padding: 20px 0; background: transparent; font-size: 16px; width: 100%; font-weight: 500;}
+        .search-input-wrap input:focus { outline: none; }
 
-        .filter-btn { background: white; border: 1px solid var(--border); border-radius: 16px; padding: 0 24px; color: var(--text); font-weight: 600; cursor: pointer; transition: all 0.2s; }
-        .filter-btn:hover { border-color: var(--text-light); }
+        .filter-btn { background: white; border: none; border-radius: 20px; padding: 0 28px; color: var(--text); font-weight: 700; font-size: 15px; cursor: pointer; box-shadow: var(--shadow-sm); transition: all 0.2s; }
+        .filter-btn:hover { background: var(--bg); transform: translateY(-2px); box-shadow: var(--shadow-md); }
 
-        /* Sections */
-        .section-title { font-size: 20px; font-weight: 700; color: var(--text); margin-bottom: 16px; }
-
-        /* Horizontal Scroll Lists */
-        .horizontal-list { display: flex; gap: 16px; overflow-x: auto; padding-bottom: 16px; margin-bottom: 16px; scrollbar-width: none; }
-        .horizontal-list::-webkit-scrollbar { display: none; }
-
-        /* Selection Card */
-        .selection-card {
-            min-width: 170px;
-            background: white;
-            border-radius: 20px;
-            border: 1px solid var(--border);
-            padding: 16px;
+        /* Featured Banner */
+        .featured-banner {
+            background-image: linear-gradient(to right, rgba(26, 26, 46, 0.8), rgba(26, 26, 46, 0.2)), url('https://images.unsplash.com/photo-1537996194471-e657df975ab4?auto=format&fit=crop&w=1200&q=80');
+            background-size: cover;
+            background-position: center;
+            border-radius: 28px;
+            padding: 40px;
+            color: white;
             display: flex;
             flex-direction: column;
-            box-shadow: 0 4px 12px rgba(26, 26, 46, 0.04);
-            cursor: pointer;
-            transition: transform 0.2s;
+            justify-content: space-between;
+            height: 280px;
+            margin-bottom: 40px;
+            box-shadow: var(--shadow-md);
+            position: relative;
+            overflow: hidden;
+            transition: transform 0.3s, box-shadow 0.3s;
         }
         
-        .selection-card:hover { transform: translateY(-4px); }
+        .featured-banner:hover {
+            transform: translateY(-5px);
+            box-shadow: var(--shadow-lg);
+        }
 
-        .sel-icon { width: 64px; height: 64px; background: var(--teal-light); border-radius: 18px; display: flex; align-items: center; justify-content: center; font-size: 28px; margin-bottom: 24px; }
-        .sel-title { font-size: 16px; font-weight: 700; color: var(--text); margin-bottom: 4px; }
-        .sel-sub { font-size: 13px; color: var(--text-light); }
+        .featured-label { background: rgba(255,255,255,0.2); backdrop-filter: blur(10px); padding: 8px 16px; border-radius: 20px; font-size: 13px; font-weight: 700; letter-spacing: 1px; text-transform: uppercase; align-self: flex-start; }
+        .featured-content h3 { font-size: 40px; font-weight: 800; margin-bottom: 8px; text-shadow: 0 2px 10px rgba(0,0,0,0.3); }
+        .featured-content p { font-size: 16px; font-weight: 500; opacity: 0.9; margin-bottom: 24px; text-shadow: 0 2px 10px rgba(0,0,0,0.3); }
+        .btn-view { background: var(--accent); color: white; border: none; padding: 14px 28px; border-radius: 16px; font-size: 15px; font-weight: 700; cursor: pointer; display: inline-block; transition: all 0.2s; box-shadow: var(--shadow-accent); }
+        .btn-view:hover { background: var(--accent-hover); transform: translateY(-2px); }
 
-        /* Trip Card */
-        .trip-card {
-            min-width: 280px;
+        /* Sections */
+        .section-title { font-family: 'Outfit', sans-serif; font-size: 24px; font-weight: 800; color: var(--text); margin-bottom: 20px; display: flex; justify-content: space-between; align-items: center; }
+        .section-title span { font-family: 'Inter', sans-serif; font-size: 14px; color: var(--accent); font-weight: 600; cursor: pointer; }
+
+        /* Horizontal Scroll Lists */
+        .horizontal-list { display: flex; gap: 20px; overflow-x: auto; padding-bottom: 24px; margin-bottom: 24px; scrollbar-width: none; scroll-snap-type: x mandatory; }
+        .horizontal-list::-webkit-scrollbar { display: none; }
+        
+        .horizontal-list > * { scroll-snap-align: start; }
+
+        /* Image Card (General for places) */
+        .image-card {
+            min-width: 240px;
+            width: 240px;
+            height: 300px;
+            border-radius: 24px;
+            overflow: hidden;
+            position: relative;
+            cursor: pointer;
+            box-shadow: var(--shadow-sm);
+            transition: all 0.3s cubic-bezier(0.25, 0.8, 0.25, 1);
+        }
+        
+        .image-card:hover {
+            transform: translateY(-8px);
+            box-shadow: var(--shadow-lg);
+        }
+
+        .image-card img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            transition: transform 0.5s ease;
+        }
+        
+        .image-card:hover img {
+            transform: scale(1.05);
+        }
+
+        .card-overlay {
+            position: absolute;
+            bottom: 0; left: 0; right: 0;
+            background: linear-gradient(to top, rgba(0,0,0,0.8) 0%, transparent 100%);
+            padding: 30px 20px 20px;
+            color: white;
+            display: flex;
+            flex-direction: column;
+            justify-content: flex-end;
+        }
+
+        .card-title { font-family: 'Outfit', sans-serif; font-size: 20px; font-weight: 800; margin-bottom: 4px; }
+        .card-sub { font-size: 13px; font-weight: 500; opacity: 0.9; display: flex; align-items: center; gap: 4px; }
+        .card-rating { position: absolute; top: 16px; right: 16px; background: rgba(255,255,255,0.9); backdrop-filter: blur(4px); color: var(--text); padding: 6px 10px; border-radius: 12px; font-size: 12px; font-weight: 700; display: flex; align-items: center; gap: 4px; }
+
+        /* Wide Card (For Previous Trips) */
+        .wide-card {
+            min-width: 320px;
+            width: 320px;
             background: white;
-            border-radius: 20px;
-            border: 1px solid var(--border);
+            border-radius: 24px;
             padding: 16px;
             display: flex;
             flex-direction: column;
+            box-shadow: var(--shadow-sm);
+            transition: all 0.3s;
+            cursor: pointer;
+        }
+        
+        .wide-card:hover {
+            transform: translateY(-6px);
+            box-shadow: var(--shadow-md);
         }
 
-        .trip-img { height: 120px; background: var(--teal-light); border-radius: 16px; display: flex; align-items: center; justify-content: center; font-size: 40px; margin-bottom: 16px; }
-        .trip-title { font-size: 18px; font-weight: 700; color: var(--text); margin-bottom: 8px; }
-        .trip-sub { font-size: 14px; color: var(--text-light); margin-bottom: 20px; }
-        .trip-btn { align-self: flex-start; background: var(--accent-light); color: var(--primary); font-weight: 700; padding: 8px 20px; border-radius: 12px; font-size: 13px; display: inline-block; cursor: pointer; }
+        .wide-card-img { height: 160px; border-radius: 16px; overflow: hidden; margin-bottom: 16px; position: relative; }
+        .wide-card-img img { width: 100%; height: 100%; object-fit: cover; }
+        .wide-card-title { font-family: 'Outfit', sans-serif; font-size: 18px; font-weight: 800; color: var(--text); margin-bottom: 6px; }
+        .wide-card-sub { font-size: 14px; color: var(--text-light); font-weight: 500; margin-bottom: 16px; display: flex; align-items: center; justify-content: space-between;}
+        
+        /* Plan Trip Banner (Replaces standard FAB) */
+        .plan-trip-banner {
+            background: linear-gradient(135deg, var(--primary) 0%, #2A2A4A 100%);
+            border-radius: 28px;
+            padding: 40px;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            color: white;
+            margin-top: 20px;
+            margin-bottom: 60px;
+            box-shadow: var(--shadow-lg);
+            position: relative;
+            overflow: hidden;
+        }
+        
+        .plan-trip-banner::after {
+            content: "🗺️";
+            position: absolute;
+            right: 40px;
+            top: 50%;
+            transform: translateY(-50%);
+            font-size: 120px;
+            opacity: 0.1;
+            pointer-events: none;
+        }
 
-        /* Plan Trip Button */
-        .fab-container { display: flex; justify-content: flex-end; margin-top: 20px; margin-bottom: 40px; }
-        .fab-btn { background: var(--accent); color: white; border: none; padding: 16px 32px; border-radius: 20px; font-size: 16px; font-weight: 700; cursor: pointer; box-shadow: 0 8px 16px rgba(217, 139, 44, 0.3); transition: transform 0.2s; }
-        .fab-btn:hover { transform: translateY(-2px); }
+        .plan-text h2 { font-size: 32px; font-weight: 800; margin-bottom: 8px; }
+        .plan-text p { font-size: 16px; color: rgba(255,255,255,0.8); font-weight: 500; }
+        .plan-btn { background: var(--accent); color: white; border: none; padding: 18px 36px; border-radius: 20px; font-size: 16px; font-weight: 800; cursor: pointer; box-shadow: var(--shadow-accent); transition: all 0.2s; z-index: 1; }
+        .plan-btn:hover { transform: translateY(-3px) scale(1.02); background: var(--accent-hover); box-shadow: 0 20px 40px rgba(217, 139, 44, 0.4); }
 
         /* Profile Menu (Dropdown) */
         .profile-menu {
             position: absolute;
-            top: 70px;
-            right: 24px;
+            top: 80px;
+            right: 32px;
             background: white;
-            border-radius: 16px;
-            box-shadow: 0 10px 25px rgba(0,0,0,0.1);
-            padding: 20px;
-            min-width: 250px;
+            border-radius: 20px;
+            box-shadow: var(--shadow-lg);
+            padding: 24px;
+            min-width: 260px;
             display: none;
             flex-direction: column;
             z-index: 200;
+            border: 1px solid var(--border);
         }
         
-        .profile-menu.active { display: flex; }
-        .prof-menu-name { font-weight: 700; font-size: 16px; color: var(--text); margin-bottom: 4px; }
-        .prof-menu-email { font-size: 13px; color: var(--text-light); margin-bottom: 16px; padding-bottom: 16px; border-bottom: 1px solid var(--border); }
-        .prof-menu-btn { background: none; border: none; text-align: left; padding: 10px 0; font-size: 14px; font-weight: 600; color: var(--danger); cursor: pointer; }
+        .profile-menu.active { display: flex; animation: slideDown 0.2s ease forwards; }
+        @keyframes slideDown { from { opacity:0; transform:translateY(-10px); } to { opacity:1; transform:translateY(0); } }
+
+        .prof-menu-name { font-family: 'Outfit', sans-serif; font-weight: 800; font-size: 18px; color: var(--text); margin-bottom: 4px; }
+        .prof-menu-email { font-size: 14px; color: var(--text-light); font-weight: 500; margin-bottom: 20px; padding-bottom: 20px; border-bottom: 1px solid var(--border); }
+        .prof-menu-btn { background: var(--danger-light); border: none; border-radius: 12px; text-align: center; padding: 12px 0; font-size: 15px; font-weight: 700; color: var(--danger); cursor: pointer; transition: background 0.2s;}
+        .prof-menu-btn:hover { background: #fadad8; }
+
+        /* Modal Overlay */
+        .modal-overlay {
+            position: fixed; top: 0; left: 0; right: 0; bottom: 0;
+            background: rgba(0,0,0,0.6);
+            backdrop-filter: blur(8px);
+            z-index: 1000;
+            display: none;
+            align-items: center;
+            justify-content: center;
+            padding: 20px;
+            opacity: 0;
+            transition: opacity 0.3s ease;
+        }
+        
+        .modal-overlay.active { display: flex; opacity: 1; }
+
+        .modal-card {
+            background: white;
+            width: 100%;
+            max-width: 600px;
+            border-radius: 32px;
+            overflow: hidden;
+            box-shadow: 0 40px 80px rgba(0,0,0,0.3);
+            transform: translateY(40px);
+            transition: transform 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+            display: flex;
+            flex-direction: column;
+            max-height: 90vh;
+        }
+        
+        .modal-overlay.active .modal-card { transform: translateY(0); }
+
+        .modal-header { height: 300px; position: relative; }
+        .modal-header img { width: 100%; height: 100%; object-fit: cover; }
+        .modal-close { position: absolute; top: 20px; right: 20px; width: 40px; height: 40px; background: rgba(0,0,0,0.5); backdrop-filter: blur(4px); color: white; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 24px; cursor: pointer; border: none; transition: background 0.2s; }
+        .modal-close:hover { background: rgba(0,0,0,0.8); }
+        
+        .modal-body { padding: 32px; overflow-y: auto; }
+        .modal-title { font-family: 'Outfit', sans-serif; font-size: 32px; font-weight: 800; margin-bottom: 8px; color: var(--text); }
+        .modal-location { font-size: 16px; color: var(--text-light); font-weight: 600; margin-bottom: 24px; display: flex; align-items: center; gap: 6px; }
+        
+        .modal-stats { display: flex; gap: 24px; margin-bottom: 24px; padding-bottom: 24px; border-bottom: 1px solid var(--border); }
+        .stat-item { display: flex; flex-direction: column; }
+        .stat-val { font-size: 20px; font-weight: 800; color: var(--text); display: flex; align-items: center; gap: 4px;}
+        .stat-label { font-size: 13px; color: var(--text-light); font-weight: 500; margin-top: 4px; }
+        
+        .modal-desc { font-size: 16px; line-height: 1.7; color: var(--text); margin-bottom: 32px; }
+        
+        .modal-action { background: var(--accent); color: white; border: none; padding: 18px; border-radius: 20px; font-size: 16px; font-weight: 800; cursor: pointer; width: 100%; box-shadow: var(--shadow-accent); transition: all 0.2s; }
+        .modal-action:hover { background: var(--accent-hover); transform: translateY(-2px); }
 
         /* Responsive */
         @media (max-width: 768px) {
             .auth-container { flex-direction: column; min-height: auto; }
-            .brand-panel { padding: 30px; }
+            .brand-panel { padding: 40px 30px; }
             .brand-panel p, .feature { display: none; }
             .brand-logo { margin-bottom: 16px; }
             .form-row { flex-direction: column; gap: 0; }
             
-            .search-bar { flex-wrap: wrap; }
-            .filter-btn { padding: 16px; flex: 1; }
+            .home-content { padding: 24px 20px; }
+            .search-bar { flex-direction: column; }
+            .filter-btn { padding: 16px; }
+            .featured-banner { height: 350px; }
+            .plan-trip-banner { flex-direction: column; text-align: center; gap: 24px; }
+            .plan-trip-banner::after { display: none; }
         }
     </style>
 </head>
@@ -307,11 +447,10 @@
 
     <!-- AUTHENTICATION VIEW -->
     <div class="auth-container" id="auth-view">
-        <!-- Left Brand Panel -->
         <div class="brand-panel">
             <div class="brand-logo">🌍</div>
             <h1>Traveloop</h1>
-            <p>Plan trips together.<br>Explore the world with friends.</p>
+            <p>Plan trips together.<br>Explore the world with friends in a premium experience.</p>
             
             <div class="feature">
                 <div class="feature-icon">👥</div>
@@ -322,12 +461,11 @@
                 <div class="feature-text">Smart itineraries</div>
             </div>
             <div class="feature">
-                <div class="feature-icon">💰</div>
-                <div class="feature-text">Split costs easily</div>
+                <div class="feature-icon">✨</div>
+                <div class="feature-text">Curated experiences</div>
             </div>
         </div>
 
-        <!-- Right Form Panel -->
         <div class="form-panel">
             <div class="toggle-tabs">
                 <div class="tab active" id="tab-register" onclick="switchTab('register')">Register</div>
@@ -336,116 +474,91 @@
 
             <div id="status-message" class="status-msg"></div>
 
-            <!-- REGISTER FORM -->
             <form id="form-register" class="auth-form active" onsubmit="handleRegister(event)">
                 <div class="form-header">
-                    <h2>Create your account</h2>
-                    <p>Fill in your details to get started</p>
+                    <h2>Create account</h2>
+                    <p>Start your journey today</p>
                 </div>
 
                 <div class="form-row">
-                    <div class="form-group">
-                        <label>First Name</label>
-                        <input type="text" id="reg-first" required>
-                    </div>
-                    <div class="form-group">
-                        <label>Last Name</label>
-                        <input type="text" id="reg-last" required>
-                    </div>
+                    <div class="form-group"><label>First Name</label><input type="text" id="reg-first" required></div>
+                    <div class="form-group"><label>Last Name</label><input type="text" id="reg-last" required></div>
                 </div>
 
                 <div class="form-row">
-                    <div class="form-group">
-                        <label>Email</label>
-                        <input type="email" id="reg-email" required>
-                    </div>
-                    <div class="form-group">
-                        <label>Phone Number</label>
-                        <input type="tel" id="reg-phone">
-                    </div>
+                    <div class="form-group"><label>Email</label><input type="email" id="reg-email" required></div>
+                    <div class="form-group"><label>Phone Number</label><input type="tel" id="reg-phone"></div>
                 </div>
 
                 <div class="form-row">
-                    <div class="form-group">
-                        <label>City</label>
-                        <input type="text" id="reg-city">
-                    </div>
-                    <div class="form-group">
-                        <label>Country</label>
-                        <input type="text" id="reg-country">
-                    </div>
+                    <div class="form-group"><label>City</label><input type="text" id="reg-city"></div>
+                    <div class="form-group"><label>Country</label><input type="text" id="reg-country"></div>
                 </div>
 
-                <div class="form-group">
-                    <label>Username</label>
-                    <input type="text" id="reg-username" required>
-                </div>
-
-                <div class="form-group">
-                    <label>Password</label>
-                    <input type="password" id="reg-password" required>
-                </div>
+                <div class="form-group"><label>Username</label><input type="text" id="reg-username" required></div>
+                <div class="form-group"><label>Password</label><input type="password" id="reg-password" required></div>
 
                 <button type="submit" class="submit-btn" id="btn-register">Create Account</button>
-                
-                <div class="switch-prompt">
-                    Already have an account? <span onclick="switchTab('login')">Sign In</span>
-                </div>
+                <div class="switch-prompt">Already have an account? <span onclick="switchTab('login')">Sign In</span></div>
             </form>
 
-            <!-- LOGIN FORM -->
             <form id="form-login" class="auth-form" onsubmit="handleLogin(event)">
                 <div class="form-header">
-                    <h2>Welcome back!</h2>
+                    <h2>Welcome back</h2>
                     <p>Enter your credentials to continue</p>
                 </div>
-
-                <div class="form-group">
-                    <label>Username</label>
-                    <input type="text" id="login-username" required>
-                </div>
-
-                <div class="form-group">
-                    <label>Password</label>
-                    <input type="password" id="login-password" required>
-                </div>
-
+                <div class="form-group"><label>Username</label><input type="text" id="login-username" required></div>
+                <div class="form-group"><label>Password</label><input type="password" id="login-password" required></div>
                 <button type="submit" class="submit-btn" id="btn-login">Sign In</button>
-                
-                <div class="switch-prompt">
-                    Don't have an account? <span onclick="switchTab('register')">Register</span>
-                </div>
+                <div class="switch-prompt">Don't have an account? <span onclick="switchTab('register')">Register</span></div>
             </form>
         </div>
     </div>
     
-    <!-- NEW TRIP VIEW (hidden) -->
-    <div class="newtrip-view" id="newtrip-view" style="display:none;">
+    <!-- NEW TRIP VIEW (Hidden via display:none by default) -->
+    <div class="newtrip-view" id="newtrip-view" style="display:none; width: 100%; height: 100vh; background: var(--bg); flex-direction: column; overflow-y: auto;">
         <div class="navbar">
-            <div class="nav-left"><div class="nav-logo">New Trip</div></div>
-            <div class="nav-right"><div class="nav-brand">Traveloop</div><div class="nav-avatar" onclick="toggleBackToHome()">←</div></div>
+            <div class="nav-left"><div class="nav-logo" onclick="toggleBackToHome()">← Back</div></div>
+            <div class="nav-right"><div class="nav-brand">Plan Trip</div></div>
         </div>
         <div class="home-content">
-            <h2 style="color:var(--text);font-size:24px;margin-bottom:12px;">Plan your next journey</h2>
-            <p style="color:var(--text-light);font-size:14px;margin-bottom:24px;">Fill in the details and discover great places to visit.</p>
-            <div class="selection-card" style="padding:20px;">
+            <div class="plan-trip-banner" style="margin-bottom: 30px;">
+                <div class="plan-text">
+                    <h2>Design your perfect getaway</h2>
+                    <p>Fill out the details and let Traveloop build your itinerary.</p>
+                </div>
+            </div>
+            
+            <div style="background: white; border-radius: 28px; padding: 40px; box-shadow: var(--shadow-sm);">
+                <h3 style="font-size: 20px; font-weight: 700; margin-bottom: 24px;">Trip Details</h3>
                 <label>Destination</label>
-                <input type="text" placeholder="Enter a city or country" style="width:100%;margin-top:8px;padding:8px;border:1px solid var(--border);border-radius:8px;"/>
-                <label style="margin-top:14px;display:block;">Start date</label>
-                <input type="date" style="width:100%;margin-top:8px;padding:8px;border:1px solid var(--border);border-radius:8px;"/>
-                <label style="margin-top:14px;display:block;">End date</label>
-                <input type="date" style="width:100%;margin-top:8px;padding:8px;border:1px solid var(--border);border-radius:8px;"/>
-                <label style="margin-top:14px;display:block;">Notes</label>
-                <textarea rows="3" placeholder="Add any travel preferences" style="width:100%;margin-top:8px;padding:8px;border:1px solid var(--border);border-radius:8px;"></textarea>
-                <button class="btn-view" style="margin-top:20px;" onclick="alert('Itinerary saved (mock)');">Save itinerary</button>
+                <input type="text" placeholder="E.g. Santorini, Greece" style="background: var(--bg); margin-top:8px; margin-bottom: 20px; padding:16px; border-radius:12px;"/>
+                
+                <div style="display:flex; gap: 16px; margin-bottom: 20px;">
+                    <div style="flex:1">
+                        <label>Start date</label>
+                        <input type="date" style="background: var(--bg); margin-top:8px; padding:16px; border-radius:12px;"/>
+                    </div>
+                    <div style="flex:1">
+                        <label>End date</label>
+                        <input type="date" style="background: var(--bg); margin-top:8px; padding:16px; border-radius:12px;"/>
+                    </div>
+                </div>
+                
+                <label>Travel Notes</label>
+                <textarea rows="4" placeholder="Any preferences? (e.g., vegan food, wheelchair accessible...)" style="width:100%; margin-top:8px; padding:16px; background: var(--bg); border: 1px solid transparent; border-radius:12px; font-size: 15px; outline: none;"></textarea>
+                
+                <button class="plan-btn" style="width:100%; margin-top:32px;" onclick="alert('Itinerary saved!'); toggleBackToHome();">Generate Itinerary</button>
             </div>
         </div>
     </div>
+    
+    <!-- HOME DASHBOARD VIEW -->
     <div class="home-view" id="home-view">
         <!-- Navbar -->
         <div class="navbar">
             <div class="nav-left">
-                <div class="nav-logo">Home</div>
+                <div class="nav-logo">Dashboard</div>
             </div>
             <div class="nav-right">
                 <div class="nav-brand">Traveloop</div>
@@ -457,95 +570,154 @@
         <div class="profile-menu" id="profile-menu">
             <div class="prof-menu-name" id="menu-name">User Name</div>
             <div class="prof-menu-email" id="menu-email">user@example.com</div>
-                        <button class="prof-menu-btn" onclick="handleLogout()">Log out</button>
-            <button class="fab-btn" onclick="showNewTrip()">+ Plan a trip</button>
+            <button class="prof-menu-btn" onclick="handleLogout()">Log out securely</button>
         </div>
 
         <!-- Main Content -->
         <div class="home-content">
-            <div class="welcome-sub" id="welcome-text">Welcome back, Traveler</div>
-            <div class="welcome-title">Find your next getaway</div>
-
-            <!-- Featured Banner -->
-            <div class="featured-banner">
-                <div class="featured-label">Featured trip</div>
-                <div class="featured-content">
-                    <h3>Explore Bali beaches</h3>
-                    <button class="btn-view">View details</button>
-                </div>
-            </div>
+            <div class="welcome-sub" id="welcome-text">Good morning, Traveler</div>
+            <div class="welcome-title">Where do you want to<br>go next?</div>
 
             <!-- Search Bar -->
             <div class="search-bar">
                 <div class="search-input-wrap">
-                    <span>🔍</span>
-                    <input type="text" placeholder="Search trips">
+                    <span>📍</span>
+                    <input type="text" placeholder="Search for destinations, hotels, or flights...">
                 </div>
-                <button class="filter-btn">Filter</button>
-                <button class="filter-btn">Sort</button>
+                <button class="filter-btn">Filters</button>
             </div>
 
-            <!-- Top Regional Selections -->
-            <div class="section-title">Top Regional Selections</div>
+            <!-- Featured Banner -->
+            <div class="featured-banner" onclick="openModal('Bali, Indonesia', 'https://images.unsplash.com/photo-1537996194471-e657df975ab4?auto=format&fit=crop&w=1200&q=80', 'South East Asia', '4.9', 'Bali is an Indonesian island known for its forested volcanic mountains, iconic rice paddies, beaches and coral reefs. The island is home to religious sites such as cliffside Uluwatu Temple. To the south, the beachside city of Kuta has lively bars, while Seminyak, Sanur and Nusa Dua are popular resort towns.')">
+                <div class="featured-label">Editors' Choice</div>
+                <div class="featured-content">
+                    <h3>Escape to Bali</h3>
+                    <p>Discover pristine beaches and rich cultural heritage.</p>
+                    <button class="btn-view">Explore Destination</button>
+                </div>
+            </div>
+            
+            <!-- Famous Places (Image Cards) -->
+            <div class="section-title">Famous Places <span>See all</span></div>
             <div class="horizontal-list">
-                <div class="selection-card">
-                    <div class="sel-icon">🏞️</div>
-                    <div class="sel-title">Lake</div>
-                    <div class="sel-sub">Popular</div>
+                <div class="image-card" onclick="openModal('Santorini', 'https://images.unsplash.com/photo-1613395877344-13d4a8e0d49e?auto=format&fit=crop&w=800&q=80', 'Greece', '4.8', 'Santorini is a volcanic island in the Cyclades group of the Greek islands. It is famous for dramatic views, stunning sunsets from Oia town, the strange white aubergine (eggplant), the town of Thira and naturally its very own active volcano.')">
+                    <img src="https://images.unsplash.com/photo-1613395877344-13d4a8e0d49e?auto=format&fit=crop&w=600&q=80" alt="Santorini">
+                    <div class="card-rating">⭐ 4.8</div>
+                    <div class="card-overlay">
+                        <div class="card-title">Santorini</div>
+                        <div class="card-sub">📍 Greece</div>
+                    </div>
                 </div>
-                <div class="selection-card">
-                    <div class="sel-icon">⛰️</div>
-                    <div class="sel-title">Mountain</div>
-                    <div class="sel-sub">Popular</div>
+                
+                <div class="image-card" onclick="openModal('Kyoto', 'https://images.unsplash.com/photo-1493976040374-85c8e12f0c0e?auto=format&fit=crop&w=800&q=80', 'Japan', '4.9', 'Kyoto, once the capital of Japan, is a city on the island of Honshu. It is famous for its numerous classical Buddhist temples, as well as gardens, imperial palaces, Shinto shrines and traditional wooden houses.')">
+                    <img src="https://images.unsplash.com/photo-1493976040374-85c8e12f0c0e?auto=format&fit=crop&w=600&q=80" alt="Kyoto">
+                    <div class="card-rating">⭐ 4.9</div>
+                    <div class="card-overlay">
+                        <div class="card-title">Kyoto</div>
+                        <div class="card-sub">📍 Japan</div>
+                    </div>
                 </div>
-                <div class="selection-card">
-                    <div class="sel-icon">🏖️</div>
-                    <div class="sel-title">Beach</div>
-                    <div class="sel-sub">Popular</div>
+                
+                <div class="image-card" onclick="openModal('Amalfi Coast', 'https://images.unsplash.com/photo-1533676802871-eca1ae998cd5?auto=format&fit=crop&w=800&q=80', 'Italy', '4.7', 'The Amalfi Coast is a 50-kilometer stretch of coastline along the southern edge of Italy’s Sorrentine Peninsula, in the Campania region. It’s a popular holiday destination, with sheer cliffs and a rugged shoreline dotted with small beaches and pastel-colored fishing villages.')">
+                    <img src="https://images.unsplash.com/photo-1533676802871-eca1ae998cd5?auto=format&fit=crop&w=600&q=80" alt="Amalfi">
+                    <div class="card-rating">⭐ 4.7</div>
+                    <div class="card-overlay">
+                        <div class="card-title">Amalfi Coast</div>
+                        <div class="card-sub">📍 Italy</div>
+                    </div>
                 </div>
-                <div class="selection-card">
-                    <div class="sel-icon">🏙️</div>
-                    <div class="sel-title">Urban</div>
-                    <div class="sel-sub">Popular</div>
-                </div>
-                <div class="selection-card">
-                    <div class="sel-icon">🌲</div>
-                    <div class="sel-title">Forest</div>
-                    <div class="sel-sub">Popular</div>
+                
+                <div class="image-card" onclick="openModal('Banff', 'https://images.unsplash.com/photo-1542668595-fa9394e5b686?auto=format&fit=crop&w=800&q=80', 'Canada', '4.9', 'Banff National Park is Canada is oldest national park, established in 1885. Located in Alberta is Rocky Mountains, Banff encompasses 6,641 square kilometres of mountainous terrain, with numerous glaciers and ice fields, dense coniferous forest, and alpine landscapes.')">
+                    <img src="https://images.unsplash.com/photo-1542668595-fa9394e5b686?auto=format&fit=crop&w=600&q=80" alt="Banff">
+                    <div class="card-rating">⭐ 4.9</div>
+                    <div class="card-overlay">
+                        <div class="card-title">Banff</div>
+                        <div class="card-sub">📍 Canada</div>
+                    </div>
                 </div>
             </div>
+            
+            <!-- Plan a Trip Banner CTA -->
+            <div class="plan-trip-banner">
+                <div class="plan-text">
+                    <h2>Ready for your next adventure?</h2>
+                    <p>Build a custom itinerary tailored to your group in seconds.</p>
+                </div>
+                <button class="plan-btn" onclick="showNewTrip()">+ Plan a trip</button>
+            </div>
 
-            <!-- Previous Trips -->
-            <div class="section-title">Previous Trips</div>
+            <!-- Previous Trips (Wide Cards) -->
+            <div class="section-title">Previous Trips <span>View history</span></div>
             <div class="horizontal-list">
-                <div class="trip-card">
-                    <div class="trip-img">🛫</div>
-                    <div class="trip-title">Seoul Escape</div>
-                    <div class="trip-sub">3 days • 2 guests</div>
-                    <div class="trip-btn">View</div>
+                <div class="wide-card">
+                    <div class="wide-card-img">
+                        <div class="card-rating" style="top:10px; right:10px;">Oct 2024</div>
+                        <img src="https://images.unsplash.com/photo-1520625624110-8b010640d6c0?auto=format&fit=crop&w=600&q=80" alt="Morocco">
+                    </div>
+                    <div class="wide-card-title">Marrakech Markets</div>
+                    <div class="wide-card-sub">
+                        <span>Morocco • 6 days</span>
+                        <span style="font-weight: 700; color: var(--accent);">View details</span>
+                    </div>
                 </div>
-                <div class="trip-card">
-                    <div class="trip-img">🛫</div>
-                    <div class="trip-title">Sicily Sunset</div>
-                    <div class="trip-sub">5 days • 4 guests</div>
-                    <div class="trip-btn">View</div>
+                
+                <div class="wide-card">
+                    <div class="wide-card-img">
+                        <div class="card-rating" style="top:10px; right:10px;">Jul 2024</div>
+                        <img src="https://images.unsplash.com/photo-1513622470522-26c3c8a854bc?auto=format&fit=crop&w=600&q=80" alt="Seattle">
+                    </div>
+                    <div class="wide-card-title">Seattle City Tour</div>
+                    <div class="wide-card-sub">
+                        <span>USA • 4 days</span>
+                        <span style="font-weight: 700; color: var(--accent);">View details</span>
+                    </div>
                 </div>
-                <div class="trip-card">
-                    <div class="trip-img">🛫</div>
-                    <div class="trip-title">Kyoto Walk</div>
-                    <div class="trip-sub">4 days • 2 guests</div>
-                    <div class="trip-btn">View</div>
-                </div>
-                <div class="trip-card">
-                    <div class="trip-img">🛫</div>
-                    <div class="trip-title">Morocco Market</div>
-                    <div class="trip-sub">6 days • 3 guests</div>
-                    <div class="trip-btn">View</div>
+                
+                <div class="wide-card">
+                    <div class="wide-card-img">
+                        <div class="card-rating" style="top:10px; right:10px;">Apr 2024</div>
+                        <img src="https://images.unsplash.com/photo-1513581166358-b66d2a64375e?auto=format&fit=crop&w=600&q=80" alt="Swiss Alps">
+                    </div>
+                    <div class="wide-card-title">Swiss Alps Skiing</div>
+                    <div class="wide-card-sub">
+                        <span>Switzerland • 7 days</span>
+                        <span style="font-weight: 700; color: var(--accent);">View details</span>
+                    </div>
                 </div>
             </div>
-
-            <div class="fab-container">
-                <button class="fab-btn" onclick="showNewTrip()">+ Plan a trip</button>
+            
+        </div>
+    </div>
+    
+    <!-- PLACE DETAILS MODAL -->
+    <div class="modal-overlay" id="place-modal" onclick="closeModal(event)">
+        <div class="modal-card">
+            <div class="modal-header">
+                <img id="modal-img" src="" alt="Location">
+                <button class="modal-close" onclick="forceCloseModal()">✕</button>
+            </div>
+            <div class="modal-body">
+                <h2 class="modal-title" id="modal-title">Place Name</h2>
+                <div class="modal-location" id="modal-location">📍 Location</div>
+                
+                <div class="modal-stats">
+                    <div class="stat-item">
+                        <div class="stat-val" id="modal-rating">⭐ 0.0</div>
+                        <div class="stat-label">Rating</div>
+                    </div>
+                    <div class="stat-item">
+                        <div class="stat-val">☀️ 28°C</div>
+                        <div class="stat-label">Weather</div>
+                    </div>
+                    <div class="stat-item">
+                        <div class="stat-val">✈️ 4h</div>
+                        <div class="stat-label">Flight</div>
+                    </div>
+                </div>
+                
+                <p class="modal-desc" id="modal-desc">Description goes here.</p>
+                
+                <button class="modal-action" onclick="showNewTrip(); forceCloseModal();">Plan a trip here</button>
             </div>
         </div>
     </div>
@@ -576,10 +748,12 @@
             if (view === 'auth') {
                 document.getElementById('auth-view').style.display = 'flex';
                 document.getElementById('home-view').classList.remove('active');
+                document.getElementById('newtrip-view').style.display = 'none';
                 document.body.style.backgroundColor = 'var(--primary)';
             } else {
                 document.getElementById('auth-view').style.display = 'none';
                 document.getElementById('home-view').classList.add('active');
+                document.getElementById('newtrip-view').style.display = 'none';
                 document.body.style.backgroundColor = 'var(--bg)';
             }
         }
@@ -607,6 +781,29 @@
             }
         });
 
+        // --- Modal Management ---
+        function openModal(title, imgUrl, location, rating, desc) {
+            document.getElementById('modal-title').textContent = title;
+            document.getElementById('modal-img').src = imgUrl;
+            document.getElementById('modal-location').textContent = '📍 ' + location;
+            document.getElementById('modal-rating').textContent = '⭐ ' + rating;
+            document.getElementById('modal-desc').textContent = desc;
+            
+            document.getElementById('place-modal').classList.add('active');
+            document.body.style.overflow = 'hidden'; // Prevent background scrolling
+        }
+        
+        function closeModal(event) {
+            if (event.target.id === 'place-modal') {
+                forceCloseModal();
+            }
+        }
+        
+        function forceCloseModal() {
+            document.getElementById('place-modal').classList.remove('active');
+            document.body.style.overflow = 'auto';
+        }
+
         // --- API Calls ---
         async function handleRegister(e) {
             e.preventDefault();
@@ -633,7 +830,7 @@
                 const data = await res.json();
                 
                 if (data.success) {
-                    showMessage('Account created successfully! Switching to login...', true);
+                    showMessage('Account created! Switching to login...', true);
                     document.getElementById('login-username').value = document.getElementById('reg-username').value;
                     document.getElementById('login-password').value = '';
                     setTimeout(() => switchTab('login'), 1500);
@@ -649,42 +846,40 @@
         }
 
         async function handleLogin(e) {
-    e.preventDefault();
-    const btn = document.getElementById('btn-login');
-    btn.disabled = true;
-    btn.textContent = 'Signing in...';
-    hideMessage();
+            e.preventDefault();
+            const btn = document.getElementById('btn-login');
+            btn.disabled = true;
+            btn.textContent = 'Signing in...';
+            hideMessage();
 
-    try {
-        const res = await fetch(`${BASE_URL}/login`, {
-            method: 'POST',
-            headers: { 'Content-Type': 'application/json' },
-            body: JSON.stringify({
-                username: document.getElementById('login-username').value,
-                password: document.getElementById('login-password').value,
-            })
-        });
+            try {
+                const res = await fetch(`${BASE_URL}/login`, {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({
+                        username: document.getElementById('login-username').value,
+                        password: document.getElementById('login-password').value,
+                    })
+                });
 
-        const data = await res.json();
+                const data = await res.json();
 
-        if (data.success) {
-            jwtToken = data.token;
-            localStorage.setItem('traveloop_token', jwtToken);
-            document.getElementById('login-password').value = '';
-            fetchProfile(); // Load dashboard
-        } else {
-            showMessage(data.message || 'Login failed', false);
+                if (data.success) {
+                    jwtToken = data.token;
+                    localStorage.setItem('traveloop_token', jwtToken);
+                    document.getElementById('login-password').value = '';
+                    fetchProfile();
+                } else {
+                    showMessage(data.message || 'Login failed', false);
+                }
+            } catch (error) {
+                showMessage('Network error. Is the server running?', false);
+            } finally {
+                btn.disabled = false;
+                btn.textContent = 'Sign In';
+            }
         }
-    } catch (error) {
-        showMessage('Network error. Is the server running?', false);
-    } finally {
-        btn.disabled = false;
-        btn.textContent = 'Sign In';
-    }
-}
 
-
-        
         async function fetchProfile() {
             if (!jwtToken) return showView('auth');
             
@@ -698,7 +893,7 @@
                 if (data.success) {
                     const user = data.user;
                     // Populate Dashboard UI
-                    document.getElementById('welcome-text').textContent = `Welcome back, ${user.first_name}`;
+                    document.getElementById('welcome-text').textContent = `Good morning, ${user.first_name}`;
                     document.getElementById('nav-avatar').textContent = user.first_name.charAt(0).toUpperCase();
                     document.getElementById('menu-name').textContent = `${user.first_name} ${user.last_name}`;
                     document.getElementById('menu-email').textContent = `@${user.username}`;
@@ -712,16 +907,14 @@
                 handleLogout();
             }
         }
-        
-        
+
         // --- Navigation between Home and New Trip ---
         function showNewTrip() {
-            // hide home view and display new trip form
             document.getElementById('home-view').classList.remove('active');
             document.getElementById('newtrip-view').style.display = 'flex';
+            document.body.style.backgroundColor = 'var(--bg)';
         }
         function toggleBackToHome() {
-            // hide new trip form and show home view again
             document.getElementById('newtrip-view').style.display = 'none';
             document.getElementById('home-view').classList.add('active');
         }
