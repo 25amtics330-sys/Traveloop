@@ -233,6 +233,7 @@ class _CreateTripScreenState extends State<CreateTripScreen> {
           onDestinationSelected: (i) {
             if (i == 0) Navigator.pushNamed(context, '/home');
             else if (i == 2) Navigator.pushNamed(context, '/packing_list');
+            else if (i == 3) Navigator.pushNamed(context, '/profile');
             // Add navigation for other indices if needed
           },
           backgroundColor: Colors.white,

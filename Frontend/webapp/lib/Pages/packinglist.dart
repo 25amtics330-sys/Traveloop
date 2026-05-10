@@ -121,6 +121,8 @@ class PackingChecklistScreen extends StatelessWidget {
               Navigator.pushReplacementNamed(context, '/home');
             } else if (i == 1) {
               Navigator.pushReplacementNamed(context, '/new_trip');
+            } else if (i == 3) {
+              Navigator.pushReplacementNamed(context, '/profile');
             }
             // i == 2 is current page (Packing)
             // i == 3 (Profile) is not yet implemented
