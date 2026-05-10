@@ -299,6 +299,9 @@ class _HomePageState extends State<HomePage> with TickerProviderStateMixin {
           onDestinationSelected: (i) {
             if (i == 1) Navigator.pushNamed(context, '/trip_section');
             else if (i == 2) Navigator.pushNamed(context, '/packing_list');
+            else if (i == 3) Navigator.pushNamed(context, '/profile');
+            
+              // i == 0 is current page (Home)
             // Add navigation for other indices if needed
           },
           backgroundColor: Colors.white,

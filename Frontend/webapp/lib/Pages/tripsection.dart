@@ -49,18 +49,19 @@ class MyTripsScreen extends StatelessWidget {
           boxShadow: [BoxShadow(color: AppColors.primary.withOpacity(0.08), blurRadius: 20, offset: const Offset(0, -4))],
         ),
         child: NavigationBar(
-          selectedIndex: 3,
+          selectedIndex: 1,
           onDestinationSelected: (i) {
             if (i == 0) {
               Navigator.pushReplacementNamed(context, '/home');
             } else if (i == 1) {
-              Navigator.pushReplacementNamed(context, '/trip_section');
+              // Stay on My Trips
             } else if (i == 2) {
               Navigator.pushReplacementNamed(context, '/packing_list');
+            } else if (i == 3) {
+              Navigator.pushReplacementNamed(context, '/profile');
             }
 
-            // i == 2 is current page (Packing)
-            // i == 3 (Profile) is not yet implemented
+            // i == 1 is current page (My Trips)
           },
           backgroundColor: Colors.white,
           elevation: 0,
