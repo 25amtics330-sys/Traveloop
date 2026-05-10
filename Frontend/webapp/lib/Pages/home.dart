@@ -168,6 +168,21 @@ class _HomePageState extends State<HomePage> with TickerProviderStateMixin {
                   ),
                   
                   const SizedBox(height: 32),
+                  const Text('Curated for You', style: TextStyle(fontSize: 20, fontWeight: FontWeight.w800)),
+                  const SizedBox(height: 16),
+                  SizedBox(
+                    height: 280,
+                    child: ListView(
+                      scrollDirection: Axis.horizontal,
+                      children: [
+                        _curatedCard('Manali, India', '4.9', '₹45,000', 'https://images.unsplash.com/photo-1626621341517-bbf3d9990a23?auto=format&fit=crop&w=600&q=80'),
+                        _curatedCard('Ubud, Bali', '4.8', '₹85,000', 'https://images.unsplash.com/photo-1537996194471-e657df975ab4?auto=format&fit=crop&w=600&q=80'),
+                        _curatedCard('Paris, France', '4.9', '₹1,40,000', 'https://images.unsplash.com/photo-1502602898657-3e91760cbb34?auto=format&fit=crop&w=600&q=80'),
+                      ],
+                    ),
+                  ),
+                  
+                  const SizedBox(height: 32),
                   const Text('Explore Regions', style: TextStyle(fontSize: 20, fontWeight: FontWeight.w800)),
                   const SizedBox(height: 16),
                   SizedBox(
@@ -224,6 +239,63 @@ class _HomePageState extends State<HomePage> with TickerProviderStateMixin {
         Text(emoji, style: const TextStyle(fontSize: 40)),
         const SizedBox(height: 12),
         Text(label, style: const TextStyle(fontWeight: FontWeight.w800, fontSize: 14)),
+      ],
+    ),
+  );
+
+  Widget _curatedCard(String title, String rating, String price, String imgUrl) => Container(
+    width: 260,
+    margin: const EdgeInsets.only(right: 16),
+    decoration: BoxDecoration(
+      color: Colors.white,
+      borderRadius: BorderRadius.circular(28),
+      border: Border.all(color: AppColors.border),
+      boxShadow: [BoxShadow(color: Colors.black.withOpacity(0.03), blurRadius: 15, offset: const Offset(0, 8))],
+    ),
+    child: Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        ClipRRect(
+          borderRadius: const BorderRadius.vertical(top: Radius.circular(28)),
+          child: Stack(
+            children: [
+              Image.network(imgUrl, height: 160, width: double.infinity, fit: BoxFit.cover),
+              Positioned(
+                top: 12, left: 12,
+                child: Container(
+                  padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 4),
+                  decoration: BoxDecoration(color: Colors.black54, borderRadius: BorderRadius.circular(8)),
+                  child: Row(children: [
+                    const Icon(Icons.star, color: Colors.amber, size: 14),
+                    const SizedBox(width: 4),
+                    Text(rating, style: const TextStyle(color: Colors.white, fontWeight: FontWeight.bold, fontSize: 12)),
+                  ]),
+                ),
+              ),
+            ],
+          ),
+        ),
+        Padding(
+          padding: const EdgeInsets.all(16),
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              Text(title, style: const TextStyle(fontWeight: FontWeight.w900, fontSize: 18)),
+              const SizedBox(height: 12),
+              Row(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                children: [
+                  Text(price, style: const TextStyle(color: AppColors.primary, fontWeight: FontWeight.w800, fontSize: 16)),
+                  Container(
+                    padding: const EdgeInsets.all(8),
+                    decoration: BoxDecoration(color: AppColors.primary.withOpacity(0.1), borderRadius: BorderRadius.circular(12)),
+                    child: const Icon(Icons.arrow_forward_ios, size: 12, color: AppColors.primary),
+                  ),
+                ],
+              ),
+            ],
+          ),
+        ),
       ],
     ),
   );
