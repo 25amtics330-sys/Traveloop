@@ -81,217 +81,152 @@ class _HomePageState extends State<HomePage> with TickerProviderStateMixin {
   Widget build(BuildContext context) {
     return Scaffold(
       backgroundColor: AppColors.bg,
-      appBar: AppBar(
-        backgroundColor: const Color.fromARGB(255, 119, 119, 232),
-        elevation: 1,
-        title: const Text('Traveloop', style: TextStyle(color: AppColors.accentLight, fontSize: 26),  ),
-        actions: const [
-          SizedBox(width: 24),
-          Icon(Icons.notifications_none, color: AppColors.accentLight),
-          SizedBox(width: 8),
-          Padding(
-            padding: EdgeInsets.only(right: 16.0),
-            child: Icon(
-              Icons.account_circle,
-              color: AppColors.accentLight,
-              size: 28,
+      body: CustomScrollView(
+        slivers: [
+          SliverAppBar(
+            expandedHeight: 200,
+            pinned: true,
+            backgroundColor: AppColors.primary,
+            flexibleSpace: FlexibleSpaceBar(
+              background: Container(
+                decoration: const BoxDecoration(
+                  gradient: LinearGradient(
+                    colors: [AppColors.primary, AppColors.primaryDark],
+                    begin: Alignment.topLeft,
+                    end: Alignment.bottomRight,
+                  ),
+                ),
+                child: Padding(
+                  padding: const EdgeInsets.all(24),
+                  child: Column(
+                    mainAxisAlignment: MainAxisAlignment.end,
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      const Text('Welcome back,', style: TextStyle(color: Colors.white70, fontSize: 16)),
+                      Text(_firstName, style: const TextStyle(color: Colors.white, fontSize: 32, fontWeight: FontWeight.w900)),
+                      const SizedBox(height: 10),
+                    ],
+                  ),
+                ),
+              ),
+            ),
+          ),
+          SliverToBoxAdapter(
+            child: Padding(
+              padding: const EdgeInsets.all(24),
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  // Stats Row
+                  Row(
+                    children: [
+                      _buildStat('Trips', appState.trips.length.toString(), AppColors.primary),
+                      const SizedBox(width: 12),
+                      _buildStat('Cities', '8', AppColors.teal),
+                      const SizedBox(width: 12),
+                      _buildStat('Saved', '12', AppColors.accent),
+                    ],
+                  ),
+                  const SizedBox(height: 32),
+
+                  const Text('Upcoming Adventures', style: TextStyle(fontSize: 20, fontWeight: FontWeight.w800)),
+                  const SizedBox(height: 16),
+                  
+                  // Featured Card
+                  Container(
+                    padding: const EdgeInsets.all(24),
+                    decoration: BoxDecoration(
+                      color: AppColors.card,
+                      borderRadius: BorderRadius.circular(28),
+                      border: Border.all(color: AppColors.border),
+                      boxShadow: [BoxShadow(color: Colors.black.withOpacity(0.03), blurRadius: 20, offset: const Offset(0, 10))],
+                    ),
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        Row(
+                          children: [
+                            Container(
+                              padding: const EdgeInsets.all(12),
+                              decoration: BoxDecoration(color: AppColors.bg, borderRadius: BorderRadius.circular(16)),
+                              child: const Text('🗼', style: TextStyle(fontSize: 32)),
+                            ),
+                            const SizedBox(width: 16),
+                            const Column(
+                              crossAxisAlignment: CrossAxisAlignment.start,
+                              children: [
+                                Text('Paris Escape', style: TextStyle(fontWeight: FontWeight.w900, fontSize: 18)),
+                                Text('Oct 12 - Oct 24 · 12 Days', style: TextStyle(color: AppColors.textLight, fontSize: 13)),
+                              ],
+                            ),
+                          ],
+                        ),
+                        const SizedBox(height: 20),
+                        TLButton(label: 'View Itinerary', onTap: () {}),
+                      ],
+                    ),
+                  ),
+                  
+                  const SizedBox(height: 32),
+                  const Text('Explore Regions', style: TextStyle(fontSize: 20, fontWeight: FontWeight.w800)),
+                  const SizedBox(height: 16),
+                  SizedBox(
+                    height: 180,
+                    child: ListView(
+                      scrollDirection: Axis.horizontal,
+                      children: [
+                        _buildCategoryCard('Islands', '🏝️'),
+                        _buildCategoryCard('Mountains', '🏔️'),
+                        _buildCategoryCard('Cities', '🏙️'),
+                        _buildCategoryCard('Forest', '🌲'),
+                      ],
+                    ),
+                  ),
+                  const SizedBox(height: 100), // Space for nav
+                ],
+              ),
             ),
           ),
         ],
       ),
-      body: SingleChildScrollView(
-        padding: const EdgeInsets.all(20),
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            Text(
-              'Welcome back, $_firstName',
-              style: TextStyle(
-                color: AppColors.textLight,
-                fontSize: 16,
-              ),
-            ),
-            const SizedBox(height: 8),
-            Text(
-              'Find your next getaway',
-              style: TextStyle(
-                color: AppColors.text,
-                fontSize: 28,
-                fontWeight: FontWeight.w700,
-              ),
-            ),
-            const SizedBox(height: 20),
-            Container(
-              height: 180,
-              width: double.infinity,
-              decoration: BoxDecoration(
-                color: AppColors.accent,
-                borderRadius: BorderRadius.circular(24),
-              ),
-              padding: const EdgeInsets.all(20),
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  Text(
-                    'Featured trip',
-                    style: TextStyle(
-                      color: AppColors.accentLight,
-                      fontSize: 14,
-                    ),
-                  ),
-                  const Spacer(),
-                  Text(
-                    'Explore Bali beaches',
-                    style: TextStyle(
-                      color: AppColors.card,
-                      fontSize: 26,
-                      fontWeight: FontWeight.bold,
-                    ),
-                  ),
-                  const SizedBox(height: 12),
-                  ElevatedButton(
-                    onPressed: () {},
-                    style: ElevatedButton.styleFrom(
-                      backgroundColor: AppColors.primary,
-                      foregroundColor: AppColors.card,
-                      shape: RoundedRectangleBorder(
-                        borderRadius: BorderRadius.circular(16),
-                      ),
-                      padding: const EdgeInsets.symmetric(
-                        horizontal: 20,
-                        vertical: 14,
-                      ),
-                    ),
-                    child: const Text('View details'),
-                  ),
-                ],
-              ),
-            ),
-            const SizedBox(height: 24),
-            Row(
-              children: [
-                Expanded(
-                  child: ScaleTransition(
-                    scale: _searchScaleAnimation,
-                    child: GestureDetector(
-                      onTap: () {
-                        setState(() {
-                          _isSearchFocused = true;
-                        });
-                        _searchAnimationController.forward();
-                      },
-                      child: Container(
-                        height: 50,
-                        padding: const EdgeInsets.symmetric(horizontal: 16),
-                        decoration: BoxDecoration(
-                          color: AppColors.card,
-                          borderRadius: BorderRadius.circular(16),
-                          border: Border.all(
-                            color: _isSearchFocused
-                                ? AppColors.accent
-                                : AppColors.border,
-                            width: _isSearchFocused ? 2 : 1,
-                          ),
-                        ),
-                        alignment: Alignment.centerLeft,
-                        child: Row(
-                          children: [
-                            Icon(Icons.search, color: AppColors.textLight),
-                            const SizedBox(width: 10),
-                            Expanded(
-                              child: TextField(
-                                controller: _searchController,
-                                onChanged: (value) {
-                                  setState(() {});
-                                },
-                                decoration: InputDecoration(
-                                  hintText: 'Search trips',
-                                  border: InputBorder.none,
-                                  hintStyle: TextStyle(
-                                    color: AppColors.textLight,
-                                  ),
-                                ),
-                                style: TextStyle(
-                                  color: AppColors.text,
-                                  fontSize: 15,
-                                ),
-                              ),
-                            ),
-                            if (_searchController.text.isNotEmpty)
-                              GestureDetector(
-                                onTap: () {
-                                  _searchController.clear();
-                                  setState(() {});
-                                },
-                                child: Icon(
-                                  Icons.close,
-                                  color: AppColors.textLight,
-                                  size: 20,
-                                ),
-                              ),
-                          ],
-                        ),
-                      ),
-                    ),
-                  ),
-                ),
-                const SizedBox(width: 12),
-                _buildFilterChip('Filter'),
-                const SizedBox(width: 8),
-                _buildFilterChip('Sort'),
-              ],
-            ),
-            const SizedBox(height: 28),
-            _buildSectionTitle('Top Regional Selections'),
-            const SizedBox(height: 12),
-            SizedBox(
-              height: 200,
-              child: ListView.separated(
-                scrollDirection: Axis.horizontal,
-                itemCount: 5,
-                separatorBuilder: (_, __) => const SizedBox(width: 12),
-                itemBuilder: (context, index) => _buildSelectionCard(index),
-              ),
-            ),
-            const SizedBox(height: 28),
-            _buildSectionTitle('Previous Trips'),
-            const SizedBox(height: 12),
-            SizedBox(
-              height: 260,
-              child: ListView.separated(
-                scrollDirection: Axis.horizontal,
-                itemCount: 4,
-                separatorBuilder: (_, __) => const SizedBox(width: 14),
-                itemBuilder: (context, index) => _buildTripCard(index),
-              ),
-            ),
-            const SizedBox(height: 24),
-            Align(
-              alignment: Alignment.centerRight,
-              child: ElevatedButton(
-                onPressed: () {
-                  Navigator.pushNamed(context, '/new_trip');
-                },
-                style: ElevatedButton.styleFrom(
-                  backgroundColor: AppColors.accent,
-                  foregroundColor: AppColors.card,
-                  shape: RoundedRectangleBorder(
-                    borderRadius: BorderRadius.circular(18),
-                  ),
-                  padding: const EdgeInsets.symmetric(
-                    horizontal: 26,
-                    vertical: 14,
-                  ),
-                ),
-                child: const Text('+ Plan a trip'),
-              ),
-            ),
-          ],
-        ),
-      ),
-      ),
     );
   }
+
+  Widget _buildStat(String label, String value, Color color) => Expanded(
+    child: Container(
+      padding: const EdgeInsets.all(16),
+      decoration: BoxDecoration(
+        color: Colors.white,
+        borderRadius: BorderRadius.circular(24),
+        border: Border.all(color: AppColors.border),
+      ),
+      child: Column(
+        children: [
+          Text(value, style: TextStyle(color: color, fontSize: 20, fontWeight: FontWeight.w900)),
+          Text(label, style: const TextStyle(color: AppColors.textLight, fontSize: 11, fontWeight: FontWeight.w700)),
+        ],
+      ),
+    ),
+  );
+
+  Widget _buildCategoryCard(String label, String emoji) => Container(
+    width: 140,
+    margin: const EdgeInsets.only(right: 12),
+    padding: const EdgeInsets.all(20),
+    decoration: BoxDecoration(
+      color: Colors.white,
+      borderRadius: BorderRadius.circular(24),
+      border: Border.all(color: AppColors.border),
+    ),
+    child: Column(
+      mainAxisAlignment: MainAxisAlignment.center,
+      children: [
+        Text(emoji, style: const TextStyle(fontSize: 40)),
+        const SizedBox(height: 12),
+        Text(label, style: const TextStyle(fontWeight: FontWeight.w800, fontSize: 14)),
+      ],
+    ),
+  );
 
   Widget _buildSectionTitle(String title) {
     return Text(

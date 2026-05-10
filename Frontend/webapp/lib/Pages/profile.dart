@@ -59,20 +59,22 @@ class UserProfileScreen extends StatelessWidget {
                   const SizedBox(height: 20),
 
                   _section([
+                    _tile(Icons.admin_panel_settings_outlined, 'Admin Dashboard', () => Navigator.push(context, MaterialPageRoute(builder: (_) => const AdminDashboardScreen())), color: AppColors.primary),
                     _tile(Icons.person_outline, 'Edit Profile', () {}),
-                    _tile(Icons.language, 'Language', () {}),
                     _tile(Icons.favorite_outline, 'Saved Destinations', () {}),
                     _tile(Icons.notifications_outlined, 'Notifications', () {}),
                   ]),
                   const SizedBox(height: 12),
                   _section([
-                    _tile(Icons.admin_panel_settings_outlined, 'Admin Dashboard', () => Navigator.push(context, MaterialPageRoute(builder: (_) => const AdminDashboardScreen()))),
                     _tile(Icons.help_outline, 'Help & Support', () {}),
                     _tile(Icons.privacy_tip_outlined, 'Privacy Policy', () {}),
                   ]),
                   const SizedBox(height: 12),
                   _section([
-                    _tile(Icons.logout, 'Sign Out', () => Navigator.pushNamed(context, '/login'), color: AppColors.danger),
+                    _tile(Icons.logout, 'Sign Out', () {
+                      appState.logout();
+                      Navigator.pushNamedAndRemoveUntil(context, '/login', (route) => false);
+                    }, color: AppColors.danger),
                     _tile(Icons.delete_forever_outlined, 'Delete Account', () {}, color: AppColors.danger),
                   ]),
                 ],
