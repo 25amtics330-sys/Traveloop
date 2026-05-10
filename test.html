@@ -1,930 +1,657 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="en" data-theme="light">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Traveloop | Premium App</title>
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=Outfit:wght@500;700;800&display=swap" rel="stylesheet">
+    <title>Traveloop | AI Travel Planner</title>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Playfair+Display:wght@600;700;800&family=Plus+Jakarta+Sans:wght@500;600;700;800&display=swap" rel="stylesheet">
     <style>
+        /* -------------------------------------
+           DESIGN SYSTEM & THEMING
+        ------------------------------------- */
         :root {
-            --primary: #1A1A2E;
-            --accent: #D98B2C;
-            --accent-hover: #c47a24;
-            --accent-light: #FFF0D9;
-            --teal: #2EC4B6;
-            --teal-light: #E0F7F5;
-            --bg: #F5F7FA;
-            --card: #FFFFFF;
-            --text: #1A1A2E;
-            --text-light: #7B7B9A;
-            --border: #EAEAF0;
-            --danger: #E05C5C;
-            --danger-light: #FDECEA;
+            /* Light Theme */
+            --bg-body: #F8FAFC;
+            --bg-card: #FFFFFF;
+            --bg-card-hover: #F1F5F9;
+            --bg-glass: rgba(255, 255, 255, 0.7);
             
-            /* Shadows for premium feel */
-            --shadow-sm: 0 4px 12px rgba(0,0,0,0.05);
-            --shadow-md: 0 12px 24px rgba(0,0,0,0.08);
-            --shadow-lg: 0 24px 48px rgba(0,0,0,0.12);
-            --shadow-accent: 0 12px 24px rgba(217, 139, 44, 0.25);
+            --text-main: #0F172A;
+            --text-muted: #64748B;
+            
+            --border-color: #E2E8F0;
+            --border-light: rgba(255,255,255,0.2);
+            
+            --primary: #2563EB;
+            --primary-hover: #1D4ED8;
+            --accent: #F59E0B;
+            --accent-hover: #D97706;
+            
+            --shadow-sm: 0 4px 6px -1px rgba(0,0,0,0.05);
+            --shadow-md: 0 10px 15px -3px rgba(0,0,0,0.08);
+            --shadow-lg: 0 20px 25px -5px rgba(0,0,0,0.1);
+            --shadow-glow: 0 0 20px rgba(37, 99, 235, 0.2);
+            
+            --radius-md: 16px;
+            --radius-lg: 24px;
+            --radius-xl: 32px;
+            
+            --transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
         }
 
-        * {
-            box-sizing: border-box;
-            margin: 0;
-            padding: 0;
-            font-family: 'Inter', sans-serif;
+        [data-theme="dark"] {
+            --bg-body: #0B0F19;
+            --bg-card: #151C2C;
+            --bg-card-hover: #1E293B;
+            --bg-glass: rgba(21, 28, 44, 0.7);
+            
+            --text-main: #F8FAFC;
+            --text-muted: #94A3B8;
+            
+            --border-color: #1E293B;
+            --border-light: rgba(255,255,255,0.05);
+            
+            --shadow-sm: 0 4px 6px -1px rgba(0,0,0,0.2);
+            --shadow-md: 0 10px 15px -3px rgba(0,0,0,0.3);
+            --shadow-lg: 0 25px 50px -12px rgba(0,0,0,0.5);
+            --shadow-glow: 0 0 30px rgba(37, 99, 235, 0.15);
         }
 
-        body {
-            background-color: var(--primary);
-            min-height: 100vh;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            overflow-x: hidden;
-        }
+        * { margin: 0; padding: 0; box-sizing: border-box; font-family: 'Inter', sans-serif; }
         
-        /* Typography overrides */
-        h1, h2, h3, .nav-brand {
-            font-family: 'Outfit', sans-serif;
-        }
+        body { background-color: var(--bg-body); color: var(--text-main); transition: var(--transition); overflow-x: hidden; }
+        
+        h1, h2, h3, h4, .brand-font { font-family: 'Plus Jakarta Sans', sans-serif; letter-spacing: -0.02em; }
+        .serif { font-family: 'Playfair Display', serif; }
+
+        /* Utility Classes */
+        .glass { background: var(--bg-glass); backdrop-filter: blur(16px); -webkit-backdrop-filter: blur(16px); border: 1px solid var(--border-light); }
+        .flex-between { display: flex; justify-content: space-between; align-items: center; }
+        .flex-center { display: flex; justify-content: center; align-items: center; }
+        
+        /* Skeleton Loading */
+        .skeleton { background: linear-gradient(90deg, var(--bg-card) 25%, var(--border-color) 50%, var(--bg-card) 75%); background-size: 200% 100%; animation: loading 1.5s infinite; border-radius: 8px; }
+        @keyframes loading { 0% { background-position: 200% 0; } 100% { background-position: -200% 0; } }
 
         /* -------------------------------------
-           AUTH VIEW (Unchanged core, enhanced shadows)
+           AUTH VIEW (Hidden by default for this demo)
         ------------------------------------- */
-        .auth-container {
-            width: 100%;
-            max-width: 950px;
-            background: var(--card);
-            border-radius: 24px;
-            box-shadow: var(--shadow-lg);
-            display: flex;
-            overflow: hidden;
-            min-height: 600px;
-            margin: 20px;
-        }
-
-        .brand-panel {
-            flex: 4;
-            background: linear-gradient(135deg, var(--accent) 0%, #B06A1C 100%);
-            padding: 40px;
-            color: white;
-            display: flex;
-            flex-direction: column;
-            justify-content: center;
-            position: relative;
-            overflow: hidden;
-        }
+        #auth-view { display: none; height: 100vh; align-items: center; justify-content: center; }
         
-        .brand-panel::before {
-            content: "";
-            position: absolute;
-            top: 0; left: 0; right: 0; bottom: 0;
-            background-image: url('https://images.unsplash.com/photo-1469854523086-cc02fe5d8800?auto=format&fit=crop&w=800&q=80');
-            background-size: cover;
-            background-position: center;
-            opacity: 0.15;
-            z-index: 0;
-        }
-        .brand-panel > * { position: relative; z-index: 1; }
-
-        .brand-logo { width: 60px; height: 60px; background: rgba(255, 255, 255, 0.2); backdrop-filter: blur(10px); border-radius: 16px; display: flex; align-items: center; justify-content: center; font-size: 32px; margin-bottom: 32px; }
-        .brand-panel h1 { font-size: 40px; font-weight: 800; margin-bottom: 12px; }
-        .brand-panel p { color: rgba(255, 255, 255, 0.9); font-size: 16px; line-height: 1.6; margin-bottom: 40px; }
-        
-        .feature { display: flex; align-items: center; margin-bottom: 16px; }
-        .feature-icon { width: 36px; height: 36px; background: rgba(255, 255, 255, 0.15); border-radius: 10px; display: flex; align-items: center; justify-content: center; margin-right: 12px; font-size: 18px; }
-        .feature-text { color: rgba(255, 255, 255, 0.95); font-weight: 500; font-size: 14px; }
-
-        .form-panel { flex: 5; padding: 40px; display: flex; flex-direction: column; position: relative; }
-        .toggle-tabs { background: var(--bg); border-radius: 12px; padding: 6px; display: flex; margin-bottom: 30px; }
-        .tab { flex: 1; text-align: center; padding: 12px 0; border-radius: 10px; font-size: 14px; font-weight: 600; color: var(--text-light); cursor: pointer; transition: all 0.3s ease; }
-        .tab.active { background: white; color: var(--text); box-shadow: var(--shadow-sm); }
-
-        .form-header { margin-bottom: 24px; }
-        .form-header h2 { font-size: 28px; color: var(--text); margin-bottom: 6px; }
-        .form-header p { font-size: 14px; color: var(--text-light); }
-
-        .auth-form { display: none; flex-direction: column; animation: fadeIn 0.4s ease forwards; }
-        .auth-form.active { display: flex; }
-
-        @keyframes fadeIn { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
-
-        .form-row { display: flex; gap: 16px; margin-bottom: 16px; }
-        .form-group { flex: 1; margin-bottom: 16px; }
-        .form-row .form-group { margin-bottom: 0; }
-
-        label { display: block; font-size: 13px; font-weight: 600; color: var(--text-light); margin-bottom: 8px; text-transform: uppercase; letter-spacing: 0.5px; }
-        input { width: 100%; padding: 14px 16px; background: var(--bg); border: 1px solid transparent; border-radius: 12px; font-size: 15px; color: var(--text); outline: none; transition: all 0.2s; }
-        input:focus { background: white; border-color: var(--accent); box-shadow: 0 0 0 4px var(--accent-light); }
-
-        button.submit-btn { background: var(--accent); color: white; border: none; padding: 16px; border-radius: 12px; font-size: 16px; font-weight: 700; cursor: pointer; margin-top: 12px; transition: all 0.2s; box-shadow: var(--shadow-accent); }
-        button.submit-btn:hover { background: var(--accent-hover); transform: translateY(-2px); box-shadow: 0 16px 30px rgba(217, 139, 44, 0.3); }
-        button.submit-btn:active { transform: translateY(0); }
-        button.submit-btn:disabled { background: #e0b686; cursor: not-allowed; box-shadow: none; transform: none; }
-
-        .switch-prompt { text-align: center; margin-top: 24px; font-size: 14px; color: var(--text-light); }
-        .switch-prompt span { color: var(--accent); font-weight: 700; cursor: pointer; }
-
-        .status-msg { padding: 14px; border-radius: 12px; font-size: 14px; font-weight: 500; margin-bottom: 16px; display: none; align-items: center; }
-        .status-msg.error { background: var(--danger-light); color: var(--danger); display: flex; }
-        .status-msg.success { background: var(--teal-light); color: var(--teal); display: flex; }
-
         /* -------------------------------------
-           HOME VIEW (Premium Dashboard)
+           MAIN DASHBOARD
         ------------------------------------- */
-        .home-view {
-            display: none;
-            width: 100%;
-            height: 100vh;
-            background: var(--bg);
-            flex-direction: column;
-            overflow-y: auto;
-            animation: fadeIn 0.4s ease forwards;
-        }
-
-        .home-view.active {
-            display: flex;
-        }
-
+        .home-view { display: flex; flex-direction: column; min-height: 100vh; }
+        
         /* Navbar */
-        .navbar {
-            background: rgba(255, 255, 255, 0.9);
-            backdrop-filter: blur(12px);
-            padding: 16px 32px;
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            position: sticky;
-            top: 0;
-            z-index: 100;
-            border-bottom: 1px solid var(--border);
-        }
-
-        .nav-left { display: flex; align-items: center; gap: 16px; }
-        .nav-logo { color: var(--text-light); font-size: 18px; font-weight: 600; cursor: pointer; }
-        .nav-logo:hover { color: var(--text); }
-        .nav-right { display: flex; align-items: center; gap: 24px; }
-        .nav-brand { color: var(--accent); font-size: 24px; font-weight: 800; letter-spacing: -0.5px; }
-        .nav-avatar { width: 44px; height: 44px; border-radius: 50%; background: linear-gradient(135deg, var(--accent), #B06A1C); color: white; display: flex; align-items: center; justify-content: center; font-weight: 700; font-size: 18px; cursor: pointer; box-shadow: var(--shadow-sm); transition: transform 0.2s; }
-        .nav-avatar:hover { transform: scale(1.05); }
-
-        /* Main Content Container */
-        .home-content {
-            max-width: 1100px;
-            margin: 0 auto;
-            padding: 40px 24px;
-            width: 100%;
-        }
-
-        /* Welcome Section */
-        .welcome-sub { color: var(--text-light); font-size: 16px; margin-bottom: 8px; font-weight: 500; }
-        .welcome-title { color: var(--text); font-size: 36px; font-weight: 800; margin-bottom: 32px; line-height: 1.2; }
-
-        /* Search Bar */
-        .search-bar {
-            display: flex;
-            gap: 16px;
-            margin-bottom: 40px;
-        }
-
-        .search-input-wrap {
-            flex: 1;
-            background: white;
-            border-radius: 20px;
-            padding: 0 20px;
-            display: flex;
-            align-items: center;
-            box-shadow: var(--shadow-sm);
-            transition: all 0.3s;
-        }
+        .navbar { position: fixed; top: 0; left: 0; right: 0; z-index: 100; padding: 16px 40px; transition: var(--transition); border-bottom: 1px solid transparent; }
+        .navbar.scrolled { background: var(--bg-glass); backdrop-filter: blur(20px); border-bottom: 1px solid var(--border-color); box-shadow: var(--shadow-sm); }
         
-        .search-input-wrap:focus-within {
-            box-shadow: 0 0 0 4px var(--accent-light), var(--shadow-md);
-            transform: translateY(-2px);
-        }
-
-        .search-input-wrap span { font-size: 20px; color: var(--text-light); margin-right: 16px; }
-        .search-input-wrap input { border: none; padding: 20px 0; background: transparent; font-size: 16px; width: 100%; font-weight: 500;}
-        .search-input-wrap input:focus { outline: none; }
-
-        .filter-btn { background: white; border: none; border-radius: 20px; padding: 0 28px; color: var(--text); font-weight: 700; font-size: 15px; cursor: pointer; box-shadow: var(--shadow-sm); transition: all 0.2s; }
-        .filter-btn:hover { background: var(--bg); transform: translateY(-2px); box-shadow: var(--shadow-md); }
-
-        /* Featured Banner */
-        .featured-banner {
-            background-image: linear-gradient(to right, rgba(26, 26, 46, 0.8), rgba(26, 26, 46, 0.2)), url('https://images.unsplash.com/photo-1537996194471-e657df975ab4?auto=format&fit=crop&w=1200&q=80');
-            background-size: cover;
-            background-position: center;
-            border-radius: 28px;
-            padding: 40px;
-            color: white;
-            display: flex;
-            flex-direction: column;
-            justify-content: space-between;
-            height: 280px;
-            margin-bottom: 40px;
-            box-shadow: var(--shadow-md);
-            position: relative;
-            overflow: hidden;
-            transition: transform 0.3s, box-shadow 0.3s;
-        }
+        .logo-text { font-size: 24px; font-weight: 800; background: linear-gradient(135deg, var(--primary), #8B5CF6); -webkit-background-clip: text; -webkit-text-fill-color: transparent; }
         
-        .featured-banner:hover {
-            transform: translateY(-5px);
-            box-shadow: var(--shadow-lg);
-        }
-
-        .featured-label { background: rgba(255,255,255,0.2); backdrop-filter: blur(10px); padding: 8px 16px; border-radius: 20px; font-size: 13px; font-weight: 700; letter-spacing: 1px; text-transform: uppercase; align-self: flex-start; }
-        .featured-content h3 { font-size: 40px; font-weight: 800; margin-bottom: 8px; text-shadow: 0 2px 10px rgba(0,0,0,0.3); }
-        .featured-content p { font-size: 16px; font-weight: 500; opacity: 0.9; margin-bottom: 24px; text-shadow: 0 2px 10px rgba(0,0,0,0.3); }
-        .btn-view { background: var(--accent); color: white; border: none; padding: 14px 28px; border-radius: 16px; font-size: 15px; font-weight: 700; cursor: pointer; display: inline-block; transition: all 0.2s; box-shadow: var(--shadow-accent); }
-        .btn-view:hover { background: var(--accent-hover); transform: translateY(-2px); }
-
-        /* Sections */
-        .section-title { font-family: 'Outfit', sans-serif; font-size: 24px; font-weight: 800; color: var(--text); margin-bottom: 20px; display: flex; justify-content: space-between; align-items: center; }
-        .section-title span { font-family: 'Inter', sans-serif; font-size: 14px; color: var(--accent); font-weight: 600; cursor: pointer; }
-
-        /* Horizontal Scroll Lists */
-        .horizontal-list { display: flex; gap: 20px; overflow-x: auto; padding-bottom: 24px; margin-bottom: 24px; scrollbar-width: none; scroll-snap-type: x mandatory; }
-        .horizontal-list::-webkit-scrollbar { display: none; }
+        .nav-actions { display: flex; gap: 16px; align-items: center; }
+        .icon-btn { width: 44px; height: 44px; border-radius: 50%; border: 1px solid var(--border-color); background: var(--bg-card); color: var(--text-main); font-size: 18px; cursor: pointer; transition: var(--transition); display: flex; justify-content: center; align-items: center;}
+        .icon-btn:hover { background: var(--border-color); transform: translateY(-2px); }
         
-        .horizontal-list > * { scroll-snap-align: start; }
+        .avatar { width: 44px; height: 44px; border-radius: 50%; overflow: hidden; cursor: pointer; border: 2px solid var(--primary); }
+        .avatar img { width: 100%; height: 100%; object-fit: cover; }
 
-        /* Image Card (General for places) */
-        .image-card {
-            min-width: 240px;
-            width: 240px;
-            height: 300px;
-            border-radius: 24px;
-            overflow: hidden;
-            position: relative;
-            cursor: pointer;
-            box-shadow: var(--shadow-sm);
-            transition: all 0.3s cubic-bezier(0.25, 0.8, 0.25, 1);
-        }
+        /* Hero Banner */
+        .hero { position: relative; height: 80vh; min-height: 600px; display: flex; align-items: center; justify-content: center; text-align: center; color: white; padding: 0 20px; overflow: hidden;}
+        .hero-bg { position: absolute; top: 0; left: 0; right: 0; bottom: 0; background: url('https://images.unsplash.com/photo-1476514525535-07fb3b4ae5f1?auto=format&fit=crop&w=2000&q=80') center/cover; z-index: -2; }
+        .hero-overlay { position: absolute; top: 0; left: 0; right: 0; bottom: 0; background: linear-gradient(to bottom, rgba(0,0,0,0.3) 0%, var(--bg-body) 100%); z-index: -1; }
         
-        .image-card:hover {
-            transform: translateY(-8px);
-            box-shadow: var(--shadow-lg);
-        }
+        .hero-content { max-width: 800px; z-index: 1; margin-top: 60px; animation: fadeInUp 1s ease; }
+        @keyframes fadeInUp { from { opacity: 0; transform: translateY(30px); } to { opacity: 1; transform: translateY(0); } }
+        
+        .hero-title { font-size: clamp(40px, 6vw, 72px); font-weight: 800; line-height: 1.1; margin-bottom: 24px; text-shadow: 0 4px 20px rgba(0,0,0,0.5); }
+        .hero-sub { font-size: clamp(16px, 2vw, 20px); font-weight: 500; opacity: 0.9; margin-bottom: 40px; text-shadow: 0 2px 10px rgba(0,0,0,0.5); }
+        
+        /* Advanced Search Bar */
+        .search-container { background: var(--bg-card); border-radius: 100px; padding: 8px; display: flex; align-items: center; box-shadow: var(--shadow-lg); max-width: 700px; margin: 0 auto; border: 1px solid var(--border-color); }
+        .search-field { flex: 1; display: flex; align-items: center; padding: 8px 24px; border-right: 1px solid var(--border-color); }
+        .search-field:last-of-type { border-right: none; }
+        .search-icon { font-size: 20px; color: var(--primary); margin-right: 12px; }
+        .search-input { border: none; background: transparent; outline: none; width: 100%; color: var(--text-main); font-weight: 600; font-size: 15px;}
+        .search-input::placeholder { color: var(--text-muted); font-weight: 500;}
+        .search-btn { background: var(--primary); color: white; border: none; border-radius: 100px; padding: 16px 32px; font-weight: 700; font-size: 16px; cursor: pointer; transition: var(--transition); box-shadow: var(--shadow-glow); }
+        .search-btn:hover { background: var(--primary-hover); transform: scale(1.05); }
 
-        .image-card img {
-            width: 100%;
-            height: 100%;
-            object-fit: cover;
-            transition: transform 0.5s ease;
-        }
+        /* Main Layout */
+        .container { max-width: 1400px; margin: 0 auto; padding: 40px; }
         
-        .image-card:hover img {
-            transform: scale(1.05);
-        }
+        .section-header { display: flex; justify-content: space-between; align-items: flex-end; margin-bottom: 24px; margin-top: 60px; }
+        .section-title { font-size: 28px; font-weight: 800; color: var(--text-main); }
+        .section-desc { font-size: 15px; color: var(--text-muted); margin-top: 4px; }
+        .view-all { color: var(--primary); font-weight: 600; text-decoration: none; display: flex; align-items: center; gap: 4px; transition: var(--transition); cursor: pointer;}
+        .view-all:hover { gap: 8px; }
 
-        .card-overlay {
-            position: absolute;
-            bottom: 0; left: 0; right: 0;
-            background: linear-gradient(to top, rgba(0,0,0,0.8) 0%, transparent 100%);
-            padding: 30px 20px 20px;
-            color: white;
-            display: flex;
-            flex-direction: column;
-            justify-content: flex-end;
-        }
+        /* Categories */
+        .category-list { display: flex; gap: 16px; overflow-x: auto; padding-bottom: 16px; scrollbar-width: none; }
+        .category-list::-webkit-scrollbar { display: none; }
+        .cat-chip { padding: 12px 24px; border-radius: 100px; background: var(--bg-card); border: 1px solid var(--border-color); color: var(--text-main); font-weight: 600; cursor: pointer; white-space: nowrap; transition: var(--transition); box-shadow: var(--shadow-sm); display: flex; align-items: center; gap: 8px;}
+        .cat-chip:hover, .cat-chip.active { background: var(--primary); color: white; border-color: var(--primary); transform: translateY(-2px); box-shadow: var(--shadow-glow); }
 
-        .card-title { font-family: 'Outfit', sans-serif; font-size: 20px; font-weight: 800; margin-bottom: 4px; }
-        .card-sub { font-size: 13px; font-weight: 500; opacity: 0.9; display: flex; align-items: center; gap: 4px; }
-        .card-rating { position: absolute; top: 16px; right: 16px; background: rgba(255,255,255,0.9); backdrop-filter: blur(4px); color: var(--text); padding: 6px 10px; border-radius: 12px; font-size: 12px; font-weight: 700; display: flex; align-items: center; gap: 4px; }
+        /* Horizontal Carousel (Modern Cards) */
+        .carousel { display: flex; gap: 24px; overflow-x: auto; padding-bottom: 32px; scrollbar-width: none; scroll-snap-type: x mandatory; margin: 0 -40px; padding-left: 40px; padding-right: 40px;}
+        .carousel::-webkit-scrollbar { display: none; }
+        
+        .dest-card { min-width: 300px; width: 300px; height: 400px; border-radius: var(--radius-lg); position: relative; overflow: hidden; cursor: pointer; scroll-snap-align: start; box-shadow: var(--shadow-md); transition: var(--transition); }
+        .dest-card:hover { transform: translateY(-10px); box-shadow: var(--shadow-lg); }
+        .dest-img { width: 100%; height: 100%; object-fit: cover; transition: transform 0.7s ease; }
+        .dest-card:hover .dest-img { transform: scale(1.1); }
+        
+        .dest-overlay { position: absolute; inset: 0; background: linear-gradient(to top, rgba(0,0,0,0.85) 0%, rgba(0,0,0,0.2) 50%, rgba(0,0,0,0.1) 100%); display: flex; flex-direction: column; justify-content: flex-end; padding: 24px; color: white; }
+        
+        .dest-fav { position: absolute; top: 20px; right: 20px; width: 40px; height: 40px; background: rgba(255,255,255,0.2); backdrop-filter: blur(8px); border-radius: 50%; display: flex; justify-content: center; align-items: center; color: white; font-size: 18px; transition: var(--transition); }
+        .dest-fav:hover { background: white; color: #EF4444; transform: scale(1.1); }
+        
+        .dest-badge { position: absolute; top: 20px; left: 20px; background: var(--primary); color: white; padding: 6px 12px; border-radius: 8px; font-size: 12px; font-weight: 700; text-transform: uppercase; letter-spacing: 1px; }
 
-        /* Wide Card (For Previous Trips) */
-        .wide-card {
-            min-width: 320px;
-            width: 320px;
-            background: white;
-            border-radius: 24px;
-            padding: 16px;
-            display: flex;
-            flex-direction: column;
-            box-shadow: var(--shadow-sm);
-            transition: all 0.3s;
-            cursor: pointer;
-        }
+        .dest-info h3 { font-size: 24px; font-weight: 800; margin-bottom: 4px; text-shadow: 0 2px 4px rgba(0,0,0,0.5); }
+        .dest-meta { display: flex; align-items: center; gap: 12px; font-size: 14px; font-weight: 500; opacity: 0.9; margin-bottom: 12px; }
+        .dest-rating { display: flex; align-items: center; gap: 4px; color: #FBBF24; }
         
-        .wide-card:hover {
-            transform: translateY(-6px);
-            box-shadow: var(--shadow-md);
-        }
+        .dest-bottom { display: flex; justify-content: space-between; align-items: center; padding-top: 16px; border-top: 1px solid rgba(255,255,255,0.2); }
+        .dest-price { font-size: 18px; font-weight: 700; }
+        .dest-price span { font-size: 12px; font-weight: 400; opacity: 0.8; }
 
-        .wide-card-img { height: 160px; border-radius: 16px; overflow: hidden; margin-bottom: 16px; position: relative; }
-        .wide-card-img img { width: 100%; height: 100%; object-fit: cover; }
-        .wide-card-title { font-family: 'Outfit', sans-serif; font-size: 18px; font-weight: 800; color: var(--text); margin-bottom: 6px; }
-        .wide-card-sub { font-size: 14px; color: var(--text-light); font-weight: 500; margin-bottom: 16px; display: flex; align-items: center; justify-content: space-between;}
-        
-        /* Plan Trip Banner (Replaces standard FAB) */
-        .plan-trip-banner {
-            background: linear-gradient(135deg, var(--primary) 0%, #2A2A4A 100%);
-            border-radius: 28px;
-            padding: 40px;
-            display: flex;
-            align-items: center;
-            justify-content: space-between;
-            color: white;
-            margin-top: 20px;
-            margin-bottom: 60px;
-            box-shadow: var(--shadow-lg);
-            position: relative;
-            overflow: hidden;
-        }
-        
-        .plan-trip-banner::after {
-            content: "🗺️";
-            position: absolute;
-            right: 40px;
-            top: 50%;
-            transform: translateY(-50%);
-            font-size: 120px;
-            opacity: 0.1;
-            pointer-events: none;
-        }
+        /* Masonry Grid (For Hidden Gems / Explore) */
+        .masonry-grid { column-count: 3; column-gap: 24px; margin-top: 24px; }
+        .masonry-item { break-inside: avoid; margin-bottom: 24px; border-radius: var(--radius-lg); overflow: hidden; position: relative; box-shadow: var(--shadow-sm); transition: var(--transition); cursor: pointer; }
+        .masonry-item:hover { transform: translateY(-5px); box-shadow: var(--shadow-md); }
+        .masonry-item img { width: 100%; display: block; transition: transform 0.5s ease; }
+        .masonry-item:hover img { transform: scale(1.05); }
+        .masonry-overlay { position: absolute; bottom: 0; left: 0; right: 0; padding: 20px; background: linear-gradient(to top, rgba(0,0,0,0.9), transparent); color: white; }
+        .masonry-overlay h4 { font-size: 18px; font-weight: 700; }
+        .masonry-overlay p { font-size: 13px; opacity: 0.8; margin-top: 4px; }
 
-        .plan-text h2 { font-size: 32px; font-weight: 800; margin-bottom: 8px; }
-        .plan-text p { font-size: 16px; color: rgba(255,255,255,0.8); font-weight: 500; }
-        .plan-btn { background: var(--accent); color: white; border: none; padding: 18px 36px; border-radius: 20px; font-size: 16px; font-weight: 800; cursor: pointer; box-shadow: var(--shadow-accent); transition: all 0.2s; z-index: 1; }
-        .plan-btn:hover { transform: translateY(-3px) scale(1.02); background: var(--accent-hover); box-shadow: 0 20px 40px rgba(217, 139, 44, 0.4); }
+        /* Full Width CTA Banner */
+        .cta-banner { margin: 80px 0; border-radius: var(--radius-xl); overflow: hidden; position: relative; padding: 80px 60px; display: flex; align-items: center; box-shadow: var(--shadow-lg); }
+        .cta-bg { position: absolute; inset: 0; background: url('https://images.unsplash.com/photo-1506929562872-bb421503ef21?auto=format&fit=crop&w=1600&q=80') center/cover; z-index: 0; }
+        .cta-overlay { position: absolute; inset: 0; background: linear-gradient(90deg, rgba(15,23,42,0.9) 0%, rgba(15,23,42,0.6) 50%, transparent 100%); z-index: 1; }
+        .cta-content { position: relative; z-index: 2; color: white; max-width: 600px; }
+        .cta-content h2 { font-size: 48px; font-weight: 800; margin-bottom: 16px; line-height: 1.1; }
+        .cta-content p { font-size: 18px; opacity: 0.9; margin-bottom: 32px; line-height: 1.6; }
+        .cta-btn { background: white; color: var(--text-main); border: none; padding: 18px 36px; border-radius: 100px; font-size: 16px; font-weight: 700; cursor: pointer; transition: var(--transition); box-shadow: var(--shadow-md); display: inline-flex; align-items: center; gap: 8px;}
+        .cta-btn:hover { transform: translateY(-2px); box-shadow: var(--shadow-lg); }
 
-        /* Profile Menu (Dropdown) */
-        .profile-menu {
-            position: absolute;
-            top: 80px;
-            right: 32px;
-            background: white;
-            border-radius: 20px;
-            box-shadow: var(--shadow-lg);
-            padding: 24px;
-            min-width: 260px;
-            display: none;
-            flex-direction: column;
-            z-index: 200;
-            border: 1px solid var(--border);
-        }
+        /* -------------------------------------
+           ADVANCED MODAL / DETAILED PAGE
+        ------------------------------------- */
+        .modal-overlay { position: fixed; inset: 0; background: rgba(0,0,0,0.8); backdrop-filter: blur(10px); z-index: 1000; display: flex; justify-content: center; align-items: flex-end; opacity: 0; pointer-events: none; transition: opacity 0.4s ease; padding-top: 60px; }
+        .modal-overlay.active { opacity: 1; pointer-events: all; }
         
-        .profile-menu.active { display: flex; animation: slideDown 0.2s ease forwards; }
-        @keyframes slideDown { from { opacity:0; transform:translateY(-10px); } to { opacity:1; transform:translateY(0); } }
+        .modal-container { background: var(--bg-body); width: 100%; max-width: 1000px; height: 95vh; border-radius: 32px 32px 0 0; display: flex; flex-direction: column; overflow: hidden; transform: translateY(100%); transition: transform 0.5s cubic-bezier(0.16, 1, 0.3, 1); box-shadow: 0 -20px 40px rgba(0,0,0,0.2); position: relative;}
+        .modal-overlay.active .modal-container { transform: translateY(0); }
 
-        .prof-menu-name { font-family: 'Outfit', sans-serif; font-weight: 800; font-size: 18px; color: var(--text); margin-bottom: 4px; }
-        .prof-menu-email { font-size: 14px; color: var(--text-light); font-weight: 500; margin-bottom: 20px; padding-bottom: 20px; border-bottom: 1px solid var(--border); }
-        .prof-menu-btn { background: var(--danger-light); border: none; border-radius: 12px; text-align: center; padding: 12px 0; font-size: 15px; font-weight: 700; color: var(--danger); cursor: pointer; transition: background 0.2s;}
-        .prof-menu-btn:hover { background: #fadad8; }
+        .modal-close { position: absolute; top: 24px; right: 24px; width: 44px; height: 44px; background: rgba(0,0,0,0.5); color: white; border-radius: 50%; display: flex; justify-content: center; align-items: center; font-size: 20px; cursor: pointer; border: none; z-index: 10; backdrop-filter: blur(8px); transition: var(--transition); }
+        .modal-close:hover { background: rgba(0,0,0,0.8); transform: scale(1.1); }
 
-        /* Modal Overlay */
-        .modal-overlay {
-            position: fixed; top: 0; left: 0; right: 0; bottom: 0;
-            background: rgba(0,0,0,0.6);
-            backdrop-filter: blur(8px);
-            z-index: 1000;
-            display: none;
-            align-items: center;
-            justify-content: center;
-            padding: 20px;
-            opacity: 0;
-            transition: opacity 0.3s ease;
-        }
-        
-        .modal-overlay.active { display: flex; opacity: 1; }
+        .modal-content { flex: 1; overflow-y: auto; scrollbar-width: none; }
+        .modal-content::-webkit-scrollbar { display: none; }
 
-        .modal-card {
-            background: white;
-            width: 100%;
-            max-width: 600px;
-            border-radius: 32px;
-            overflow: hidden;
-            box-shadow: 0 40px 80px rgba(0,0,0,0.3);
-            transform: translateY(40px);
-            transition: transform 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
-            display: flex;
-            flex-direction: column;
-            max-height: 90vh;
-        }
-        
-        .modal-overlay.active .modal-card { transform: translateY(0); }
+        /* Modal Gallery */
+        .modal-gallery { height: 450px; position: relative; }
+        .main-img { width: 100%; height: 100%; object-fit: cover; }
+        .gallery-thumbs { position: absolute; bottom: 24px; right: 24px; display: flex; gap: 12px; }
+        .thumb { width: 80px; height: 60px; border-radius: 12px; border: 2px solid white; overflow: hidden; cursor: pointer; box-shadow: var(--shadow-md); transition: var(--transition); }
+        .thumb:hover { transform: translateY(-4px); }
+        .thumb img { width: 100%; height: 100%; object-fit: cover; }
 
-        .modal-header { height: 300px; position: relative; }
-        .modal-header img { width: 100%; height: 100%; object-fit: cover; }
-        .modal-close { position: absolute; top: 20px; right: 20px; width: 40px; height: 40px; background: rgba(0,0,0,0.5); backdrop-filter: blur(4px); color: white; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 24px; cursor: pointer; border: none; transition: background 0.2s; }
-        .modal-close:hover { background: rgba(0,0,0,0.8); }
+        /* Modal Body */
+        .modal-body { padding: 40px; display: grid; grid-template-columns: 2fr 1fr; gap: 40px; }
         
-        .modal-body { padding: 32px; overflow-y: auto; }
-        .modal-title { font-family: 'Outfit', sans-serif; font-size: 32px; font-weight: 800; margin-bottom: 8px; color: var(--text); }
-        .modal-location { font-size: 16px; color: var(--text-light); font-weight: 600; margin-bottom: 24px; display: flex; align-items: center; gap: 6px; }
+        .modal-title-row { display: flex; justify-content: space-between; align-items: flex-start; margin-bottom: 8px; }
+        .modal-title { font-size: 40px; font-weight: 800; color: var(--text-main); }
+        .modal-actions { display: flex; gap: 12px; }
+        .action-btn { width: 48px; height: 48px; border-radius: 50%; border: 1px solid var(--border-color); background: var(--bg-card); color: var(--text-main); font-size: 20px; display: flex; justify-content: center; align-items: center; cursor: pointer; transition: var(--transition); box-shadow: var(--shadow-sm);}
+        .action-btn:hover { background: var(--bg-card-hover); transform: translateY(-2px); box-shadow: var(--shadow-md);}
+
+        .modal-location { font-size: 18px; color: var(--text-muted); font-weight: 500; margin-bottom: 24px; display: flex; align-items: center; gap: 8px; }
+
+        .quick-stats { display: flex; gap: 24px; margin-bottom: 32px; padding: 24px; background: var(--bg-card); border-radius: var(--radius-lg); border: 1px solid var(--border-color); }
+        .q-stat { flex: 1; display: flex; flex-direction: column; gap: 4px; }
+        .q-icon { font-size: 24px; margin-bottom: 4px; }
+        .q-val { font-size: 18px; font-weight: 700; color: var(--text-main); }
+        .q-lbl { font-size: 13px; color: var(--text-muted); font-weight: 500; }
+
+        .modal-tabs { display: flex; gap: 32px; border-bottom: 1px solid var(--border-color); margin-bottom: 24px; }
+        .m-tab { padding: 12px 0; font-size: 16px; font-weight: 600; color: var(--text-muted); cursor: pointer; position: relative; }
+        .m-tab.active { color: var(--primary); }
+        .m-tab.active::after { content: ''; position: absolute; bottom: -1px; left: 0; right: 0; height: 3px; background: var(--primary); border-radius: 3px 3px 0 0; }
+
+        .modal-desc { font-size: 16px; line-height: 1.8; color: var(--text-main); margin-bottom: 32px; opacity: 0.9; }
+
+        /* Nearby / Highlights */
+        .highlights-list { display: flex; flex-direction: column; gap: 16px; }
+        .highlight-item { display: flex; gap: 16px; padding: 16px; background: var(--bg-card); border-radius: var(--radius-md); border: 1px solid var(--border-color); align-items: center; }
+        .h-img { width: 60px; height: 60px; border-radius: 12px; object-fit: cover; }
+        .h-info h4 { font-size: 16px; font-weight: 700; color: var(--text-main); }
+        .h-info p { font-size: 13px; color: var(--text-muted); margin-top: 4px; }
+
+        /* Sidebar in Modal */
+        .modal-sidebar { display: flex; flex-direction: column; gap: 24px; }
+        .booking-card { background: var(--bg-card); padding: 24px; border-radius: var(--radius-lg); border: 1px solid var(--border-color); box-shadow: var(--shadow-md); position: sticky; top: 24px; }
+        .b-price { font-size: 32px; font-weight: 800; color: var(--text-main); margin-bottom: 4px; }
+        .b-sub { font-size: 14px; color: var(--text-muted); margin-bottom: 24px; }
         
-        .modal-stats { display: flex; gap: 24px; margin-bottom: 24px; padding-bottom: 24px; border-bottom: 1px solid var(--border); }
-        .stat-item { display: flex; flex-direction: column; }
-        .stat-val { font-size: 20px; font-weight: 800; color: var(--text); display: flex; align-items: center; gap: 4px;}
-        .stat-label { font-size: 13px; color: var(--text-light); font-weight: 500; margin-top: 4px; }
+        .b-btn { background: var(--primary); color: white; border: none; padding: 16px; width: 100%; border-radius: 12px; font-size: 16px; font-weight: 700; cursor: pointer; margin-bottom: 12px; transition: var(--transition); box-shadow: var(--shadow-glow); }
+        .b-btn:hover { background: var(--primary-hover); transform: translateY(-2px); }
+        .b-btn-outline { background: transparent; color: var(--primary); border: 2px solid var(--primary); padding: 14px; width: 100%; border-radius: 12px; font-size: 16px; font-weight: 700; cursor: pointer; transition: var(--transition); }
+        .b-btn-outline:hover { background: var(--primary); color: white; }
         
-        .modal-desc { font-size: 16px; line-height: 1.7; color: var(--text); margin-bottom: 32px; }
-        
-        .modal-action { background: var(--accent); color: white; border: none; padding: 18px; border-radius: 20px; font-size: 16px; font-weight: 800; cursor: pointer; width: 100%; box-shadow: var(--shadow-accent); transition: all 0.2s; }
-        .modal-action:hover { background: var(--accent-hover); transform: translateY(-2px); }
+        .map-preview { width: 100%; height: 200px; border-radius: var(--radius-md); background: url('https://images.unsplash.com/photo-1524661135-423995f22d0b?auto=format&fit=crop&w=600&q=80') center/cover; position: relative; overflow: hidden; border: 1px solid var(--border-color); margin-top: 24px; cursor: pointer;}
+        .map-overlay { position: absolute; inset: 0; background: rgba(0,0,0,0.3); display: flex; justify-content: center; align-items: center; color: white; font-weight: 700; font-size: 16px; backdrop-filter: blur(2px); transition: var(--transition); }
+        .map-preview:hover .map-overlay { background: rgba(0,0,0,0.5); backdrop-filter: blur(0px); }
 
         /* Responsive */
+        @media (max-width: 1024px) {
+            .masonry-grid { column-count: 2; }
+            .modal-body { grid-template-columns: 1fr; }
+            .booking-card { position: static; }
+        }
         @media (max-width: 768px) {
-            .auth-container { flex-direction: column; min-height: auto; }
-            .brand-panel { padding: 40px 30px; }
-            .brand-panel p, .feature { display: none; }
-            .brand-logo { margin-bottom: 16px; }
-            .form-row { flex-direction: column; gap: 0; }
-            
-            .home-content { padding: 24px 20px; }
-            .search-bar { flex-direction: column; }
-            .filter-btn { padding: 16px; }
-            .featured-banner { height: 350px; }
-            .plan-trip-banner { flex-direction: column; text-align: center; gap: 24px; }
-            .plan-trip-banner::after { display: none; }
+            .navbar { padding: 16px 20px; }
+            .container { padding: 20px; }
+            .carousel { margin: 0 -20px; padding-left: 20px; padding-right: 20px; }
+            .search-container { flex-direction: column; border-radius: 20px; padding: 12px; }
+            .search-field { width: 100%; border-right: none; border-bottom: 1px solid var(--border-color); padding: 12px; }
+            .search-btn { width: 100%; border-radius: 12px; margin-top: 12px; }
+            .hero-title { font-size: 36px; }
+            .cta-banner { padding: 40px 24px; }
+            .cta-content h2 { font-size: 32px; }
+            .modal-container { height: 100vh; border-radius: 0; }
+            .modal-gallery { height: 300px; }
+            .modal-body { padding: 24px; }
+            .modal-title { font-size: 28px; }
+            .quick-stats { flex-wrap: wrap; }
+            .q-stat { min-width: 40%; }
         }
     </style>
 </head>
 <body>
 
-    <!-- AUTHENTICATION VIEW -->
-    <div class="auth-container" id="auth-view">
-        <div class="brand-panel">
-            <div class="brand-logo">🌍</div>
-            <h1>Traveloop</h1>
-            <p>Plan trips together.<br>Explore the world with friends in a premium experience.</p>
-            
-            <div class="feature">
-                <div class="feature-icon">👥</div>
-                <div class="feature-text">Collaborative planning</div>
-            </div>
-            <div class="feature">
-                <div class="feature-icon">🗺️</div>
-                <div class="feature-text">Smart itineraries</div>
-            </div>
-            <div class="feature">
-                <div class="feature-icon">✨</div>
-                <div class="feature-text">Curated experiences</div>
+    <!-- NAVBAR -->
+    <nav class="navbar" id="navbar">
+        <div class="flex-between">
+            <div class="logo-text">Traveloop<span style="color:var(--text-main)">.ai</span></div>
+            <div class="nav-actions">
+                <button class="icon-btn" onclick="toggleTheme()" title="Toggle Dark Mode">🌓</button>
+                <button class="icon-btn">🔔</button>
+                <div class="avatar" onclick="alert('Profile Menu Opened')">
+                    <img src="https://images.unsplash.com/photo-1535713875002-d1d0cf377fde?auto=format&fit=crop&w=150&q=80" alt="User">
+                </div>
             </div>
         </div>
+    </nav>
 
-        <div class="form-panel">
-            <div class="toggle-tabs">
-                <div class="tab active" id="tab-register" onclick="switchTab('register')">Register</div>
-                <div class="tab" id="tab-login" onclick="switchTab('login')">Sign In</div>
-            </div>
-
-            <div id="status-message" class="status-msg"></div>
-
-            <form id="form-register" class="auth-form active" onsubmit="handleRegister(event)">
-                <div class="form-header">
-                    <h2>Create account</h2>
-                    <p>Start your journey today</p>
-                </div>
-
-                <div class="form-row">
-                    <div class="form-group"><label>First Name</label><input type="text" id="reg-first" required></div>
-                    <div class="form-group"><label>Last Name</label><input type="text" id="reg-last" required></div>
-                </div>
-
-                <div class="form-row">
-                    <div class="form-group"><label>Email</label><input type="email" id="reg-email" required></div>
-                    <div class="form-group"><label>Phone Number</label><input type="tel" id="reg-phone"></div>
-                </div>
-
-                <div class="form-row">
-                    <div class="form-group"><label>City</label><input type="text" id="reg-city"></div>
-                    <div class="form-group"><label>Country</label><input type="text" id="reg-country"></div>
-                </div>
-
-                <div class="form-group"><label>Username</label><input type="text" id="reg-username" required></div>
-                <div class="form-group"><label>Password</label><input type="password" id="reg-password" required></div>
-
-                <button type="submit" class="submit-btn" id="btn-register">Create Account</button>
-                <div class="switch-prompt">Already have an account? <span onclick="switchTab('login')">Sign In</span></div>
-            </form>
-
-            <form id="form-login" class="auth-form" onsubmit="handleLogin(event)">
-                <div class="form-header">
-                    <h2>Welcome back</h2>
-                    <p>Enter your credentials to continue</p>
-                </div>
-                <div class="form-group"><label>Username</label><input type="text" id="login-username" required></div>
-                <div class="form-group"><label>Password</label><input type="password" id="login-password" required></div>
-                <button type="submit" class="submit-btn" id="btn-login">Sign In</button>
-                <div class="switch-prompt">Don't have an account? <span onclick="switchTab('register')">Register</span></div>
-            </form>
-        </div>
-    </div>
-    
-    <!-- NEW TRIP VIEW (Hidden via display:none by default) -->
-    <div class="newtrip-view" id="newtrip-view" style="display:none; width: 100%; height: 100vh; background: var(--bg); flex-direction: column; overflow-y: auto;">
-        <div class="navbar">
-            <div class="nav-left"><div class="nav-logo" onclick="toggleBackToHome()">← Back</div></div>
-            <div class="nav-right"><div class="nav-brand">Plan Trip</div></div>
-        </div>
-        <div class="home-content">
-            <div class="plan-trip-banner" style="margin-bottom: 30px;">
-                <div class="plan-text">
-                    <h2>Design your perfect getaway</h2>
-                    <p>Fill out the details and let Traveloop build your itinerary.</p>
-                </div>
-            </div>
-            
-            <div style="background: white; border-radius: 28px; padding: 40px; box-shadow: var(--shadow-sm);">
-                <h3 style="font-size: 20px; font-weight: 700; margin-bottom: 24px;">Trip Details</h3>
-                <label>Destination</label>
-                <input type="text" placeholder="E.g. Santorini, Greece" style="background: var(--bg); margin-top:8px; margin-bottom: 20px; padding:16px; border-radius:12px;"/>
-                
-                <div style="display:flex; gap: 16px; margin-bottom: 20px;">
-                    <div style="flex:1">
-                        <label>Start date</label>
-                        <input type="date" style="background: var(--bg); margin-top:8px; padding:16px; border-radius:12px;"/>
-                    </div>
-                    <div style="flex:1">
-                        <label>End date</label>
-                        <input type="date" style="background: var(--bg); margin-top:8px; padding:16px; border-radius:12px;"/>
-                    </div>
-                </div>
-                
-                <label>Travel Notes</label>
-                <textarea rows="4" placeholder="Any preferences? (e.g., vegan food, wheelchair accessible...)" style="width:100%; margin-top:8px; padding:16px; background: var(--bg); border: 1px solid transparent; border-radius:12px; font-size: 15px; outline: none;"></textarea>
-                
-                <button class="plan-btn" style="width:100%; margin-top:32px;" onclick="alert('Itinerary saved!'); toggleBackToHome();">Generate Itinerary</button>
-            </div>
-        </div>
-    </div>
-    
-    <!-- HOME DASHBOARD VIEW -->
-    <div class="home-view" id="home-view">
-        <!-- Navbar -->
-        <div class="navbar">
-            <div class="nav-left">
-                <div class="nav-logo">Dashboard</div>
-            </div>
-            <div class="nav-right">
-                <div class="nav-brand">Traveloop</div>
-                <div class="nav-avatar" id="nav-avatar" onclick="toggleProfileMenu()">U</div>
-            </div>
-        </div>
+    <!-- MAIN APP VIEW -->
+    <main class="home-view" id="main-view">
         
-        <!-- Profile Dropdown -->
-        <div class="profile-menu" id="profile-menu">
-            <div class="prof-menu-name" id="menu-name">User Name</div>
-            <div class="prof-menu-email" id="menu-email">user@example.com</div>
-            <button class="prof-menu-btn" onclick="handleLogout()">Log out securely</button>
+        <!-- Hero Section -->
+        <section class="hero">
+            <div class="hero-bg"></div>
+            <div class="hero-overlay"></div>
+            <div class="hero-content">
+                <h1 class="hero-title serif">Discover Your Next<br>Great Adventure</h1>
+                <p class="hero-sub">AI-powered itineraries, curated stays, and hidden gems tailored just for you.</p>
+                
+                <div class="search-container glass">
+                    <div class="search-field">
+                        <span class="search-icon">📍</span>
+                        <input type="text" class="search-input" placeholder="Where to?">
+                    </div>
+                    <div class="search-field">
+                        <span class="search-icon">🗓️</span>
+                        <input type="text" class="search-input" placeholder="Dates">
+                    </div>
+                    <div class="search-field">
+                        <span class="search-icon">👥</span>
+                        <input type="text" class="search-input" placeholder="Guests">
+                    </div>
+                    <button class="search-btn">Search</button>
+                </div>
+            </div>
+        </section>
+
+        <div class="container">
+            
+            <!-- Travel Categories -->
+            <div class="category-list">
+                <div class="cat-chip active">🔥 Trending</div>
+                <div class="cat-chip">⛰️ Mountains</div>
+                <div class="cat-chip">🏖️ Beaches</div>
+                <div class="cat-chip">🏛️ Culture</div>
+                <div class="cat-chip">🍜 Foodie</div>
+                <div class="cat-chip">🏕️ Adventure</div>
+                <div class="cat-chip">💎 Hidden Gems</div>
+            </div>
+
+            <!-- Top Rated Destinations (Carousel) -->
+            <div class="section-header">
+                <div>
+                    <h2 class="section-title">AI Recommended For You</h2>
+                    <p class="section-desc">Based on your recent searches and preferences</p>
+                </div>
+                <a href="#" class="view-all">View all <span>→</span></a>
+            </div>
+            
+            <div class="carousel" id="ai-recs-container">
+                <!-- Injected via JS -->
+                <div class="dest-card skeleton"></div>
+                <div class="dest-card skeleton"></div>
+                <div class="dest-card skeleton"></div>
+                <div class="dest-card skeleton"></div>
+            </div>
+
+            <!-- Full Width Banner CTA -->
+            <div class="cta-banner">
+                <div class="cta-bg"></div>
+                <div class="cta-overlay"></div>
+                <div class="cta-content">
+                    <h2>Weekend Getaways under $500</h2>
+                    <p>Pack your bags for a quick escape. We've curated the best budget-friendly trips departing this Friday from your location.</p>
+                    <button class="cta-btn">Explore Deals <span>✨</span></button>
+                </div>
+            </div>
+
+            <!-- Explore More (Masonry Grid) -->
+            <div class="section-header">
+                <div>
+                    <h2 class="section-title">Explore the World</h2>
+                    <p class="section-desc">Get inspired by beautiful places around the globe</p>
+                </div>
+            </div>
+            
+            <div class="masonry-grid" id="masonry-container">
+                <!-- Injected via JS -->
+                <div class="masonry-item skeleton" style="height: 300px;"></div>
+                <div class="masonry-item skeleton" style="height: 400px;"></div>
+                <div class="masonry-item skeleton" style="height: 250px;"></div>
+                <div class="masonry-item skeleton" style="height: 350px;"></div>
+            </div>
+
         </div>
+    </main>
 
-        <!-- Main Content -->
-        <div class="home-content">
-            <div class="welcome-sub" id="welcome-text">Good morning, Traveler</div>
-            <div class="welcome-title">Where do you want to<br>go next?</div>
-
-            <!-- Search Bar -->
-            <div class="search-bar">
-                <div class="search-input-wrap">
-                    <span>📍</span>
-                    <input type="text" placeholder="Search for destinations, hotels, or flights...">
-                </div>
-                <button class="filter-btn">Filters</button>
-            </div>
-
-            <!-- Featured Banner -->
-            <div class="featured-banner" onclick="openModal('Bali, Indonesia', 'https://images.unsplash.com/photo-1537996194471-e657df975ab4?auto=format&fit=crop&w=1200&q=80', 'South East Asia', '4.9', 'Bali is an Indonesian island known for its forested volcanic mountains, iconic rice paddies, beaches and coral reefs. The island is home to religious sites such as cliffside Uluwatu Temple. To the south, the beachside city of Kuta has lively bars, while Seminyak, Sanur and Nusa Dua are popular resort towns.')">
-                <div class="featured-label">Editors' Choice</div>
-                <div class="featured-content">
-                    <h3>Escape to Bali</h3>
-                    <p>Discover pristine beaches and rich cultural heritage.</p>
-                    <button class="btn-view">Explore Destination</button>
-                </div>
-            </div>
-            
-            <!-- Famous Places (Image Cards) -->
-            <div class="section-title">Famous Places <span>See all</span></div>
-            <div class="horizontal-list">
-                <div class="image-card" onclick="openModal('Santorini', 'https://images.unsplash.com/photo-1613395877344-13d4a8e0d49e?auto=format&fit=crop&w=800&q=80', 'Greece', '4.8', 'Santorini is a volcanic island in the Cyclades group of the Greek islands. It is famous for dramatic views, stunning sunsets from Oia town, the strange white aubergine (eggplant), the town of Thira and naturally its very own active volcano.')">
-                    <img src="https://images.unsplash.com/photo-1613395877344-13d4a8e0d49e?auto=format&fit=crop&w=600&q=80" alt="Santorini">
-                    <div class="card-rating">⭐ 4.8</div>
-                    <div class="card-overlay">
-                        <div class="card-title">Santorini</div>
-                        <div class="card-sub">📍 Greece</div>
-                    </div>
-                </div>
-                
-                <div class="image-card" onclick="openModal('Kyoto', 'https://images.unsplash.com/photo-1493976040374-85c8e12f0c0e?auto=format&fit=crop&w=800&q=80', 'Japan', '4.9', 'Kyoto, once the capital of Japan, is a city on the island of Honshu. It is famous for its numerous classical Buddhist temples, as well as gardens, imperial palaces, Shinto shrines and traditional wooden houses.')">
-                    <img src="https://images.unsplash.com/photo-1493976040374-85c8e12f0c0e?auto=format&fit=crop&w=600&q=80" alt="Kyoto">
-                    <div class="card-rating">⭐ 4.9</div>
-                    <div class="card-overlay">
-                        <div class="card-title">Kyoto</div>
-                        <div class="card-sub">📍 Japan</div>
-                    </div>
-                </div>
-                
-                <div class="image-card" onclick="openModal('Amalfi Coast', 'https://images.unsplash.com/photo-1533676802871-eca1ae998cd5?auto=format&fit=crop&w=800&q=80', 'Italy', '4.7', 'The Amalfi Coast is a 50-kilometer stretch of coastline along the southern edge of Italy’s Sorrentine Peninsula, in the Campania region. It’s a popular holiday destination, with sheer cliffs and a rugged shoreline dotted with small beaches and pastel-colored fishing villages.')">
-                    <img src="https://images.unsplash.com/photo-1533676802871-eca1ae998cd5?auto=format&fit=crop&w=600&q=80" alt="Amalfi">
-                    <div class="card-rating">⭐ 4.7</div>
-                    <div class="card-overlay">
-                        <div class="card-title">Amalfi Coast</div>
-                        <div class="card-sub">📍 Italy</div>
-                    </div>
-                </div>
-                
-                <div class="image-card" onclick="openModal('Banff', 'https://images.unsplash.com/photo-1542668595-fa9394e5b686?auto=format&fit=crop&w=800&q=80', 'Canada', '4.9', 'Banff National Park is Canada is oldest national park, established in 1885. Located in Alberta is Rocky Mountains, Banff encompasses 6,641 square kilometres of mountainous terrain, with numerous glaciers and ice fields, dense coniferous forest, and alpine landscapes.')">
-                    <img src="https://images.unsplash.com/photo-1542668595-fa9394e5b686?auto=format&fit=crop&w=600&q=80" alt="Banff">
-                    <div class="card-rating">⭐ 4.9</div>
-                    <div class="card-overlay">
-                        <div class="card-title">Banff</div>
-                        <div class="card-sub">📍 Canada</div>
-                    </div>
-                </div>
-            </div>
-            
-            <!-- Plan a Trip Banner CTA -->
-            <div class="plan-trip-banner">
-                <div class="plan-text">
-                    <h2>Ready for your next adventure?</h2>
-                    <p>Build a custom itinerary tailored to your group in seconds.</p>
-                </div>
-                <button class="plan-btn" onclick="showNewTrip()">+ Plan a trip</button>
-            </div>
-
-            <!-- Previous Trips (Wide Cards) -->
-            <div class="section-title">Previous Trips <span>View history</span></div>
-            <div class="horizontal-list">
-                <div class="wide-card">
-                    <div class="wide-card-img">
-                        <div class="card-rating" style="top:10px; right:10px;">Oct 2024</div>
-                        <img src="https://images.unsplash.com/photo-1520625624110-8b010640d6c0?auto=format&fit=crop&w=600&q=80" alt="Morocco">
-                    </div>
-                    <div class="wide-card-title">Marrakech Markets</div>
-                    <div class="wide-card-sub">
-                        <span>Morocco • 6 days</span>
-                        <span style="font-weight: 700; color: var(--accent);">View details</span>
-                    </div>
-                </div>
-                
-                <div class="wide-card">
-                    <div class="wide-card-img">
-                        <div class="card-rating" style="top:10px; right:10px;">Jul 2024</div>
-                        <img src="https://images.unsplash.com/photo-1513622470522-26c3c8a854bc?auto=format&fit=crop&w=600&q=80" alt="Seattle">
-                    </div>
-                    <div class="wide-card-title">Seattle City Tour</div>
-                    <div class="wide-card-sub">
-                        <span>USA • 4 days</span>
-                        <span style="font-weight: 700; color: var(--accent);">View details</span>
-                    </div>
-                </div>
-                
-                <div class="wide-card">
-                    <div class="wide-card-img">
-                        <div class="card-rating" style="top:10px; right:10px;">Apr 2024</div>
-                        <img src="https://images.unsplash.com/photo-1513581166358-b66d2a64375e?auto=format&fit=crop&w=600&q=80" alt="Swiss Alps">
-                    </div>
-                    <div class="wide-card-title">Swiss Alps Skiing</div>
-                    <div class="wide-card-sub">
-                        <span>Switzerland • 7 days</span>
-                        <span style="font-weight: 700; color: var(--accent);">View details</span>
-                    </div>
-                </div>
-            </div>
-            
-        </div>
-    </div>
-    
-    <!-- PLACE DETAILS MODAL -->
+    <!-- DETAILED PLACE MODAL -->
     <div class="modal-overlay" id="place-modal" onclick="closeModal(event)">
-        <div class="modal-card">
-            <div class="modal-header">
-                <img id="modal-img" src="" alt="Location">
-                <button class="modal-close" onclick="forceCloseModal()">✕</button>
-            </div>
-            <div class="modal-body">
-                <h2 class="modal-title" id="modal-title">Place Name</h2>
-                <div class="modal-location" id="modal-location">📍 Location</div>
-                
-                <div class="modal-stats">
-                    <div class="stat-item">
-                        <div class="stat-val" id="modal-rating">⭐ 0.0</div>
-                        <div class="stat-label">Rating</div>
-                    </div>
-                    <div class="stat-item">
-                        <div class="stat-val">☀️ 28°C</div>
-                        <div class="stat-label">Weather</div>
-                    </div>
-                    <div class="stat-item">
-                        <div class="stat-val">✈️ 4h</div>
-                        <div class="stat-label">Flight</div>
+        <div class="modal-container">
+            <button class="modal-close" onclick="forceCloseModal()">✕</button>
+            
+            <div class="modal-content">
+                <!-- Gallery -->
+                <div class="modal-gallery">
+                    <img id="m-img-main" class="main-img" src="" alt="Location">
+                    <div class="gallery-thumbs" id="m-thumbs">
+                        <!-- Thumbs injected via JS -->
                     </div>
                 </div>
                 
-                <p class="modal-desc" id="modal-desc">Description goes here.</p>
-                
-                <button class="modal-action" onclick="showNewTrip(); forceCloseModal();">Plan a trip here</button>
+                <!-- Body -->
+                <div class="modal-body">
+                    
+                    <!-- Left Column -->
+                    <div class="modal-main-col">
+                        <div class="modal-title-row">
+                            <div>
+                                <h2 class="modal-title" id="m-title">Destination Name</h2>
+                                <div class="modal-location" id="m-location">📍 Location</div>
+                            </div>
+                            <div class="modal-actions">
+                                <button class="action-btn" title="Save">❤️</button>
+                                <button class="action-btn" title="Share">↗️</button>
+                            </div>
+                        </div>
+
+                        <div class="quick-stats">
+                            <div class="q-stat">
+                                <span class="q-icon">⭐</span>
+                                <span class="q-val" id="m-rating">4.9</span>
+                                <span class="q-lbl">Rating</span>
+                            </div>
+                            <div class="q-stat">
+                                <span class="q-icon">⛅</span>
+                                <span class="q-val" id="m-weather">24°C</span>
+                                <span class="q-lbl">Best Time: <span id="m-best-time">Sep</span></span>
+                            </div>
+                            <div class="q-stat">
+                                <span class="q-icon">✈️</span>
+                                <span class="q-val">Direct</span>
+                                <span class="q-lbl">Flights available</span>
+                            </div>
+                        </div>
+
+                        <div class="modal-tabs">
+                            <div class="m-tab active">Overview</div>
+                            <div class="m-tab">Itinerary</div>
+                            <div class="m-tab">Hotels</div>
+                            <div class="m-tab">Reviews</div>
+                        </div>
+
+                        <p class="modal-desc" id="m-desc">Description goes here.</p>
+
+                        <h3 class="brand-font" style="font-size: 20px; margin-bottom: 16px;">Top Attractions</h3>
+                        <div class="highlights-list" id="m-attractions">
+                            <!-- Injected via JS -->
+                        </div>
+                    </div>
+
+                    <!-- Right Column (Sidebar) -->
+                    <div class="modal-sidebar">
+                        <div class="booking-card">
+                            <div class="b-price" id="m-price">$0<span>/person</span></div>
+                            <div class="b-sub">Estimated 5-day budget</div>
+                            
+                            <button class="b-btn">Start Planning ⚡</button>
+                            <button class="b-btn-outline">View Flights</button>
+                            
+                            <div class="map-preview" title="View on map">
+                                <div class="map-overlay">View Interactive Map</div>
+                            </div>
+                        </div>
+                    </div>
+
+                </div>
             </div>
         </div>
     </div>
 
+    <!-- JAVASCRIPT DATA & LOGIC -->
     <script>
-        const BASE_URL = 'http://localhost:5000/api/auth';
-        let jwtToken = localStorage.getItem('traveloop_token');
-        
-        // --- Initialization ---
-        window.onload = () => {
-            if (jwtToken) {
-                fetchProfile();
-            } else {
-                showView('auth');
-            }
-        };
+        // --- DATA STORE ---
+        const destinationsData = [
+            {
+                id: '1', type: 'recommendation', badge: 'Must Visit',
+                name: 'Kyoto', location: 'Japan', rating: '4.9', price: '$1,200',
+                bestTime: 'Spring (March-May)', weather: '20°C',
+                desc: 'Kyoto, once the capital of Japan, is a city on the island of Honshu. It is famous for its numerous classical Buddhist temples, as well as gardens, imperial palaces, Shinto shrines and traditional wooden houses. It represents the traditional heart of Japanese culture.',
+                images: [
+                    'https://images.unsplash.com/photo-1493976040374-85c8e12f0c0e?auto=format&fit=crop&w=1200&q=80',
+                    'https://images.unsplash.com/photo-1545569341-9eb8b3097314?auto=format&fit=crop&w=800&q=80',
+                    'https://images.unsplash.com/photo-1624253321171-1be53e12f5f4?auto=format&fit=crop&w=800&q=80'
+                ],
+                attractions: [
+                    { name: 'Fushimi Inari Shrine', desc: 'Famous for its thousands of vermilion torii gates.', img: 'https://images.unsplash.com/photo-1524413840807-0c3cb6fa808d?auto=format&fit=crop&w=200&q=80' },
+                    { name: 'Arashiyama Bamboo Grove', desc: 'A mesmerizing walk through towering bamboo stalks.', img: 'https://images.unsplash.com/photo-1578330541338-7f920eb50013?auto=format&fit=crop&w=200&q=80' }
+                ]
+            },
+            {
+                id: '2', type: 'recommendation', badge: 'Honeymoon',
+                name: 'Amalfi Coast', location: 'Italy', rating: '4.8', price: '$2,500',
+                bestTime: 'Summer (June-Aug)', weather: '28°C',
+                desc: 'The Amalfi Coast is a 50-kilometer stretch of coastline along the southern edge of Italy’s Sorrentine Peninsula. It’s a popular holiday destination, with sheer cliffs and a rugged shoreline dotted with small beaches and pastel-colored fishing villages.',
+                images: [
+                    'https://images.unsplash.com/photo-1533676802871-eca1ae998cd5?auto=format&fit=crop&w=1200&q=80',
+                    'https://images.unsplash.com/photo-1552554700-111db6fb9923?auto=format&fit=crop&w=800&q=80',
+                    'https://images.unsplash.com/photo-1610017810004-a6f3c531df34?auto=format&fit=crop&w=800&q=80'
+                ],
+                attractions: [
+                    { name: 'Positano', desc: 'Cliffside village with pebble beaches and steep streets.', img: 'https://images.unsplash.com/photo-1516483638261-f40af5aa3454?auto=format&fit=crop&w=200&q=80' }
+                ]
+            },
+            {
+                id: '3', type: 'recommendation', badge: 'Nature',
+                name: 'Banff National Park', location: 'Canada', rating: '4.9', price: '$900',
+                bestTime: 'Summer or Winter', weather: '15°C',
+                desc: 'Banff National Park is Canada’s oldest national park, established in 1885. Located in Alberta’s Rocky Mountains, Banff encompasses mountainous terrain, with numerous glaciers and ice fields, dense coniferous forest, and alpine landscapes.',
+                images: [
+                    'https://images.unsplash.com/photo-1542668595-fa9394e5b686?auto=format&fit=crop&w=1200&q=80',
+                    'https://images.unsplash.com/photo-1503614472-8c93d56e92ce?auto=format&fit=crop&w=800&q=80'
+                ],
+                attractions: [
+                    { name: 'Lake Louise', desc: 'Known for its turquoise, glacier-fed lake ringed by high peaks.', img: 'https://images.unsplash.com/photo-1513569771920-c9e1d31714fc?auto=format&fit=crop&w=200&q=80' }
+                ]
+            },
+            {
+                id: '4', type: 'recommendation', badge: 'Tropical',
+                name: 'Bali', location: 'Indonesia', rating: '4.7', price: '$800',
+                bestTime: 'Dry Season (Apr-Oct)', weather: '30°C',
+                desc: 'Bali is an Indonesian island known for its forested volcanic mountains, iconic rice paddies, beaches and coral reefs. The island is home to religious sites such as cliffside Uluwatu Temple.',
+                images: [
+                    'https://images.unsplash.com/photo-1537996194471-e657df975ab4?auto=format&fit=crop&w=1200&q=80',
+                    'https://images.unsplash.com/photo-1518548419970-58e3b4079ab2?auto=format&fit=crop&w=800&q=80'
+                ],
+                attractions: [
+                    { name: 'Ubud Monkey Forest', desc: 'A nature reserve and Hindu temple complex.', img: 'https://images.unsplash.com/photo-1553556108-7a544c76b92a?auto=format&fit=crop&w=200&q=80' }
+                ]
+            },
+            // Masonry Grid Items
+            { id: '5', type: 'explore', name: 'Santorini', location: 'Greece', img: 'https://images.unsplash.com/photo-1613395877344-13d4a8e0d49e?auto=format&fit=crop&w=600&q=80' },
+            { id: '6', type: 'explore', name: 'Swiss Alps', location: 'Switzerland', img: 'https://images.unsplash.com/photo-1530122037265-a5f1f91d3b99?auto=format&fit=crop&w=600&q=80' },
+            { id: '7', type: 'explore', name: 'Tulum', location: 'Mexico', img: 'https://images.unsplash.com/photo-1522061901111-f1f31f99a5e1?auto=format&fit=crop&w=600&q=80' },
+            { id: '8', type: 'explore', name: 'Maldives', location: 'South Asia', img: 'https://images.unsplash.com/photo-1514282401047-d79a71a590e8?auto=format&fit=crop&w=600&q=80' },
+            { id: '9', type: 'explore', name: 'Paris', location: 'France', img: 'https://images.unsplash.com/photo-1499856871958-5b9627545d1a?auto=format&fit=crop&w=600&q=80' },
+            { id: '10', type: 'explore', name: 'Patagonia', location: 'Argentina', img: 'https://images.unsplash.com/photo-1464822759023-fed622ff2c3b?auto=format&fit=crop&w=600&q=80' },
+        ];
 
-        // --- View Management ---
-        function switchTab(tab) {
-            document.getElementById('tab-register').className = tab === 'register' ? 'tab active' : 'tab';
-            document.getElementById('tab-login').className = tab === 'login' ? 'tab active' : 'tab';
-            document.getElementById('form-register').className = tab === 'register' ? 'auth-form active' : 'auth-form';
-            document.getElementById('form-login').className = tab === 'login' ? 'auth-form active' : 'auth-form';
-            hideMessage();
-        }
-        
-        function showView(view) {
-            if (view === 'auth') {
-                document.getElementById('auth-view').style.display = 'flex';
-                document.getElementById('home-view').classList.remove('active');
-                document.getElementById('newtrip-view').style.display = 'none';
-                document.body.style.backgroundColor = 'var(--primary)';
-            } else {
-                document.getElementById('auth-view').style.display = 'none';
-                document.getElementById('home-view').classList.add('active');
-                document.getElementById('newtrip-view').style.display = 'none';
-                document.body.style.backgroundColor = 'var(--bg)';
-            }
-        }
+        // --- RENDER LOGIC ---
+        document.addEventListener('DOMContentLoaded', () => {
+            // Setup Navbar Scroll Effect
+            window.addEventListener('scroll', () => {
+                const nav = document.getElementById('navbar');
+                if (window.scrollY > 50) nav.classList.add('scrolled');
+                else nav.classList.remove('scrolled');
+            });
 
-        function showMessage(msg, isSuccess) {
-            const el = document.getElementById('status-message');
-            el.textContent = msg;
-            el.className = 'status-msg ' + (isSuccess ? 'success' : 'error');
-        }
+            // Render AI Recommendations
+            const recsContainer = document.getElementById('ai-recs-container');
+            const recsHtml = destinationsData.filter(d => d.type === 'recommendation').map(dest => `
+                <div class="dest-card" onclick="openFullModal('${dest.id}')">
+                    <img src="${dest.images[0]}" alt="${dest.name}" class="dest-img" loading="lazy">
+                    <div class="dest-overlay">
+                        <div class="dest-badge">${dest.badge}</div>
+                        <div class="dest-fav" onclick="event.stopPropagation(); this.style.color='#EF4444';">❤️</div>
+                        <div class="dest-info">
+                            <h3>${dest.name}</h3>
+                            <div class="dest-meta">
+                                <span>📍 ${dest.location}</span>
+                                <div class="dest-rating">⭐ ${dest.rating}</div>
+                            </div>
+                            <div class="dest-bottom">
+                                <div class="dest-price">${dest.price} <span>/person</span></div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            `).join('');
+            
+            // Render Masonry Grid
+            const masonryContainer = document.getElementById('masonry-container');
+            const masonryHtml = destinationsData.filter(d => d.type === 'explore').map(dest => `
+                <div class="masonry-item" onclick="openBasicModal('${dest.name}', '${dest.location}', '${dest.img}')">
+                    <img src="${dest.img}" alt="${dest.name}" loading="lazy">
+                    <div class="masonry-overlay">
+                        <h4>${dest.name}</h4>
+                        <p>📍 ${dest.location}</p>
+                    </div>
+                </div>
+            `).join('');
 
-        function hideMessage() {
-            document.getElementById('status-message').className = 'status-msg';
-        }
-
-        function toggleProfileMenu() {
-            document.getElementById('profile-menu').classList.toggle('active');
-        }
-
-        // Close menu when clicking outside
-        document.addEventListener('click', function(event) {
-            const menu = document.getElementById('profile-menu');
-            const avatar = document.getElementById('nav-avatar');
-            if (!menu.contains(event.target) && event.target !== avatar) {
-                menu.classList.remove('active');
-            }
+            // Simulate loading delay for premium feel
+            setTimeout(() => {
+                recsContainer.innerHTML = recsHtml;
+                masonryContainer.innerHTML = masonryHtml;
+            }, 800);
         });
 
-        // --- Modal Management ---
-        function openModal(title, imgUrl, location, rating, desc) {
-            document.getElementById('modal-title').textContent = title;
-            document.getElementById('modal-img').src = imgUrl;
-            document.getElementById('modal-location').textContent = '📍 ' + location;
-            document.getElementById('modal-rating').textContent = '⭐ ' + rating;
-            document.getElementById('modal-desc').textContent = desc;
-            
-            document.getElementById('place-modal').classList.add('active');
-            document.body.style.overflow = 'hidden'; // Prevent background scrolling
-        }
-        
-        function closeModal(event) {
-            if (event.target.id === 'place-modal') {
-                forceCloseModal();
+        // --- THEME TOGGLE ---
+        function toggleTheme() {
+            const html = document.documentElement;
+            if (html.getAttribute('data-theme') === 'light') {
+                html.setAttribute('data-theme', 'dark');
+            } else {
+                html.setAttribute('data-theme', 'light');
             }
         }
-        
+
+        // --- MODAL LOGIC ---
+        function openFullModal(id) {
+            const dest = destinationsData.find(d => d.id === id);
+            if(!dest) return;
+
+            document.getElementById('m-title').textContent = dest.name;
+            document.getElementById('m-location').textContent = `📍 ${dest.location}`;
+            document.getElementById('m-desc').textContent = dest.desc;
+            document.getElementById('m-price').innerHTML = `${dest.price}<span>/person</span>`;
+            document.getElementById('m-rating').textContent = dest.rating;
+            document.getElementById('m-weather').textContent = dest.weather;
+            document.getElementById('m-best-time').textContent = dest.bestTime;
+            
+            // Set Main Image
+            document.getElementById('m-img-main').src = dest.images[0];
+            
+            // Set Thumbs
+            const thumbsHtml = dest.images.map(img => `
+                <div class="thumb" onclick="document.getElementById('m-img-main').src='${img}'">
+                    <img src="${img}" alt="thumb">
+                </div>
+            `).join('');
+            document.getElementById('m-thumbs').innerHTML = thumbsHtml;
+
+            // Set Attractions
+            const attHtml = dest.attractions.map(a => `
+                <div class="highlight-item">
+                    <img src="${a.img}" class="h-img" alt="${a.name}">
+                    <div class="h-info">
+                        <h4>${a.name}</h4>
+                        <p>${a.desc}</p>
+                    </div>
+                </div>
+            `).join('');
+            document.getElementById('m-attractions').innerHTML = attHtml;
+
+            showModal();
+        }
+
+        function openBasicModal(name, location, imgUrl) {
+            // Fallback for simple masonry items
+            document.getElementById('m-title').textContent = name;
+            document.getElementById('m-location').textContent = `📍 ${location}`;
+            document.getElementById('m-desc').textContent = `Explore the beautiful sights of ${name}, a premier destination in ${location}.`;
+            document.getElementById('m-price').innerHTML = `$???<span>/person</span>`;
+            document.getElementById('m-rating').textContent = '4.5+';
+            
+            document.getElementById('m-img-main').src = imgUrl;
+            document.getElementById('m-thumbs').innerHTML = '';
+            document.getElementById('m-attractions').innerHTML = '<p style="color:var(--text-muted)">Details loading...</p>';
+            
+            showModal();
+        }
+
+        function showModal() {
+            document.getElementById('place-modal').classList.add('active');
+            document.body.style.overflow = 'hidden';
+        }
+
+        function closeModal(event) {
+            if (event.target.id === 'place-modal') forceCloseModal();
+        }
+
         function forceCloseModal() {
             document.getElementById('place-modal').classList.remove('active');
             document.body.style.overflow = 'auto';
-        }
-
-        // --- API Calls ---
-        async function handleRegister(e) {
-            e.preventDefault();
-            const btn = document.getElementById('btn-register');
-            btn.disabled = true;
-            btn.textContent = 'Creating...';
-            hideMessage();
-
-            try {
-                const res = await fetch(`${BASE_URL}/register`, {
-                    method: 'POST',
-                    headers: { 'Content-Type': 'application/json' },
-                    body: JSON.stringify({
-                        first_name: document.getElementById('reg-first').value,
-                        last_name: document.getElementById('reg-last').value,
-                        email: document.getElementById('reg-email').value,
-                        phone: document.getElementById('reg-phone').value,
-                        city: document.getElementById('reg-city').value,
-                        country: document.getElementById('reg-country').value,
-                        username: document.getElementById('reg-username').value,
-                        password: document.getElementById('reg-password').value,
-                    })
-                });
-                const data = await res.json();
-                
-                if (data.success) {
-                    showMessage('Account created! Switching to login...', true);
-                    document.getElementById('login-username').value = document.getElementById('reg-username').value;
-                    document.getElementById('login-password').value = '';
-                    setTimeout(() => switchTab('login'), 1500);
-                } else {
-                    showMessage(data.message || 'Registration failed', false);
-                }
-            } catch (error) {
-                showMessage('Network error. Is the server running?', false);
-            } finally {
-                btn.disabled = false;
-                btn.textContent = 'Create Account';
-            }
-        }
-
-        async function handleLogin(e) {
-            e.preventDefault();
-            const btn = document.getElementById('btn-login');
-            btn.disabled = true;
-            btn.textContent = 'Signing in...';
-            hideMessage();
-
-            try {
-                const res = await fetch(`${BASE_URL}/login`, {
-                    method: 'POST',
-                    headers: { 'Content-Type': 'application/json' },
-                    body: JSON.stringify({
-                        username: document.getElementById('login-username').value,
-                        password: document.getElementById('login-password').value,
-                    })
-                });
-
-                const data = await res.json();
-
-                if (data.success) {
-                    jwtToken = data.token;
-                    localStorage.setItem('traveloop_token', jwtToken);
-                    document.getElementById('login-password').value = '';
-                    fetchProfile();
-                } else {
-                    showMessage(data.message || 'Login failed', false);
-                }
-            } catch (error) {
-                showMessage('Network error. Is the server running?', false);
-            } finally {
-                btn.disabled = false;
-                btn.textContent = 'Sign In';
-            }
-        }
-
-        async function fetchProfile() {
-            if (!jwtToken) return showView('auth');
-            
-            try {
-                const res = await fetch(`${BASE_URL}/profile`, {
-                    method: 'GET',
-                    headers: { 'Authorization': `Bearer ${jwtToken}` }
-                });
-                const data = await res.json();
-                
-                if (data.success) {
-                    const user = data.user;
-                    // Populate Dashboard UI
-                    document.getElementById('welcome-text').textContent = `Good morning, ${user.first_name}`;
-                    document.getElementById('nav-avatar').textContent = user.first_name.charAt(0).toUpperCase();
-                    document.getElementById('menu-name').textContent = `${user.first_name} ${user.last_name}`;
-                    document.getElementById('menu-email').textContent = `@${user.username}`;
-                    
-                    showView('home');
-                } else {
-                    handleLogout();
-                }
-            } catch (error) {
-                console.error("Profile fetch error", error);
-                handleLogout();
-            }
-        }
-
-        // --- Navigation between Home and New Trip ---
-        function showNewTrip() {
-            document.getElementById('home-view').classList.remove('active');
-            document.getElementById('newtrip-view').style.display = 'flex';
-            document.body.style.backgroundColor = 'var(--bg)';
-        }
-        function toggleBackToHome() {
-            document.getElementById('newtrip-view').style.display = 'none';
-            document.getElementById('home-view').classList.add('active');
-        }
-
-        function handleLogout() {
-            jwtToken = null;
-            localStorage.removeItem('traveloop_token');
-            document.getElementById('profile-menu').classList.remove('active');
-            showView('auth');
-            switchTab('login');
         }
     </script>
 </body>
