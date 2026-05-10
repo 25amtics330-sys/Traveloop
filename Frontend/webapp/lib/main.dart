@@ -37,7 +37,7 @@ class MyApp extends StatelessWidget {
 }
 
 class AppColors {
-  static const Color primary = Color(0xFF1A1A2E);
+  static const Color primary = Color.fromARGB(255, 79, 79, 175);
   static const Color accent = Color.fromARGB(255, 217, 139, 44);
   static const Color accentLight = Color(0xFFFFF0D9);
   static const Color teal = Color(0xFF2EC4B6);
@@ -163,7 +163,7 @@ class AppState extends ChangeNotifier {
   bool isLoggedIn = false;
   String userName = 'Alex Rivera';
   String userEmail = 'alex@example.com';
-  String userAvatar = '🧑‍💼';
+  String userAvatar = ' ';
 
   List<Trip> trips = [
     Trip(
@@ -211,6 +211,8 @@ class AppState extends ChangeNotifier {
       ],
     ),
   ];
+
+
 
   List<ChecklistItem> checklistItems = [
     ChecklistItem(id: 'c1', name: 'Passport', category: 'Documents', isPacked: true),
@@ -289,4 +291,44 @@ class TraveloopApp extends StatelessWidget {
       },
     );
   }
+}
+
+// ─── Notifications Screen ─────────────────────────────────────────────────────
+class NotificationsScreen extends StatelessWidget {
+  const NotificationsScreen({super.key});
+
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+      appBar: AppBar(title: const Text('Notifications')),
+      body: ListView(
+        padding: const EdgeInsets.all(16),
+        children: [
+          _notif('Trip reminder', 'Your Paris trip starts in 7 days!', '2h ago', Icons.airplane_ticket, AppColors.accent),
+          _notif('Budget alert', 'Japan trip is at 75% of budget', '1d ago', Icons.attach_money, AppColors.danger),
+          _notif('New follower', 'Sarah started following your trips', '2d ago', Icons.person_add, AppColors.teal),
+          _notif('Trip liked', 'Your Europe tour got 12 likes', '3d ago', Icons.favorite, AppColors.accent),
+        ],
+      ),
+    );
+  }
+
+  Widget _notif(String title, String body, String time, IconData icon, Color color) => Container(
+    margin: const EdgeInsets.only(bottom: 10),
+    padding: const EdgeInsets.all(14),
+    decoration: BoxDecoration(color: Colors.white, borderRadius: BorderRadius.circular(14), border: Border.all(color: AppColors.border)),
+    child: Row(children: [
+      Container(
+        padding: const EdgeInsets.all(10),
+        decoration: BoxDecoration(color: color.withOpacity(0.1), borderRadius: BorderRadius.circular(12)),
+        child: Icon(icon, color: color, size: 20),
+      ),
+      const SizedBox(width: 12),
+      Expanded(child: Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
+        Text(title, style: const TextStyle(fontWeight: FontWeight.w700, fontSize: 14)),
+        Text(body, style: const TextStyle(color: AppColors.textLight, fontSize: 12)),
+      ])),
+      Text(time, style: const TextStyle(color: AppColors.textLight, fontSize: 11)),
+    ]),
+  );
 }

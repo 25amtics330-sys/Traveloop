@@ -72,7 +72,7 @@ class UserProfileScreen extends StatelessWidget {
                   ]),
                   const SizedBox(height: 12),
                   _section([
-                    _tile(Icons.logout, 'Sign Out', () => appState.logout(), color: AppColors.danger),
+                    _tile(Icons.logout, 'Sign Out', () => Navigator.pushNamed(context, '/login'), color: AppColors.danger),
                     _tile(Icons.delete_forever_outlined, 'Delete Account', () {}, color: AppColors.danger),
                   ]),
                 ],
