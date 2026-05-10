@@ -39,18 +39,12 @@ class _HomePageState extends State<HomePage> with TickerProviderStateMixin {
     return Scaffold(
       backgroundColor: AppColors.bg,
       appBar: AppBar(
-        backgroundColor: AppColors.primary,
+        backgroundColor: const Color.fromARGB(255, 119, 119, 232),
         elevation: 1,
-        title: const Text('Home'),
+        title: const Text('Traveloop', style: TextStyle(color: AppColors.accentLight, fontSize: 26),  ),
         actions: const [
-          Text(
-            'Traveloop',
-            style: TextStyle(
-              color: AppColors.accentLight,
-              fontSize: 24,
-              fontWeight: FontWeight.bold,
-            ),
-          ),
+          SizedBox(width: 24),
+          Icon(Icons.notifications_none, color: AppColors.accentLight),
           SizedBox(width: 8),
           Padding(
             padding: EdgeInsets.only(right: 16.0),
@@ -232,7 +226,9 @@ class _HomePageState extends State<HomePage> with TickerProviderStateMixin {
             Align(
               alignment: Alignment.centerRight,
               child: ElevatedButton(
-                onPressed: () {},
+                onPressed: () {
+                  Navigator.pushNamed(context, '/new_trip');
+                },
                 style: ElevatedButton.styleFrom(
                   backgroundColor: AppColors.accent,
                   foregroundColor: AppColors.card,

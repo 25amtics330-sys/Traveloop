@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'Pages/Authorization/login.dart';
 import 'Pages/Authorization/signup.dart';
 import 'Pages/home.dart';
+import 'Pages/new_trip.dart';
 
 void main() {
   runApp(const MyApp());
@@ -18,6 +19,7 @@ class MyApp extends StatelessWidget {
         '/login': (context) => const LoginPage(),
         '/signup': (context) => const SignupPage(),
         '/home': (context) => const HomePage(), 
+        '/new_trip': (context) => const CreateTripScreen(),
       },
       theme: ThemeData(
         colorScheme: ColorScheme.fromSeed(seedColor: Colors.deepPurple),
