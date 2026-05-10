@@ -135,6 +135,9 @@ class _AuthPageState extends State<AuthPage> with SingleTickerProviderStateMixin
 
       if (data['success'] == true) {
         if (mounted) {
+          appState.login();
+          // Navigator is not strictly needed if appState triggers home update, 
+          // but good for clearing stacks.
           Navigator.pushReplacementNamed(context, '/home', arguments: data['token']);
         }
       } else {

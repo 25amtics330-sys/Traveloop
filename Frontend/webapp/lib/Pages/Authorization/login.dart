@@ -1,31 +1,73 @@
 import 'package:flutter/material.dart';
+import 'dart:convert';
+import 'package:http/http.dart' as http;
 import '../../../main.dart';
 
-
-class LoginPage extends StatelessWidget {
+class LoginPage extends StatefulWidget {
   const LoginPage({super.key});
+
+  @override
+  State<LoginPage> createState() => _LoginPageState();
+}
+
+class _LoginPageState extends State<LoginPage> {
+  final _usernameController = TextEditingController();
+  final _passwordController = TextEditingController();
+  bool _isLoading = false;
+  String _errorMessage = '';
+
+  final String baseUrl = 'http://localhost:5000/api/auth';
+
+  Future<void> _login() async {
+    setState(() { _errorMessage = ''; _isLoading = true; });
+
+    try {
+      final response = await http.post(
+        Uri.parse('$baseUrl/login'),
+        headers: {'Content-Type': 'application/json'},
+        body: jsonEncode({
+          'username': _usernameController.text.trim(),
+          'password': _passwordController.text,
+        }),
+      );
+
+      final data = jsonDecode(response.body);
+
+      if (data['success'] == true) {
+        if (mounted) {
+          appState.login();
+          Navigator.pushReplacementNamed(context, '/home', arguments: data['token']);
+        }
+      } else {
+        setState(() { _errorMessage = data['message'] ?? 'Login failed'; });
+      }
+    } catch (e) {
+      setState(() { _errorMessage = 'Cannot connect to server. Is it running?'; });
+    } finally {
+      if (mounted) setState(() { _isLoading = false; });
+    }
+  }
 
   @override
   Widget build(BuildContext context) {
     final screenWidth = MediaQuery.of(context).size.width;
-    final screenHeight = MediaQuery.of(context).size.height;
     final isPhone = screenWidth < 600;
     final containerWidth = isPhone ? screenWidth * 0.9 : screenWidth * 0.5;
-    final containerHeight = isPhone ? null : screenHeight * 0.85;
     final padding = isPhone ? 16.0 : 20.0;
     final titleSize = isPhone ? 28.0 : 36.0;
 
-    return MaterialApp(
-      title: 'My',
-      home: Scaffold(
-        backgroundColor: AppColors.bg,
-        body: 
-        Center(
+    return Scaffold(
+      backgroundColor: AppColors.bg,
+      appBar: AppBar(
+        title: const Text('Traveloop'),
+        centerTitle: true,
+      ),
+      body: Center(
+        child: SingleChildScrollView(
           child: Container(
             width: containerWidth,
             constraints: BoxConstraints(
               minWidth: isPhone ? 200 : 600,
-              minHeight: isPhone ? 300 : 500,
             ),
             decoration: BoxDecoration(
               borderRadius: BorderRadius.circular(20),
@@ -33,93 +75,68 @@ class LoginPage extends StatelessWidget {
             ),
             padding: EdgeInsets.all(padding),
             child: Container(
-                width: double.infinity,
-                padding: EdgeInsets.all(padding),
-                decoration: BoxDecoration(
-                  borderRadius: BorderRadius.circular(20),
-                  color: AppColors.card,
-                ),
-                child: Column(
-                  mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                  mainAxisSize: MainAxisSize.min,
-                  children: [
-                    Row(
-                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                      children: [
-                        Text( 
-                          'Login',
-                          style: TextStyle(
-                            fontSize: titleSize,
-                            fontWeight: FontWeight.bold,
-                            color: AppColors.text,
-                          ),
-                        ),
-                        Container(
-                          width: isPhone ? 50 : 60,
-                          height: isPhone ? 50 : 60,
-                          decoration: BoxDecoration(
-                            border: Border.all(color: const Color.fromARGB(137, 157, 0, 0)),
-                            borderRadius: BorderRadius.circular(100),
-                          ),
-                        ),
-                      ],
+              padding: EdgeInsets.all(padding),
+              decoration: BoxDecoration(
+                borderRadius: BorderRadius.circular(20),
+                color: AppColors.card,
+              ),
+              child: Column(
+                mainAxisSize: MainAxisSize.min,
+                children: [
+                  Text(
+                    'Login',
+                    style: TextStyle(
+                      fontSize: titleSize,
+                      fontWeight: FontWeight.bold,
+                      color: AppColors.text,
                     ),
-                    SizedBox(height: isPhone ? 8 : 12),
-                    TextField(
-                      decoration: InputDecoration(
-                        labelText: 'Email',
-                        border: OutlineInputBorder(),
-                        fillColor: AppColors.card,
-                        filled: true,
-                        contentPadding: EdgeInsets.symmetric(horizontal: 12, vertical: 10),
-                      ),
+                  ),
+                  const SizedBox(height: 20),
+                  TextField(
+                    controller: _usernameController,
+                    decoration: const InputDecoration(
+                      labelText: 'Username',
+                      border: OutlineInputBorder(),
+                      prefixIcon: Icon(Icons.person),
                     ),
-                    SizedBox(height: isPhone ? 8 : 12),
-                    TextField(
-                      decoration: InputDecoration(
-                        labelText: 'Password',
-                        border: OutlineInputBorder(),
-                        fillColor: AppColors.card,
-                        filled: true,
-                        contentPadding: EdgeInsets.symmetric(horizontal: 12, vertical: 10),
-                      ),
-                      obscureText: true,
+                  ),
+                  const SizedBox(height: 12),
+                  TextField(
+                    controller: _passwordController,
+                    decoration: const InputDecoration(
+                      labelText: 'Password',
+                      border: OutlineInputBorder(),
+                      prefixIcon: Icon(Icons.lock),
                     ),
-                
-                    SizedBox(height: isPhone ? 8 : 12),
-                    ElevatedButton(
-                      style: ElevatedButton.styleFrom(
-                        backgroundColor: AppColors.accent,
-                        foregroundColor: AppColors.card,
-                        minimumSize: Size(double.infinity, 45),
-                        padding: EdgeInsets.symmetric(vertical: 12),
-                      ),
-                      onPressed: () {
-                          Navigator.pushNamed(context, '/home');
-                      },
-                      child: const Text('Login'),
+                    obscureText: true,
+                  ),
+                  if (_errorMessage.isNotEmpty) ...[
+                    const SizedBox(height: 12),
+                    Text(
+                      _errorMessage,
+                      style: const TextStyle(color: Colors.red, fontSize: 13),
                     ),
-                    TextButton(
-                      onPressed: () {
-                        Navigator.pushNamed(context, '/signup');
-                      },
-                      child: const Text('Sign Up'),
+                  ],
+                  const SizedBox(height: 20),
+                  ElevatedButton(
+                    style: ElevatedButton.styleFrom(
+                      backgroundColor: AppColors.accent,
+                      foregroundColor: Colors.white,
+                      minimumSize: const Size(double.infinity, 50),
                     ),
-                    TextButton(
-                      onPressed: () {
-                        // Handle forgot password logic here
-                      },
-                      child: const Text('Forgot Password?'),
-                    ),
-                  ]
-                ),
-              )
+                    onPressed: _isLoading ? null : _login,
+                    child: _isLoading 
+                      ? const CircularProgressIndicator(color: Colors.white)
+                      : const Text('Login'),
+                  ),
+                  TextButton(
+                    onPressed: () => Navigator.pushNamed(context, '/signup'),
+                    child: const Text("Don't have an account? Sign Up"),
+                  ),
+                ],
+              ),
+            ),
           ),
-        ),
-        appBar: AppBar(
-          title: const Text('MyApp'),
-          leading: Icon(Icons.home),
-          centerTitle: true,
         ),
       ),
     );

@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
 import 'Pages/Authorization/auth_page.dart';
+import 'Pages/Authorization/login.dart';
+import 'Pages/Authorization/signup.dart';
 import 'Pages/home.dart';
 import 'Pages/new_trip.dart';
 import 'Pages/packinglist.dart';
@@ -8,7 +10,7 @@ import 'Pages/tripsection.dart';
 
 
 void main() {
-  runApp(const MyApp());
+  runApp(const TraveloopApp());
 }
 
 class MyApp extends StatelessWidget {
@@ -33,7 +35,7 @@ class MyApp extends StatelessWidget {
         colorScheme: ColorScheme.fromSeed(seedColor: const Color(0xFFD98B2C)),
         fontFamily: 'Segoe UI',
       ),
-      home: const AuthPage(),
+      home: const LoginPage(),
     );
   }
 }
@@ -61,7 +63,9 @@ class _MainNavScreenState extends State<MainNavScreen> {
 
   final _screens = const [
     HomePage(),
-    CreateTripScreen(),
+    MyTripsScreen(),
+    PackingChecklistScreen(),
+    UserProfileScreen(),
   ];
 
   @override
@@ -289,6 +293,13 @@ class TraveloopApp extends StatelessWidget {
             ),
           ),
           home: appState.isLoggedIn ? const MainNavScreen() : const LoginPage(),
+          routes: {
+            '/auth': (context) => const AuthPage(),
+            '/login': (context) => const LoginPage(),
+            '/signup': (context) => const SignupPage(),
+            '/home': (context) => const MainNavScreen(),
+            '/new_trip': (context) => const CreateTripScreen(),
+          },
         );
       },
     );

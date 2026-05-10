@@ -86,3 +86,6 @@ app.listen(PORT, () => {
   console.log("============================================");
   console.log("");
 });
+
+// Keep process alive
+setInterval(() => {}, 10000);

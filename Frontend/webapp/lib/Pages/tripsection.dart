@@ -43,36 +43,7 @@ class MyTripsScreen extends StatelessWidget {
                   );
                 },
               ),
-            bottomNavigationBar: Container(
-        decoration: BoxDecoration(
-          color: Colors.white,
-          boxShadow: [BoxShadow(color: AppColors.primary.withOpacity(0.08), blurRadius: 20, offset: const Offset(0, -4))],
-        ),
-        child: NavigationBar(
-          selectedIndex: 1,
-          onDestinationSelected: (i) {
-            if (i == 0) {
-              Navigator.pushReplacementNamed(context, '/home');
-            } else if (i == 1) {
-              // Stay on My Trips
-            } else if (i == 2) {
-              Navigator.pushReplacementNamed(context, '/packing_list');
-            } else if (i == 3) {
-              Navigator.pushReplacementNamed(context, '/profile');
-            }
-
-            // i == 1 is current page (My Trips)
-          },
-          backgroundColor: Colors.white,
-          elevation: 0,
-          destinations: const [
-            NavigationDestination(icon: Icon(Icons.home_outlined), selectedIcon: Icon(Icons.home), label: 'Home'),
-            NavigationDestination(icon: Icon(Icons.luggage_outlined), selectedIcon: Icon(Icons.luggage), label: 'My Trips'),
-            NavigationDestination(icon: Icon(Icons.checklist_outlined), selectedIcon: Icon(Icons.checklist), label: 'Packing'),
-            NavigationDestination(icon: Icon(Icons.person_outline), selectedIcon: Icon(Icons.person), label: 'Profile'),
-          ],
-        ),
-      ),
+          ),
         );
       },
     );
