@@ -135,7 +135,7 @@ class _AuthPageState extends State<AuthPage> with SingleTickerProviderStateMixin
 
       if (data['success'] == true) {
         if (mounted) {
-          Navigator.pushReplacementNamed(context, '/home');
+          Navigator.pushReplacementNamed(context, '/home', arguments: data['token']);
         }
       } else {
         setState(() { _errorMessage = data['message'] ?? 'Login failed'; });

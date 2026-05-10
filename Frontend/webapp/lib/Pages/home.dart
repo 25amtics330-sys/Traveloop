@@ -1,4 +1,6 @@
 import 'package:flutter/material.dart';
+import 'dart:convert';
+import 'package:http/http.dart' as http;
 import '../main.dart';
 
 class HomePage extends StatefulWidget {
@@ -13,6 +15,47 @@ class _HomePageState extends State<HomePage> with TickerProviderStateMixin {
   late AnimationController _searchAnimationController;
   late Animation<double> _searchScaleAnimation;
   bool _isSearchFocused = false;
+  
+  String _firstName = 'Traveler';
+  bool _isLoadingProfile = true;
+
+  @override
+  void didChangeDependencies() {
+    super.didChangeDependencies();
+    // Get token passed from login page
+    final token = ModalRoute.of(context)?.settings.arguments as String?;
+    if (token != null && _isLoadingProfile) {
+      _fetchProfile(token);
+    } else {
+      setState(() {
+        _isLoadingProfile = false;
+      });
+    }
+  }
+
+  Future<void> _fetchProfile(String token) async {
+    try {
+      final response = await http.get(
+        Uri.parse('http://localhost:5000/api/auth/profile'),
+        headers: {
+          'Authorization': 'Bearer $token',
+        },
+      );
+      
+      final data = jsonDecode(response.body);
+      if (data['success'] == true) {
+        setState(() {
+          _firstName = data['user']['first_name'] ?? 'Traveler';
+        });
+      }
+    } catch (e) {
+      print('Error fetching profile: $e');
+    } finally {
+      setState(() {
+        _isLoadingProfile = false;
+      });
+    }
+  }
 
   @override
   void initState() {
@@ -68,10 +111,10 @@ class _HomePageState extends State<HomePage> with TickerProviderStateMixin {
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
             Text(
-              'Welcome back',
+              'Welcome back, $_firstName',
               style: TextStyle(
                 color: AppColors.textLight,
-                fontSize: 14,
+                fontSize: 16,
               ),
             ),
             const SizedBox(height: 8),
