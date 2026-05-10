@@ -92,7 +92,7 @@ class UserProfileScreen extends StatelessWidget {
             if (i == 0) {
               Navigator.pushReplacementNamed(context, '/home');
             } else if (i == 1) {
-              Navigator.pushReplacementNamed(context, '/new_trip');
+              Navigator.pushReplacementNamed(context, '/trip_section');
             } else if (i == 2) {
               Navigator.pushReplacementNamed(context, '/packing_list');
             }

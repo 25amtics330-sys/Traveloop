@@ -297,7 +297,7 @@ class _HomePageState extends State<HomePage> with TickerProviderStateMixin {
         child: NavigationBar(
           selectedIndex: 0,
           onDestinationSelected: (i) {
-            if (i == 1) Navigator.pushNamed(context, '/new_trip');
+            if (i == 1) Navigator.pushNamed(context, '/trip_section');
             else if (i == 2) Navigator.pushNamed(context, '/packing_list');
             // Add navigation for other indices if needed
           },
