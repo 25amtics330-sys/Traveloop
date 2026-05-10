@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Traveloop | Professional Auth</title>
+    <title>Traveloop | Web App</title>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
     <style>
         :root {
@@ -35,10 +35,11 @@
             display: flex;
             align-items: center;
             justify-content: center;
-            padding: 20px;
         }
 
-        /* Container */
+        /* -------------------------------------
+           AUTH VIEW (Login & Register)
+        ------------------------------------- */
         .auth-container {
             width: 100%;
             max-width: 950px;
@@ -48,9 +49,9 @@
             display: flex;
             overflow: hidden;
             min-height: 600px;
+            margin: 20px;
         }
 
-        /* Left Brand Panel */
         .brand-panel {
             flex: 4;
             background: linear-gradient(135deg, var(--accent) 0%, #B06A1C 100%);
@@ -73,307 +74,238 @@
             margin-bottom: 32px;
         }
 
-        .brand-panel h1 {
-            font-size: 36px;
-            font-weight: 800;
-            letter-spacing: -0.5px;
-            margin-bottom: 12px;
-        }
+        .brand-panel h1 { font-size: 36px; font-weight: 800; margin-bottom: 12px; }
+        .brand-panel p { color: rgba(255, 255, 255, 0.85); font-size: 16px; line-height: 1.5; margin-bottom: 40px; }
+        
+        .feature { display: flex; align-items: center; margin-bottom: 16px; }
+        .feature-icon { width: 36px; height: 36px; background: rgba(255, 255, 255, 0.15); border-radius: 10px; display: flex; align-items: center; justify-content: center; margin-right: 12px; font-size: 18px; }
+        .feature-text { color: rgba(255, 255, 255, 0.9); font-weight: 500; font-size: 14px; }
 
-        .brand-panel p {
-            color: rgba(255, 255, 255, 0.85);
-            font-size: 16px;
-            line-height: 1.5;
-            margin-bottom: 40px;
-        }
+        .form-panel { flex: 5; padding: 40px; display: flex; flex-direction: column; position: relative; }
+        .toggle-tabs { background: var(--bg); border-radius: 12px; padding: 4px; display: flex; margin-bottom: 30px; }
+        .tab { flex: 1; text-align: center; padding: 12px 0; border-radius: 10px; font-size: 14px; font-weight: 500; color: var(--text-light); cursor: pointer; transition: all 0.3s ease; }
+        .tab.active { background: white; color: var(--text); font-weight: 700; box-shadow: 0 2px 8px rgba(0, 0, 0, 0.06); }
 
-        .feature {
-            display: flex;
-            align-items: center;
-            margin-bottom: 16px;
-        }
+        .form-header { margin-bottom: 24px; }
+        .form-header h2 { font-size: 24px; color: var(--text); margin-bottom: 6px; }
+        .form-header p { font-size: 13px; color: var(--text-light); }
 
-        .feature-icon {
-            width: 36px;
-            height: 36px;
-            background: rgba(255, 255, 255, 0.15);
-            border-radius: 10px;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            margin-right: 12px;
-            font-size: 18px;
-        }
+        .auth-form { display: none; flex-direction: column; animation: fadeIn 0.4s ease forwards; }
+        .auth-form.active { display: flex; }
 
-        .feature-text {
-            color: rgba(255, 255, 255, 0.9);
-            font-weight: 500;
-            font-size: 14px;
-        }
+        @keyframes fadeIn { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
 
-        /* Right Form Panel */
-        .form-panel {
-            flex: 5;
-            padding: 40px;
-            display: flex;
-            flex-direction: column;
-            position: relative;
-        }
+        .form-row { display: flex; gap: 12px; margin-bottom: 14px; }
+        .form-group { flex: 1; margin-bottom: 14px; }
+        .form-row .form-group { margin-bottom: 0; }
 
-        /* Toggle Tabs */
-        .toggle-tabs {
-            background: var(--bg);
-            border-radius: 12px;
-            padding: 4px;
-            display: flex;
-            margin-bottom: 30px;
-        }
+        label { display: block; font-size: 13px; font-weight: 500; color: var(--text-light); margin-bottom: 6px; }
+        input { width: 100%; padding: 12px 16px; background: var(--bg); border: 1px solid var(--border); border-radius: 12px; font-size: 14px; color: var(--text); outline: none; }
+        input:focus { border-color: var(--accent); }
 
-        .tab {
-            flex: 1;
-            text-align: center;
-            padding: 12px 0;
-            border-radius: 10px;
-            font-size: 14px;
-            font-weight: 500;
-            color: var(--text-light);
-            cursor: pointer;
-            transition: all 0.3s ease;
-        }
+        button.submit-btn { background: var(--accent); color: white; border: none; padding: 14px; border-radius: 12px; font-size: 15px; font-weight: 600; cursor: pointer; margin-top: 8px; transition: background 0.2s; }
+        button.submit-btn:hover { background: var(--accent-hover); }
+        button.submit-btn:disabled { background: #e0b686; cursor: not-allowed; }
 
-        .tab.active {
-            background: white;
-            color: var(--text);
-            font-weight: 700;
-            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.06);
-        }
+        .switch-prompt { text-align: center; margin-top: 20px; font-size: 13px; color: var(--text-light); }
+        .switch-prompt span { color: var(--accent); font-weight: 700; cursor: pointer; }
 
-        /* Forms */
-        .form-header {
-            margin-bottom: 24px;
-        }
+        .status-msg { padding: 12px 14px; border-radius: 10px; font-size: 13px; margin-bottom: 16px; display: none; align-items: center; }
+        .status-msg.error { background: var(--danger-light); color: var(--danger); display: flex; }
+        .status-msg.success { background: var(--teal-light); color: var(--teal); display: flex; }
 
-        .form-header h2 {
-            font-size: 24px;
-            color: var(--text);
-            margin-bottom: 6px;
-        }
-
-        .form-header p {
-            font-size: 13px;
-            color: var(--text-light);
-        }
-
-        .auth-form {
+        /* -------------------------------------
+           HOME VIEW (Dashboard)
+        ------------------------------------- */
+        .home-view {
             display: none;
+            width: 100%;
+            height: 100vh;
+            background: var(--bg);
             flex-direction: column;
+            overflow-y: auto;
             animation: fadeIn 0.4s ease forwards;
         }
 
-        .auth-form.active {
+        .home-view.active {
             display: flex;
         }
 
-        @keyframes fadeIn {
-            from { opacity: 0; transform: translateY(10px); }
-            to { opacity: 1; transform: translateY(0); }
+        /* Navbar */
+        .navbar {
+            background: var(--primary);
+            padding: 16px 24px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+            position: sticky;
+            top: 0;
+            z-index: 100;
         }
 
-        .form-row {
+        .nav-left { display: flex; align-items: center; gap: 16px; }
+        .nav-logo { color: var(--card); font-size: 20px; font-weight: 600; }
+        .nav-right { display: flex; align-items: center; gap: 16px; }
+        .nav-brand { color: var(--accent-light); font-size: 22px; font-weight: 700; }
+        .nav-avatar { width: 40px; height: 40px; border-radius: 50%; background: var(--accent); color: white; display: flex; align-items: center; justify-content: center; font-weight: 700; cursor: pointer; border: 2px solid var(--accent-light); }
+
+        /* Main Content Container */
+        .home-content {
+            max-width: 1000px;
+            margin: 0 auto;
+            padding: 30px 24px;
+            width: 100%;
+        }
+
+        /* Welcome Section */
+        .welcome-sub { color: var(--text-light); font-size: 16px; margin-bottom: 8px; }
+        .welcome-title { color: var(--text); font-size: 32px; font-weight: 800; margin-bottom: 24px; }
+
+        /* Featured Banner */
+        .featured-banner {
+            background: var(--accent);
+            border-radius: 24px;
+            padding: 30px;
+            color: white;
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
+            height: 200px;
+            margin-bottom: 30px;
+            box-shadow: 0 10px 20px rgba(217, 139, 44, 0.2);
+            position: relative;
+            overflow: hidden;
+        }
+        
+        .featured-banner::after {
+            content: "🌴";
+            position: absolute;
+            right: 20px;
+            bottom: -20px;
+            font-size: 150px;
+            opacity: 0.2;
+            pointer-events: none;
+        }
+
+        .featured-label { color: var(--accent-light); font-size: 14px; font-weight: 600; letter-spacing: 1px; text-transform: uppercase; }
+        .featured-content h3 { font-size: 32px; font-weight: 800; margin-bottom: 16px; }
+        .btn-view { background: var(--primary); color: white; border: none; padding: 12px 24px; border-radius: 12px; font-size: 14px; font-weight: 600; cursor: pointer; display: inline-block; }
+
+        /* Search Bar */
+        .search-bar {
             display: flex;
             gap: 12px;
-            margin-bottom: 14px;
+            margin-bottom: 32px;
         }
 
-        .form-group {
+        .search-input-wrap {
             flex: 1;
-            position: relative;
-            margin-bottom: 14px;
-        }
-        
-        .form-row .form-group {
-            margin-bottom: 0;
-        }
-
-        label {
-            display: block;
-            font-size: 13px;
-            font-weight: 500;
-            color: var(--text-light);
-            margin-bottom: 6px;
-        }
-
-        input {
-            width: 100%;
-            padding: 12px 16px;
-            background: var(--bg);
-            border: 1px solid var(--border);
-            border-radius: 12px;
-            font-size: 14px;
-            color: var(--text);
-            outline: none;
-            transition: border-color 0.2s;
-        }
-
-        input:focus {
-            border-color: var(--accent);
-        }
-
-        button.submit-btn {
-            background: var(--accent);
-            color: white;
-            border: none;
-            padding: 14px;
-            border-radius: 12px;
-            font-size: 15px;
-            font-weight: 600;
-            cursor: pointer;
-            margin-top: 8px;
-            transition: background 0.2s;
-        }
-
-        button.submit-btn:hover {
-            background: var(--accent-hover);
-        }
-        
-        button.submit-btn:disabled {
-            background: #e0b686;
-            cursor: not-allowed;
-        }
-
-        .switch-prompt {
-            text-align: center;
-            margin-top: 20px;
-            font-size: 13px;
-            color: var(--text-light);
-        }
-
-        .switch-prompt span {
-            color: var(--accent);
-            font-weight: 700;
-            cursor: pointer;
-        }
-
-        /* Status Messages */
-        .status-msg {
-            padding: 12px 14px;
-            border-radius: 10px;
-            font-size: 13px;
-            margin-bottom: 16px;
-            display: none;
-            align-items: center;
-        }
-
-        .status-msg.error {
-            background: var(--danger-light);
-            color: var(--danger);
-            display: flex;
-        }
-
-        .status-msg.success {
-            background: var(--teal-light);
-            color: var(--teal);
-            display: flex;
-        }
-        
-        /* Profile Section (Initially Hidden) */
-        .profile-panel {
-            display: none;
-            width: 100%;
-            max-width: 600px;
-            background: var(--card);
-            border-radius: 24px;
-            padding: 40px;
-            text-align: center;
-            animation: fadeIn 0.4s ease forwards;
-        }
-        
-        .profile-panel.active {
-            display: block;
-        }
-        
-        .profile-avatar {
-            width: 80px;
-            height: 80px;
-            background: var(--accent-light);
-            color: var(--accent);
-            border-radius: 50%;
-            display: inline-flex;
-            align-items: center;
-            justify-content: center;
-            font-size: 32px;
-            font-weight: bold;
-            margin-bottom: 20px;
-        }
-        
-        .profile-panel h2 {
-            font-size: 28px;
-            color: var(--text);
-            margin-bottom: 8px;
-        }
-        
-        .profile-panel p {
-            color: var(--text-light);
-            margin-bottom: 30px;
-        }
-        
-        .profile-details {
-            background: var(--bg);
+            background: white;
             border-radius: 16px;
-            padding: 20px;
-            text-align: left;
-            margin-bottom: 30px;
-            display: grid;
-            grid-template-columns: 1fr 1fr;
-            gap: 16px;
-        }
-        
-        .detail-item label {
-            font-size: 12px;
-            margin-bottom: 4px;
-        }
-        
-        .detail-item div {
-            font-size: 14px;
-            color: var(--text);
-            font-weight: 500;
-        }
-        
-        .logout-btn {
-            background: transparent;
-            color: var(--danger);
-            border: 1px solid var(--danger);
-            padding: 10px 24px;
-            border-radius: 12px;
-            font-weight: 600;
-            cursor: pointer;
+            padding: 0 16px;
+            display: flex;
+            align-items: center;
+            border: 1px solid var(--border);
             transition: all 0.2s;
         }
         
-        .logout-btn:hover {
-            background: var(--danger-light);
+        .search-input-wrap:focus-within {
+            border-color: var(--accent);
+            box-shadow: 0 0 0 4px rgba(217, 139, 44, 0.1);
         }
+
+        .search-input-wrap span { font-size: 20px; color: var(--text-light); margin-right: 12px; }
+        .search-input-wrap input { border: none; padding: 16px 0; background: transparent; font-size: 16px; }
+        .search-input-wrap input:focus { border-color: transparent; }
+
+        .filter-btn { background: white; border: 1px solid var(--border); border-radius: 16px; padding: 0 24px; color: var(--text); font-weight: 600; cursor: pointer; transition: all 0.2s; }
+        .filter-btn:hover { border-color: var(--text-light); }
+
+        /* Sections */
+        .section-title { font-size: 20px; font-weight: 700; color: var(--text); margin-bottom: 16px; }
+
+        /* Horizontal Scroll Lists */
+        .horizontal-list { display: flex; gap: 16px; overflow-x: auto; padding-bottom: 16px; margin-bottom: 16px; scrollbar-width: none; }
+        .horizontal-list::-webkit-scrollbar { display: none; }
+
+        /* Selection Card */
+        .selection-card {
+            min-width: 170px;
+            background: white;
+            border-radius: 20px;
+            border: 1px solid var(--border);
+            padding: 16px;
+            display: flex;
+            flex-direction: column;
+            box-shadow: 0 4px 12px rgba(26, 26, 46, 0.04);
+            cursor: pointer;
+            transition: transform 0.2s;
+        }
+        
+        .selection-card:hover { transform: translateY(-4px); }
+
+        .sel-icon { width: 64px; height: 64px; background: var(--teal-light); border-radius: 18px; display: flex; align-items: center; justify-content: center; font-size: 28px; margin-bottom: 24px; }
+        .sel-title { font-size: 16px; font-weight: 700; color: var(--text); margin-bottom: 4px; }
+        .sel-sub { font-size: 13px; color: var(--text-light); }
+
+        /* Trip Card */
+        .trip-card {
+            min-width: 280px;
+            background: white;
+            border-radius: 20px;
+            border: 1px solid var(--border);
+            padding: 16px;
+            display: flex;
+            flex-direction: column;
+        }
+
+        .trip-img { height: 120px; background: var(--teal-light); border-radius: 16px; display: flex; align-items: center; justify-content: center; font-size: 40px; margin-bottom: 16px; }
+        .trip-title { font-size: 18px; font-weight: 700; color: var(--text); margin-bottom: 8px; }
+        .trip-sub { font-size: 14px; color: var(--text-light); margin-bottom: 20px; }
+        .trip-btn { align-self: flex-start; background: var(--accent-light); color: var(--primary); font-weight: 700; padding: 8px 20px; border-radius: 12px; font-size: 13px; display: inline-block; cursor: pointer; }
+
+        /* Plan Trip Button */
+        .fab-container { display: flex; justify-content: flex-end; margin-top: 20px; margin-bottom: 40px; }
+        .fab-btn { background: var(--accent); color: white; border: none; padding: 16px 32px; border-radius: 20px; font-size: 16px; font-weight: 700; cursor: pointer; box-shadow: 0 8px 16px rgba(217, 139, 44, 0.3); transition: transform 0.2s; }
+        .fab-btn:hover { transform: translateY(-2px); }
+
+        /* Profile Menu (Dropdown) */
+        .profile-menu {
+            position: absolute;
+            top: 70px;
+            right: 24px;
+            background: white;
+            border-radius: 16px;
+            box-shadow: 0 10px 25px rgba(0,0,0,0.1);
+            padding: 20px;
+            min-width: 250px;
+            display: none;
+            flex-direction: column;
+            z-index: 200;
+        }
+        
+        .profile-menu.active { display: flex; }
+        .prof-menu-name { font-weight: 700; font-size: 16px; color: var(--text); margin-bottom: 4px; }
+        .prof-menu-email { font-size: 13px; color: var(--text-light); margin-bottom: 16px; padding-bottom: 16px; border-bottom: 1px solid var(--border); }
+        .prof-menu-btn { background: none; border: none; text-align: left; padding: 10px 0; font-size: 14px; font-weight: 600; color: var(--danger); cursor: pointer; }
 
         /* Responsive */
         @media (max-width: 768px) {
-            .auth-container {
-                flex-direction: column;
-                min-height: auto;
-            }
-            .brand-panel {
-                padding: 30px;
-            }
-            .brand-panel p, .feature {
-                display: none; /* Hide extra text on mobile */
-            }
+            .auth-container { flex-direction: column; min-height: auto; }
+            .brand-panel { padding: 30px; }
+            .brand-panel p, .feature { display: none; }
             .brand-logo { margin-bottom: 16px; }
             .form-row { flex-direction: column; gap: 0; }
+            
+            .search-bar { flex-wrap: wrap; }
+            .filter-btn { padding: 16px; flex: 1; }
         }
     </style>
 </head>
 <body>
 
-    <!-- AUTHENTICATION CONTAINER -->
+    <!-- AUTHENTICATION VIEW -->
     <div class="auth-container" id="auth-view">
         <!-- Left Brand Panel -->
         <div class="brand-panel">
@@ -397,13 +329,11 @@
 
         <!-- Right Form Panel -->
         <div class="form-panel">
-            <!-- Tabs -->
             <div class="toggle-tabs">
                 <div class="tab active" id="tab-register" onclick="switchTab('register')">Register</div>
                 <div class="tab" id="tab-login" onclick="switchTab('login')">Sign In</div>
             </div>
 
-            <!-- Global Status Message -->
             <div id="status-message" class="status-msg"></div>
 
             <!-- REGISTER FORM -->
@@ -489,61 +419,171 @@
         </div>
     </div>
     
-    <!-- PROFILE DASHBOARD (Shown after login) -->
-    <div class="profile-panel" id="profile-view">
-        <div class="profile-avatar" id="prof-initial">U</div>
-        <h2 id="prof-name">User Name</h2>
-        <p id="prof-username">@username</p>
-        
-        <div class="profile-details">
-            <div class="detail-item">
-                <label>Email</label>
-                <div id="prof-email">-</div>
+    <!-- NEW TRIP VIEW (hidden) -->
+    <div class="newtrip-view" id="newtrip-view" style="display:none;">
+        <div class="navbar">
+            <div class="nav-left"><div class="nav-logo">New Trip</div></div>
+            <div class="nav-right"><div class="nav-brand">Traveloop</div><div class="nav-avatar" onclick="toggleBackToHome()">←</div></div>
+        </div>
+        <div class="home-content">
+            <h2 style="color:var(--text);font-size:24px;margin-bottom:12px;">Plan your next journey</h2>
+            <p style="color:var(--text-light);font-size:14px;margin-bottom:24px;">Fill in the details and discover great places to visit.</p>
+            <div class="selection-card" style="padding:20px;">
+                <label>Destination</label>
+                <input type="text" placeholder="Enter a city or country" style="width:100%;margin-top:8px;padding:8px;border:1px solid var(--border);border-radius:8px;"/>
+                <label style="margin-top:14px;display:block;">Start date</label>
+                <input type="date" style="width:100%;margin-top:8px;padding:8px;border:1px solid var(--border);border-radius:8px;"/>
+                <label style="margin-top:14px;display:block;">End date</label>
+                <input type="date" style="width:100%;margin-top:8px;padding:8px;border:1px solid var(--border);border-radius:8px;"/>
+                <label style="margin-top:14px;display:block;">Notes</label>
+                <textarea rows="3" placeholder="Add any travel preferences" style="width:100%;margin-top:8px;padding:8px;border:1px solid var(--border);border-radius:8px;"></textarea>
+                <button class="btn-view" style="margin-top:20px;" onclick="alert('Itinerary saved (mock)');">Save itinerary</button>
             </div>
-            <div class="detail-item">
-                <label>Phone</label>
-                <div id="prof-phone">-</div>
+        </div>
+    </div>
+    <div class="home-view" id="home-view">
+        <!-- Navbar -->
+        <div class="navbar">
+            <div class="nav-left">
+                <div class="nav-logo">Home</div>
             </div>
-            <div class="detail-item">
-                <label>Location</label>
-                <div id="prof-location">-</div>
+            <div class="nav-right">
+                <div class="nav-brand">Traveloop</div>
+                <div class="nav-avatar" id="nav-avatar" onclick="toggleProfileMenu()">U</div>
             </div>
         </div>
         
-        <button class="logout-btn" onclick="handleLogout()">Log Out</button>
+        <!-- Profile Dropdown -->
+        <div class="profile-menu" id="profile-menu">
+            <div class="prof-menu-name" id="menu-name">User Name</div>
+            <div class="prof-menu-email" id="menu-email">user@example.com</div>
+                        <button class="prof-menu-btn" onclick="handleLogout()">Log out</button>
+            <button class="fab-btn" onclick="showNewTrip()">+ Plan a trip</button>
+        </div>
+
+        <!-- Main Content -->
+        <div class="home-content">
+            <div class="welcome-sub" id="welcome-text">Welcome back, Traveler</div>
+            <div class="welcome-title">Find your next getaway</div>
+
+            <!-- Featured Banner -->
+            <div class="featured-banner">
+                <div class="featured-label">Featured trip</div>
+                <div class="featured-content">
+                    <h3>Explore Bali beaches</h3>
+                    <button class="btn-view">View details</button>
+                </div>
+            </div>
+
+            <!-- Search Bar -->
+            <div class="search-bar">
+                <div class="search-input-wrap">
+                    <span>🔍</span>
+                    <input type="text" placeholder="Search trips">
+                </div>
+                <button class="filter-btn">Filter</button>
+                <button class="filter-btn">Sort</button>
+            </div>
+
+            <!-- Top Regional Selections -->
+            <div class="section-title">Top Regional Selections</div>
+            <div class="horizontal-list">
+                <div class="selection-card">
+                    <div class="sel-icon">🏞️</div>
+                    <div class="sel-title">Lake</div>
+                    <div class="sel-sub">Popular</div>
+                </div>
+                <div class="selection-card">
+                    <div class="sel-icon">⛰️</div>
+                    <div class="sel-title">Mountain</div>
+                    <div class="sel-sub">Popular</div>
+                </div>
+                <div class="selection-card">
+                    <div class="sel-icon">🏖️</div>
+                    <div class="sel-title">Beach</div>
+                    <div class="sel-sub">Popular</div>
+                </div>
+                <div class="selection-card">
+                    <div class="sel-icon">🏙️</div>
+                    <div class="sel-title">Urban</div>
+                    <div class="sel-sub">Popular</div>
+                </div>
+                <div class="selection-card">
+                    <div class="sel-icon">🌲</div>
+                    <div class="sel-title">Forest</div>
+                    <div class="sel-sub">Popular</div>
+                </div>
+            </div>
+
+            <!-- Previous Trips -->
+            <div class="section-title">Previous Trips</div>
+            <div class="horizontal-list">
+                <div class="trip-card">
+                    <div class="trip-img">🛫</div>
+                    <div class="trip-title">Seoul Escape</div>
+                    <div class="trip-sub">3 days • 2 guests</div>
+                    <div class="trip-btn">View</div>
+                </div>
+                <div class="trip-card">
+                    <div class="trip-img">🛫</div>
+                    <div class="trip-title">Sicily Sunset</div>
+                    <div class="trip-sub">5 days • 4 guests</div>
+                    <div class="trip-btn">View</div>
+                </div>
+                <div class="trip-card">
+                    <div class="trip-img">🛫</div>
+                    <div class="trip-title">Kyoto Walk</div>
+                    <div class="trip-sub">4 days • 2 guests</div>
+                    <div class="trip-btn">View</div>
+                </div>
+                <div class="trip-card">
+                    <div class="trip-img">🛫</div>
+                    <div class="trip-title">Morocco Market</div>
+                    <div class="trip-sub">6 days • 3 guests</div>
+                    <div class="trip-btn">View</div>
+                </div>
+            </div>
+
+            <div class="fab-container">
+                <button class="fab-btn" onclick="showNewTrip()">+ Plan a trip</button>
+            </div>
+        </div>
     </div>
 
     <script>
         const BASE_URL = 'http://localhost:5000/api/auth';
         let jwtToken = localStorage.getItem('traveloop_token');
         
-        // Check if already logged in on page load
+        // --- Initialization ---
         window.onload = () => {
             if (jwtToken) {
                 fetchProfile();
+            } else {
+                showView('auth');
             }
         };
 
-        // --- UI Switching Logic ---
+        // --- View Management ---
         function switchTab(tab) {
-            // Update tabs
             document.getElementById('tab-register').className = tab === 'register' ? 'tab active' : 'tab';
             document.getElementById('tab-login').className = tab === 'login' ? 'tab active' : 'tab';
-            
-            // Update forms
             document.getElementById('form-register').className = tab === 'register' ? 'auth-form active' : 'auth-form';
             document.getElementById('form-login').className = tab === 'login' ? 'auth-form active' : 'auth-form';
-            
-            // Clear messages
             hideMessage();
         }
         
         function showView(view) {
-            document.getElementById('auth-view').style.display = view === 'auth' ? 'flex' : 'none';
-            document.getElementById('profile-view').classList.toggle('active', view === 'profile');
+            if (view === 'auth') {
+                document.getElementById('auth-view').style.display = 'flex';
+                document.getElementById('home-view').classList.remove('active');
+                document.body.style.backgroundColor = 'var(--primary)';
+            } else {
+                document.getElementById('auth-view').style.display = 'none';
+                document.getElementById('home-view').classList.add('active');
+                document.body.style.backgroundColor = 'var(--bg)';
+            }
         }
 
-        // --- Message Handling ---
         function showMessage(msg, isSuccess) {
             const el = document.getElementById('status-message');
             el.textContent = msg;
@@ -554,8 +594,20 @@
             document.getElementById('status-message').className = 'status-msg';
         }
 
+        function toggleProfileMenu() {
+            document.getElementById('profile-menu').classList.toggle('active');
+        }
+
+        // Close menu when clicking outside
+        document.addEventListener('click', function(event) {
+            const menu = document.getElementById('profile-menu');
+            const avatar = document.getElementById('nav-avatar');
+            if (!menu.contains(event.target) && event.target !== avatar) {
+                menu.classList.remove('active');
+            }
+        });
+
         // --- API Calls ---
-        
         async function handleRegister(e) {
             e.preventDefault();
             const btn = document.getElementById('btn-register');
@@ -578,18 +630,13 @@
                         password: document.getElementById('reg-password').value,
                     })
                 });
-                
                 const data = await res.json();
                 
                 if (data.success) {
                     showMessage('Account created successfully! Switching to login...', true);
-                    // Pre-fill login username
                     document.getElementById('login-username').value = document.getElementById('reg-username').value;
                     document.getElementById('login-password').value = '';
-                    
-                    setTimeout(() => {
-                        switchTab('login');
-                    }, 1500);
+                    setTimeout(() => switchTab('login'), 1500);
                 } else {
                     showMessage(data.message || 'Registration failed', false);
                 }
@@ -602,80 +649,87 @@
         }
 
         async function handleLogin(e) {
-            e.preventDefault();
-            const btn = document.getElementById('btn-login');
-            btn.disabled = true;
-            btn.textContent = 'Signing in...';
-            hideMessage();
+    e.preventDefault();
+    const btn = document.getElementById('btn-login');
+    btn.disabled = true;
+    btn.textContent = 'Signing in...';
+    hideMessage();
 
-            try {
-                const res = await fetch(`${BASE_URL}/login`, {
-                    method: 'POST',
-                    headers: { 'Content-Type': 'application/json' },
-                    body: JSON.stringify({
-                        username: document.getElementById('login-username').value,
-                        password: document.getElementById('login-password').value,
-                    })
-                });
-                
-                const data = await res.json();
-                
-                if (data.success) {
-                    jwtToken = data.token;
-                    localStorage.setItem('traveloop_token', jwtToken);
-                    showMessage('Login successful!', true);
-                    
-                    setTimeout(() => {
-                        fetchProfile();
-                    }, 500);
-                } else {
-                    showMessage(data.message || 'Login failed', false);
-                }
-            } catch (error) {
-                showMessage('Network error. Is the server running?', false);
-            } finally {
-                btn.disabled = false;
-                btn.textContent = 'Sign In';
-            }
+    try {
+        const res = await fetch(`${BASE_URL}/login`, {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({
+                username: document.getElementById('login-username').value,
+                password: document.getElementById('login-password').value,
+            })
+        });
+
+        const data = await res.json();
+
+        if (data.success) {
+            jwtToken = data.token;
+            localStorage.setItem('traveloop_token', jwtToken);
+            document.getElementById('login-password').value = '';
+            fetchProfile(); // Load dashboard
+        } else {
+            showMessage(data.message || 'Login failed', false);
         }
+    } catch (error) {
+        showMessage('Network error. Is the server running?', false);
+    } finally {
+        btn.disabled = false;
+        btn.textContent = 'Sign In';
+    }
+}
+
+
         
         async function fetchProfile() {
-            if (!jwtToken) return;
+            if (!jwtToken) return showView('auth');
             
             try {
                 const res = await fetch(`${BASE_URL}/profile`, {
                     method: 'GET',
                     headers: { 'Authorization': `Bearer ${jwtToken}` }
                 });
-                
                 const data = await res.json();
                 
                 if (data.success) {
                     const user = data.user;
-                    // Populate Profile UI
-                    document.getElementById('prof-initial').textContent = user.first_name.charAt(0).toUpperCase();
-                    document.getElementById('prof-name').textContent = `${user.first_name} ${user.last_name}`;
-                    document.getElementById('prof-username').textContent = `@${user.username}`;
-                    document.getElementById('prof-email').textContent = user.email || '-';
-                    document.getElementById('prof-phone').textContent = user.phone || '-';
+                    // Populate Dashboard UI
+                    document.getElementById('welcome-text').textContent = `Welcome back, ${user.first_name}`;
+                    document.getElementById('nav-avatar').textContent = user.first_name.charAt(0).toUpperCase();
+                    document.getElementById('menu-name').textContent = `${user.first_name} ${user.last_name}`;
+                    document.getElementById('menu-email').textContent = `@${user.username}`;
                     
-                    const location = [user.city, user.country].filter(Boolean).join(', ');
-                    document.getElementById('prof-location').textContent = location || '-';
-                    
-                    showView('profile');
+                    showView('home');
                 } else {
-                    // Token might be expired
                     handleLogout();
                 }
             } catch (error) {
                 console.error("Profile fetch error", error);
+                handleLogout();
             }
         }
         
+        
+        // --- Navigation between Home and New Trip ---
+        function showNewTrip() {
+            // hide home view and display new trip form
+            document.getElementById('home-view').classList.remove('active');
+            document.getElementById('newtrip-view').style.display = 'flex';
+        }
+        function toggleBackToHome() {
+            // hide new trip form and show home view again
+            document.getElementById('newtrip-view').style.display = 'none';
+            document.getElementById('home-view').classList.add('active');
+        }
+
         function handleLogout() {
             jwtToken = null;
             localStorage.removeItem('traveloop_token');
-            document.getElementById('form-login').reset();
+            document.getElementById('profile-menu').classList.remove('active');
             showView('auth');
             switchTab('login');
         }
