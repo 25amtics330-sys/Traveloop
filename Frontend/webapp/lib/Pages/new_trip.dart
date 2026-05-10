@@ -223,6 +223,28 @@ class _CreateTripScreenState extends State<CreateTripScreen> {
           ],
         ),
       ),
+      bottomNavigationBar: Container(
+        decoration: BoxDecoration(
+          color: Colors.white,
+          boxShadow: [BoxShadow(color: AppColors.primary.withOpacity(0.08), blurRadius: 20, offset: const Offset(0, -4))],
+        ),
+        child: NavigationBar(
+          selectedIndex: 1,
+          onDestinationSelected: (i) {
+            if (i == 0) Navigator.pushNamed(context, '/home');
+            else if (i == 2) Navigator.pushNamed(context, '/packing_list');
+            // Add navigation for other indices if needed
+          },
+          backgroundColor: Colors.white,
+          elevation: 0,
+          destinations: const [
+            NavigationDestination(icon: Icon(Icons.home_outlined), selectedIcon: Icon(Icons.home), label: 'Home'),
+            NavigationDestination(icon: Icon(Icons.luggage_outlined), selectedIcon: Icon(Icons.luggage), label: 'My Trips'),
+            NavigationDestination(icon: Icon(Icons.checklist_outlined), selectedIcon: Icon(Icons.checklist), label: 'Packing'),
+            NavigationDestination(icon: Icon(Icons.person_outline), selectedIcon: Icon(Icons.person), label: 'Profile'),
+          ],
+        ),
+      ),
     );
   }
 
