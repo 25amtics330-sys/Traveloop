@@ -19,63 +19,86 @@ class LoginPage extends StatelessWidget {
             width: 700,
             decoration: BoxDecoration(
               borderRadius: BorderRadius.circular(20),
-              color: AppColors.card,
+              color: AppColors.accentLight,
             ),
             
             padding: EdgeInsets.all(20),
-              child: Column(
-                mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                children: [
-                  Text( 
-                    'Login',
-                    style: TextStyle(
-                      fontSize: 34,
-                      fontWeight: FontWeight.bold,
-                      color: AppColors.text,
+              child: Container(
+                height: 570,
+                width: 670,
+                padding: EdgeInsets.all(20),
+                decoration: BoxDecoration(
+                  
+                  borderRadius: BorderRadius.circular(20),
+                  color: AppColors.card,
+                ),
+                child: Column(
+                  mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                  children: [
+                    Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                      children: [
+                        Text( 
+                          'Login',
+                          style: TextStyle(
+                            fontSize: 36,
+                            fontWeight: FontWeight.bold,
+                            color: AppColors.text,
+                          ),
+                        ),
+                        Container(
+                          width: 60,
+                          height: 60,
+                          decoration: BoxDecoration(
+                            border: Border.all(color: const Color.fromARGB(137, 157, 0, 0)),
+                            borderRadius: BorderRadius.circular(100),
+                          ),
+                        ),
+                      ],
                     ),
-                  ),
-                  TextField(
-                    decoration: InputDecoration(
-                      labelText: 'Email',
-                      border: OutlineInputBorder(),
-                      fillColor: AppColors.card,
-                      filled: true,
+                    TextField(
+                      decoration: InputDecoration(
+                        labelText: 'Email',
+                        border: OutlineInputBorder(),
+                        fillColor: AppColors.card,
+                        filled: true,
+                      ),
                     ),
-                  ),
-                  TextField(
-                    decoration: InputDecoration(
-                      labelText: 'Password',
-                      border: OutlineInputBorder(),
-                      fillColor: AppColors.card,
-                      filled: true,
+                    TextField(
+                      decoration: InputDecoration(
+                        labelText: 'Password',
+                        border: OutlineInputBorder(),
+                        fillColor: AppColors.card,
+                        filled: true,
+                      ),
+                      obscureText: true,
                     ),
-                    obscureText: true,
-                  ),
-
-                  ElevatedButton(
-                    style: ElevatedButton.styleFrom(
-                      backgroundColor: AppColors.accent,
-                      foregroundColor: AppColors.card,
-                      minimumSize: Size(double.infinity, 0),
-                      padding: EdgeInsets.symmetric(vertical: 15),
+                
+                    ElevatedButton(
+                      style: ElevatedButton.styleFrom(
+                        backgroundColor: AppColors.accent,
+                        foregroundColor: AppColors.card,
+                        minimumSize: Size(double.infinity, 0),
+                        padding: EdgeInsets.symmetric(vertical: 15),
+                      ),
+                      onPressed: () {
+                        // Handle login logic here
+                      },
+                      child: Text('Login'),
                     ),
-                    onPressed: () {
-                      // Handle login logic here
-                    },
-                    child: Text('Login'),
-                  ),
-                  TextButton(onPressed: () {
-                    Navigator.pushNamed(context, '/signup');
-                  }, child: Text('Sign Up')),
-
-
-                  TextButton(
-                    onPressed: () {
-                      // Handle forgot password logic here
-                    },
-                    child: Text('Forgot Password?'),
-                  ),
-                ]
+                    TextButton(onPressed: () {
+                      Navigator.pushNamed(context, '/signup');
+                    }, child: Text('Sign Up')),
+                
+                
+                    TextButton(
+                      onPressed: () {
+                        // Handle forgot password logic here
+                      },
+                      child: Text('Forgot Password?'),
+                    ),
+                  ]
+                ),
               )
           ),
         ),
