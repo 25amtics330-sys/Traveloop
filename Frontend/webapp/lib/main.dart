@@ -5,7 +5,7 @@ import 'Pages/home.dart';
 import 'Pages/new_trip.dart';
 import 'Pages/packinglist.dart';
 import 'Pages/profile.dart';
-
+import 'Pages/tripsection.dart';
 
 
 void main() {
@@ -26,6 +26,7 @@ class MyApp extends StatelessWidget {
         '/new_trip': (context) => const CreateTripScreen(),
         '/packing_list': (context) => const PackingChecklistScreen(),
         '/profile': (context) => const UserProfileScreen(),
+        '/trip_section': (context) => const MyTripsScreen(),
       },
       theme: ThemeData(
         colorScheme: ColorScheme.fromSeed(seedColor: Colors.deepPurple),

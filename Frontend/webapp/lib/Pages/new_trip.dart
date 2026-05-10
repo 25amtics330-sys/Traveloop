@@ -1,329 +1,127 @@
 ﻿import 'package:flutter/material.dart';
+import 'package:webapp/Pages/root.dart';
 import '../main.dart';
 
 class CreateTripScreen extends StatefulWidget {
-  const CreateTripScreen({Key? key}) : super(key: key);
-
-  @override
-  State<CreateTripScreen> createState() => _CreateTripScreenState();
+  const CreateTripScreen({super.key});
+  @override State<CreateTripScreen> createState() => _CreateTripScreenState();
 }
 
 class _CreateTripScreenState extends State<CreateTripScreen> {
-  final TextEditingController _destinationController = TextEditingController();
-  final TextEditingController _startDateController = TextEditingController();
-  final TextEditingController _endDateController = TextEditingController();
-  final TextEditingController _notesController = TextEditingController();
-
-  final List<Map<String, String>> _suggestions = [
-    {'title': 'Beach', 'subtitle': 'Relax by the sea', 'icon': '🏖'},
-    {'title': 'Mountain', 'subtitle': 'Hike the trails', 'icon': '⛰'},
-    {'title': 'City', 'subtitle': 'Explore local streets', 'icon': '🏙'},
-    {'title': 'Food', 'subtitle': 'Taste new flavors', 'icon': '🍲'},
-    {'title': 'Culture', 'subtitle': 'Visit museums', 'icon': '🏛'},
-    {'title': 'Adventure', 'subtitle': 'Try new sports', 'icon': '🚣'},
-  ];
-
-  @override
-  void dispose() {
-    _destinationController.dispose();
-    _startDateController.dispose();
-    _endDateController.dispose();
-    _notesController.dispose();
-    super.dispose();
-  }
+  final nameCtrl = TextEditingController();
+  final descCtrl = TextEditingController();
+  DateTime startDate = DateTime.now().add(const Duration(days: 7));
+  DateTime endDate = DateTime.now().add(const Duration(days: 14));
+  String selectedEmoji = '✈️';
+  final emojis = ['✈️','🗼','🏯','🌴','🏖️','🗽','⛩️','🏔️','🌍','🚢','🎡','🏛️'];
+  double budget = 2000;
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: AppColors.bg,
-      appBar:AppBar(
-        backgroundColor: const Color.fromARGB(255, 119, 119, 232),
-        elevation: 1,
-        title: const Text('Traveloop', style: TextStyle(color: AppColors.accentLight, fontSize: 26),  ),
-        actions: const [
-          SizedBox(width: 24),
-          Icon(Icons.notifications_none, color: AppColors.accentLight),
-          SizedBox(width: 8),
-          Padding(
-            padding: EdgeInsets.only(right: 16.0),
-            child: Icon(
-              Icons.account_circle,
-              color: AppColors.accentLight,
-              size: 28,
-            ),
-          ),
-        ],
-      ),
+      appBar: AppBar(title: const Text('New Trip'), leading: const BackButton()),
       body: SingleChildScrollView(
         padding: const EdgeInsets.all(20),
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            Text(
-              'Create your next adventure',
-              style: TextStyle(
-                color: AppColors.text,
-                fontSize: 26,
-                fontWeight: FontWeight.bold,
-              ),
-            ),
-            const SizedBox(height: 8),
-            Text(
-              'Fill in the details and discover great places to visit.',
-              style: TextStyle(
-                color: AppColors.textLight,
-                fontSize: 15,
+            // Cover emoji picker
+            Center(
+              child: Column(
+                children: [
+                  Container(
+                    width: 80, height: 80,
+                    decoration: BoxDecoration(color: AppColors.accentLight, borderRadius: BorderRadius.circular(24)),
+                    alignment: Alignment.center,
+                    child: Text(selectedEmoji, style: const TextStyle(fontSize: 40)),
+                  ),
+                  const SizedBox(height: 12),
+                  Wrap(
+                    spacing: 8,
+                    children: emojis.map((e) => GestureDetector(
+                      onTap: () => setState(() => selectedEmoji = e),
+                      child: Container(
+                        width: 40, height: 40,
+                        decoration: BoxDecoration(
+                          color: selectedEmoji == e ? AppColors.accent : AppColors.bg,
+                          borderRadius: BorderRadius.circular(10),
+                        ),
+                        alignment: Alignment.center,
+                        child: Text(e, style: const TextStyle(fontSize: 20)),
+                      ),
+                    )).toList(),
+                  ),
+                ],
               ),
             ),
             const SizedBox(height: 24),
-            Container(
-              decoration: BoxDecoration(
-                color: AppColors.card,
-                borderRadius: BorderRadius.circular(24),
-                boxShadow: [
-                  BoxShadow(
-                    color: Colors.black.withOpacity(0.05),
-                    blurRadius: 18,
-                    offset: const Offset(0, 10),
-                  ),
-                ],
-              ),
-              padding: const EdgeInsets.all(22),
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  Text(
-                    'Trip details',
-                    style: TextStyle(
-                      color: AppColors.text,
-                      fontSize: 18,
-                      fontWeight: FontWeight.w700,
-                    ),
-                  ),
-                  const SizedBox(height: 16),
-                  _buildInputField(
-                    label: 'Destination',
-                    controller: _destinationController,
-                    hintText: 'Enter a city or country',
-                    icon: Icons.place,
-                  ),
-                  const SizedBox(height: 14),
-                  _buildInputField(
-                    label: 'Start date',
-                    controller: _startDateController,
-                    hintText: 'MM/DD/YYYY',
-                    icon: Icons.calendar_today,
-                  ),
-                  const SizedBox(height: 14),
-                  _buildInputField(
-                    label: 'End date',
-                    controller: _endDateController,
-                    hintText: 'MM/DD/YYYY',
-                    icon: Icons.calendar_month,
-                  ),
-                  const SizedBox(height: 14),
-                  _buildInputField(
-                    label: 'Notes',
-                    controller: _notesController,
-                    hintText: 'Add any travel preferences',
-                    icon: Icons.notes,
-                    maxLines: 3,
-                  ),
-                ],
-              ),
+            TLTextField(hint: 'e.g. Europe Dream Tour', label: 'Trip Name', controller: nameCtrl, icon: Icons.title),
+            const SizedBox(height: 16),
+            TLTextField(hint: 'Describe your adventure...', label: 'Description', controller: descCtrl, icon: Icons.notes),
+            const SizedBox(height: 16),
+            // Date pickers
+            Row(children: [
+              Expanded(child: _datePicker('Start Date', startDate, (d) => setState(() => startDate = d))),
+              const SizedBox(width: 12),
+              Expanded(child: _datePicker('End Date', endDate, (d) => setState(() => endDate = d))),
+            ]),
+            const SizedBox(height: 20),
+            // Budget slider
+            Row(children: [
+              const Text('Budget', style: TextStyle(fontWeight: FontWeight.w600, fontSize: 13, color: AppColors.textLight)),
+              const Spacer(),
+              Text('\$${budget.toInt()}', style: const TextStyle(fontWeight: FontWeight.w800, color: AppColors.accent, fontSize: 16)),
+            ]),
+            Slider(
+              value: budget,
+              min: 500,
+              max: 10000,
+              divisions: 19,
+              activeColor: AppColors.accent,
+              onChanged: (v) => setState(() => budget = v),
             ),
-            const SizedBox(height: 26),
-            Row(
-              children: [
-                _buildPill('Solo'),
-                const SizedBox(width: 10),
-                _buildPill('Couple'),
-                const SizedBox(width: 10),
-                _buildPill('Family'),
-              ],
-            ),
-            const SizedBox(height: 26),
-            Text(
-              'Suggestions',
-              style: TextStyle(
-                color: AppColors.text,
-                fontSize: 18,
-                fontWeight: FontWeight.w700,
-              ),
-            ),
-            const SizedBox(height: 14),
-            GridView.builder(
-              shrinkWrap: true,
-              physics: const NeverScrollableScrollPhysics(),
-              itemCount: _suggestions.length,
-              gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
-                crossAxisCount: 2,
-                crossAxisSpacing: 14,
-                mainAxisSpacing: 14,
-                childAspectRatio: 1.05,
-              ),
-              itemBuilder: (context, index) {
-                final item = _suggestions[index];
-                return Container(
-                  constraints: const BoxConstraints(minHeight: 120, minWidth: 150, maxHeight: 220, maxWidth: 260),
-                  decoration: BoxDecoration(
-                    color: AppColors.card,
-                    borderRadius: BorderRadius.circular(18),
-                    border: Border.all(color: AppColors.border),
-                  ),
-                  padding: const EdgeInsets.all(16),
-                  child: Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      Text(
-                        item['icon']!,
-                        style: const TextStyle(fontSize: 28),
-                      ),
-                      const Spacer(),
-                      Text(
-                        item['title']!,
-                        style: TextStyle(
-                          color: AppColors.text,
-                          fontSize: 16,
-                          fontWeight: FontWeight.w700,
-                        ),
-                      ),
-                      const SizedBox(height: 4),
-                      Text(
-                        item['subtitle']!,
-                        style: TextStyle(
-                          color: AppColors.textLight,
-                          fontSize: 13,
-                        ),
-                      ),
-                    ],
-                  ),
-                );
-              },
-            ),
-            const SizedBox(height: 28),
-            Align(
-              alignment: Alignment.centerRight,
-              child: ElevatedButton(
-                onPressed: () {},
-                style: ElevatedButton.styleFrom(
-                  backgroundColor: AppColors.accent,
-                  foregroundColor: AppColors.card,
-                  shape: RoundedRectangleBorder(
-                    borderRadius: BorderRadius.circular(18),
-                  ),
-                  padding: const EdgeInsets.symmetric(
-                    horizontal: 28,
-                    vertical: 16,
-                  ),
-                ),
-                child: const Text('Save itinerary'),
+            const SizedBox(height: 24),
+            SizedBox(
+              width: double.infinity,
+              child: TLButton(
+                label: 'Create Trip',
+                onTap: () {
+                  if (nameCtrl.text.isEmpty) return;
+                  appState.addTrip(Trip(
+                    id: DateTime.now().millisecondsSinceEpoch.toString(),
+                    name: nameCtrl.text,
+                    description: descCtrl.text,
+                    coverEmoji: selectedEmoji,
+                    startDate: startDate,
+                    endDate: endDate,
+                    stops: [],
+                    budget: budget,
+                  ));
+                  Navigator.pop(context);
+                },
               ),
             ),
           ],
         ),
       ),
-      bottomNavigationBar: Container(
+    );
+  }
+
+  Widget _datePicker(String label, DateTime date, Function(DateTime) onChanged) {
+    return GestureDetector(
+      onTap: () async {
+        final d = await showDatePicker(context: context, initialDate: date, firstDate: DateTime.now(), lastDate: DateTime(2030));
+        if (d != null) onChanged(d);
+      },
+      child: Container(
+        padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 14),
         decoration: BoxDecoration(
-          color: Colors.white,
-          boxShadow: [BoxShadow(color: AppColors.primary.withOpacity(0.08), blurRadius: 20, offset: const Offset(0, -4))],
-        ),
-        child: NavigationBar(
-          selectedIndex: 1,
-          onDestinationSelected: (i) {
-            if (i == 0) Navigator.pushNamed(context, '/home');
-            else if (i == 2) Navigator.pushNamed(context, '/packing_list');
-            else if (i == 3) Navigator.pushNamed(context, '/profile');
-            // Add navigation for other indices if needed
-          },
-          backgroundColor: Colors.white,
-          elevation: 0,
-          destinations: const [
-            NavigationDestination(icon: Icon(Icons.home_outlined), selectedIcon: Icon(Icons.home), label: 'Home'),
-            NavigationDestination(icon: Icon(Icons.luggage_outlined), selectedIcon: Icon(Icons.luggage), label: 'My Trips'),
-            NavigationDestination(icon: Icon(Icons.checklist_outlined), selectedIcon: Icon(Icons.checklist), label: 'Packing'),
-            NavigationDestination(icon: Icon(Icons.person_outline), selectedIcon: Icon(Icons.person), label: 'Profile'),
-          ],
-        ),
-      ),
-    );
-  }
-
-  Widget _buildInputField({
-    required String label,
-    required TextEditingController controller,
-    required String hintText,
-    required IconData icon,
-    int maxLines = 1,
-  }) {
-    final screenWidth = MediaQuery.of(context).size.width;
-    final isPhone = screenWidth < 600;
-
-    return Column(
-      crossAxisAlignment: CrossAxisAlignment.start,
-      children: [
-        Text(
-          label,
-          style: TextStyle(
-            color: AppColors.text,
-            fontSize: isPhone ? 13.0 : 14.0,
-            fontWeight: FontWeight.w600,
-          ),
-        ),
-        const SizedBox(height: 8),
-        TextField(
-          controller: controller,
-          maxLines: maxLines,
-          decoration: InputDecoration(
-            prefixIcon: Icon(icon, color: AppColors.textLight, size: 20),
-            hintText: hintText,
-            hintStyle: TextStyle(color: AppColors.textLight, fontSize: isPhone ? 13.0 : 14.0),
-            filled: true,
-            fillColor: AppColors.bg,
-            border: OutlineInputBorder(
-              borderRadius: BorderRadius.circular(16),
-              borderSide: BorderSide(color: AppColors.border),
-            ),
-            enabledBorder: OutlineInputBorder(
-              borderRadius: BorderRadius.circular(16),
-              borderSide: BorderSide(color: AppColors.border),
-            ),
-            focusedBorder: OutlineInputBorder(
-              borderRadius: BorderRadius.circular(16),
-              borderSide: BorderSide(color: AppColors.accent),
-            ),
-            contentPadding: const EdgeInsets.symmetric(
-              vertical: 12,
-              horizontal: 12,
-            ),
-          ),
-          style: TextStyle(
-            color: AppColors.text,
-            fontSize: isPhone ? 13.0 : 14.0,
-          ),
-        ),
-      ],
-    );
-  }
-
-  Widget _buildPill(String label) {
-    final screenWidth = MediaQuery.of(context).size.width;
-    final isPhone = screenWidth < 600;
-
-    return Container(
-      padding: EdgeInsets.symmetric(horizontal: isPhone ? 12 : 16, vertical: 10),
-      decoration: BoxDecoration(
-        color: AppColors.card,
-        borderRadius: BorderRadius.circular(18),
-        border: Border.all(color: AppColors.border),
-      ),
-      child: Text(
-        label,
-        style: TextStyle(
-          color: AppColors.text,
-          fontSize: isPhone ? 13.0 : 14.0,
-          fontWeight: FontWeight.w600,
-        ),
+          color: Colors.white, borderRadius: BorderRadius.circular(12), border: Border.all(color: AppColors.border)),
+        child: Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
+          Text(label, style: const TextStyle(fontSize: 11, color: AppColors.textLight, fontWeight: FontWeight.w600)),
+          const SizedBox(height: 4),
+          Text('${date.day}/${date.month}/${date.year}', style: const TextStyle(fontWeight: FontWeight.w700, fontSize: 14)),
+        ]),
       ),
     );
   }
