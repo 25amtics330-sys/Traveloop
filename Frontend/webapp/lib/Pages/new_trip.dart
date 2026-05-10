@@ -1,51 +1,70 @@
-import 'package:flutter/material.dart';
-import '../../main.dart';
+﻿import 'package:flutter/material.dart';
+import '../main.dart';
 
-class NewTripPage extends StatefulWidget {
-  const NewTripPage({super.key});
+class CreateTripScreen extends StatefulWidget {
+  const CreateTripScreen({Key? key}) : super(key: key);
 
   @override
-  State<NewTripPage> createState() => _NewTripPageState();
+  State<CreateTripScreen> createState() => _CreateTripScreenState();
 }
 
-class _NewTripPageState extends State<NewTripPage> with SingleTickerProviderStateMixin {
-  final _destinationController = TextEditingController();
-  final _startDateController = TextEditingController();
-  final _endDateController = TextEditingController();
-  final _notesController = TextEditingController();
+class _CreateTripScreenState extends State<CreateTripScreen> {
+  final TextEditingController _destinationController = TextEditingController();
+  final TextEditingController _startDateController = TextEditingController();
+  final TextEditingController _endDateController = TextEditingController();
+  final TextEditingController _notesController = TextEditingController();
 
   final List<Map<String, String>> _suggestions = [
-    {'icon': '🪁', 'title': 'Adventure', 'subtitle': 'Hiking, rafting'},
-    {'icon': '🏝️', 'title': 'Beach', 'subtitle': 'Sun & surf'},
-    {'icon': '🏛️', 'title': 'Culture', 'subtitle': 'Museums, tours'},
-    {'icon': '🍽️', 'title': 'Food', 'subtitle': 'Local cuisine'}
+    {'title': 'Beach', 'subtitle': 'Relax by the sea', 'icon': '🏖'},
+    {'title': 'Mountain', 'subtitle': 'Hike the trails', 'icon': '⛰'},
+    {'title': 'City', 'subtitle': 'Explore local streets', 'icon': '🏙'},
+    {'title': 'Food', 'subtitle': 'Taste new flavors', 'icon': '🍲'},
+    {'title': 'Culture', 'subtitle': 'Visit museums', 'icon': '🏛'},
+    {'title': 'Adventure', 'subtitle': 'Try new sports', 'icon': '🚣'},
   ];
 
   @override
+  void dispose() {
+    _destinationController.dispose();
+    _startDateController.dispose();
+    _endDateController.dispose();
+    _notesController.dispose();
+    super.dispose();
+  }
+
+  @override
   Widget build(BuildContext context) {
-    final screenWidth = MediaQuery.of(context).size.width;
-    final isPhone = screenWidth < 600;
     return Scaffold(
       backgroundColor: AppColors.bg,
-      appBar: AppBar(
-        backgroundColor: AppColors.primary,
-        title: const Text('New Trip'),
-        leading: IconButton(
-          icon: const Icon(Icons.arrow_back),
-          onPressed: () => Navigator.pop(context),
-        ),
+      appBar:AppBar(
+        backgroundColor: const Color.fromARGB(255, 119, 119, 232),
+        elevation: 1,
+        title: const Text('Traveloop', style: TextStyle(color: AppColors.accentLight, fontSize: 26),  ),
+        actions: const [
+          SizedBox(width: 24),
+          Icon(Icons.notifications_none, color: AppColors.accentLight),
+          SizedBox(width: 8),
+          Padding(
+            padding: EdgeInsets.only(right: 16.0),
+            child: Icon(
+              Icons.account_circle,
+              color: AppColors.accentLight,
+              size: 28,
+            ),
+          ),
+        ],
       ),
       body: SingleChildScrollView(
-        padding: const EdgeInsets.all(24),
+        padding: const EdgeInsets.all(20),
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
             Text(
-              'Plan your next journey',
+              'Create your next adventure',
               style: TextStyle(
                 color: AppColors.text,
-                fontSize: isPhone ? 22 : 28,
-                fontWeight: FontWeight.w800,
+                fontSize: 26,
+                fontWeight: FontWeight.bold,
               ),
             ),
             const SizedBox(height: 8),
@@ -53,7 +72,7 @@ class _NewTripPageState extends State<NewTripPage> with SingleTickerProviderStat
               'Fill in the details and discover great places to visit.',
               style: TextStyle(
                 color: AppColors.textLight,
-                fontSize: isPhone ? 13 : 15,
+                fontSize: 15,
               ),
             ),
             const SizedBox(height: 24),
@@ -204,6 +223,29 @@ class _NewTripPageState extends State<NewTripPage> with SingleTickerProviderStat
           ],
         ),
       ),
+      bottomNavigationBar: Container(
+        decoration: BoxDecoration(
+          color: Colors.white,
+          boxShadow: [BoxShadow(color: AppColors.primary.withOpacity(0.08), blurRadius: 20, offset: const Offset(0, -4))],
+        ),
+        child: NavigationBar(
+          selectedIndex: 1,
+          onDestinationSelected: (i) {
+            if (i == 0) Navigator.pushNamed(context, '/home');
+            else if (i == 2) Navigator.pushNamed(context, '/packing_list');
+            else if (i == 3) Navigator.pushNamed(context, '/profile');
+            // Add navigation for other indices if needed
+          },
+          backgroundColor: Colors.white,
+          elevation: 0,
+          destinations: const [
+            NavigationDestination(icon: Icon(Icons.home_outlined), selectedIcon: Icon(Icons.home), label: 'Home'),
+            NavigationDestination(icon: Icon(Icons.luggage_outlined), selectedIcon: Icon(Icons.luggage), label: 'My Trips'),
+            NavigationDestination(icon: Icon(Icons.checklist_outlined), selectedIcon: Icon(Icons.checklist), label: 'Packing'),
+            NavigationDestination(icon: Icon(Icons.person_outline), selectedIcon: Icon(Icons.person), label: 'Profile'),
+          ],
+        ),
+      ),
     );
   }
 
@@ -216,6 +258,7 @@ class _NewTripPageState extends State<NewTripPage> with SingleTickerProviderStat
   }) {
     final screenWidth = MediaQuery.of(context).size.width;
     final isPhone = screenWidth < 600;
+
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
@@ -266,6 +309,7 @@ class _NewTripPageState extends State<NewTripPage> with SingleTickerProviderStat
   Widget _buildPill(String label) {
     final screenWidth = MediaQuery.of(context).size.width;
     final isPhone = screenWidth < 600;
+
     return Container(
       padding: EdgeInsets.symmetric(horizontal: isPhone ? 12 : 16, vertical: 10),
       decoration: BoxDecoration(

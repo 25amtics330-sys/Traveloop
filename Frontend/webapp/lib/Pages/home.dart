@@ -82,18 +82,12 @@ class _HomePageState extends State<HomePage> with TickerProviderStateMixin {
     return Scaffold(
       backgroundColor: AppColors.bg,
       appBar: AppBar(
-        backgroundColor: AppColors.primary,
+        backgroundColor: const Color.fromARGB(255, 119, 119, 232),
         elevation: 1,
-        title: const Text('Home'),
+        title: const Text('Traveloop', style: TextStyle(color: AppColors.accentLight, fontSize: 26),  ),
         actions: const [
-          Text(
-            'Traveloop',
-            style: TextStyle(
-              color: AppColors.accentLight,
-              fontSize: 24,
-              fontWeight: FontWeight.bold,
-            ),
-          ),
+          SizedBox(width: 24),
+          Icon(Icons.notifications_none, color: AppColors.accentLight),
           SizedBox(width: 8),
           Padding(
             padding: EdgeInsets.only(right: 16.0),
@@ -275,7 +269,9 @@ class _HomePageState extends State<HomePage> with TickerProviderStateMixin {
             Align(
               alignment: Alignment.centerRight,
               child: ElevatedButton(
-                onPressed: () {},
+                onPressed: () {
+                  Navigator.pushNamed(context, '/new_trip');
+                },
                 style: ElevatedButton.styleFrom(
                   backgroundColor: AppColors.accent,
                   foregroundColor: AppColors.card,
@@ -290,6 +286,28 @@ class _HomePageState extends State<HomePage> with TickerProviderStateMixin {
                 child: const Text('+ Plan a trip'),
               ),
             ),
+          ],
+        ),
+      ),
+      bottomNavigationBar: Container(
+        decoration: BoxDecoration(
+          color: Colors.white,
+          boxShadow: [BoxShadow(color: AppColors.primary.withOpacity(0.08), blurRadius: 20, offset: const Offset(0, -4))],
+        ),
+        child: NavigationBar(
+          selectedIndex: 0,
+          onDestinationSelected: (i) {
+            if (i == 1) Navigator.pushNamed(context, '/new_trip');
+            else if (i == 2) Navigator.pushNamed(context, '/packing_list');
+            // Add navigation for other indices if needed
+          },
+          backgroundColor: Colors.white,
+          elevation: 0,
+          destinations: const [
+            NavigationDestination(icon: Icon(Icons.home_outlined), selectedIcon: Icon(Icons.home), label: 'Home'),
+            NavigationDestination(icon: Icon(Icons.luggage_outlined), selectedIcon: Icon(Icons.luggage), label: 'My Trips'),
+            NavigationDestination(icon: Icon(Icons.checklist_outlined), selectedIcon: Icon(Icons.checklist), label: 'Packing'),
+            NavigationDestination(icon: Icon(Icons.person_outline), selectedIcon: Icon(Icons.person), label: 'Profile'),
           ],
         ),
       ),
