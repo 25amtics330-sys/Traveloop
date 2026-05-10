@@ -1,0 +1,684 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Traveloop | Professional Auth</title>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --primary: #1A1A2E;
+            --accent: #D98B2C;
+            --accent-hover: #c47a24;
+            --accent-light: #FFF0D9;
+            --teal: #2EC4B6;
+            --teal-light: #E0F7F5;
+            --bg: #F8F7F4;
+            --card: #FFFFFF;
+            --text: #1A1A2E;
+            --text-light: #7B7B9A;
+            --border: #EAEAF0;
+            --danger: #E05C5C;
+            --danger-light: #FDECEA;
+        }
+
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+            font-family: 'Inter', sans-serif;
+        }
+
+        body {
+            background-color: var(--primary);
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 20px;
+        }
+
+        /* Container */
+        .auth-container {
+            width: 100%;
+            max-width: 950px;
+            background: var(--card);
+            border-radius: 24px;
+            box-shadow: 0 20px 40px rgba(0, 0, 0, 0.3);
+            display: flex;
+            overflow: hidden;
+            min-height: 600px;
+        }
+
+        /* Left Brand Panel */
+        .brand-panel {
+            flex: 4;
+            background: linear-gradient(135deg, var(--accent) 0%, #B06A1C 100%);
+            padding: 40px;
+            color: white;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+        }
+
+        .brand-logo {
+            width: 60px;
+            height: 60px;
+            background: rgba(255, 255, 255, 0.2);
+            border-radius: 16px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 32px;
+            margin-bottom: 32px;
+        }
+
+        .brand-panel h1 {
+            font-size: 36px;
+            font-weight: 800;
+            letter-spacing: -0.5px;
+            margin-bottom: 12px;
+        }
+
+        .brand-panel p {
+            color: rgba(255, 255, 255, 0.85);
+            font-size: 16px;
+            line-height: 1.5;
+            margin-bottom: 40px;
+        }
+
+        .feature {
+            display: flex;
+            align-items: center;
+            margin-bottom: 16px;
+        }
+
+        .feature-icon {
+            width: 36px;
+            height: 36px;
+            background: rgba(255, 255, 255, 0.15);
+            border-radius: 10px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin-right: 12px;
+            font-size: 18px;
+        }
+
+        .feature-text {
+            color: rgba(255, 255, 255, 0.9);
+            font-weight: 500;
+            font-size: 14px;
+        }
+
+        /* Right Form Panel */
+        .form-panel {
+            flex: 5;
+            padding: 40px;
+            display: flex;
+            flex-direction: column;
+            position: relative;
+        }
+
+        /* Toggle Tabs */
+        .toggle-tabs {
+            background: var(--bg);
+            border-radius: 12px;
+            padding: 4px;
+            display: flex;
+            margin-bottom: 30px;
+        }
+
+        .tab {
+            flex: 1;
+            text-align: center;
+            padding: 12px 0;
+            border-radius: 10px;
+            font-size: 14px;
+            font-weight: 500;
+            color: var(--text-light);
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        .tab.active {
+            background: white;
+            color: var(--text);
+            font-weight: 700;
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.06);
+        }
+
+        /* Forms */
+        .form-header {
+            margin-bottom: 24px;
+        }
+
+        .form-header h2 {
+            font-size: 24px;
+            color: var(--text);
+            margin-bottom: 6px;
+        }
+
+        .form-header p {
+            font-size: 13px;
+            color: var(--text-light);
+        }
+
+        .auth-form {
+            display: none;
+            flex-direction: column;
+            animation: fadeIn 0.4s ease forwards;
+        }
+
+        .auth-form.active {
+            display: flex;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(10px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        .form-row {
+            display: flex;
+            gap: 12px;
+            margin-bottom: 14px;
+        }
+
+        .form-group {
+            flex: 1;
+            position: relative;
+            margin-bottom: 14px;
+        }
+        
+        .form-row .form-group {
+            margin-bottom: 0;
+        }
+
+        label {
+            display: block;
+            font-size: 13px;
+            font-weight: 500;
+            color: var(--text-light);
+            margin-bottom: 6px;
+        }
+
+        input {
+            width: 100%;
+            padding: 12px 16px;
+            background: var(--bg);
+            border: 1px solid var(--border);
+            border-radius: 12px;
+            font-size: 14px;
+            color: var(--text);
+            outline: none;
+            transition: border-color 0.2s;
+        }
+
+        input:focus {
+            border-color: var(--accent);
+        }
+
+        button.submit-btn {
+            background: var(--accent);
+            color: white;
+            border: none;
+            padding: 14px;
+            border-radius: 12px;
+            font-size: 15px;
+            font-weight: 600;
+            cursor: pointer;
+            margin-top: 8px;
+            transition: background 0.2s;
+        }
+
+        button.submit-btn:hover {
+            background: var(--accent-hover);
+        }
+        
+        button.submit-btn:disabled {
+            background: #e0b686;
+            cursor: not-allowed;
+        }
+
+        .switch-prompt {
+            text-align: center;
+            margin-top: 20px;
+            font-size: 13px;
+            color: var(--text-light);
+        }
+
+        .switch-prompt span {
+            color: var(--accent);
+            font-weight: 700;
+            cursor: pointer;
+        }
+
+        /* Status Messages */
+        .status-msg {
+            padding: 12px 14px;
+            border-radius: 10px;
+            font-size: 13px;
+            margin-bottom: 16px;
+            display: none;
+            align-items: center;
+        }
+
+        .status-msg.error {
+            background: var(--danger-light);
+            color: var(--danger);
+            display: flex;
+        }
+
+        .status-msg.success {
+            background: var(--teal-light);
+            color: var(--teal);
+            display: flex;
+        }
+        
+        /* Profile Section (Initially Hidden) */
+        .profile-panel {
+            display: none;
+            width: 100%;
+            max-width: 600px;
+            background: var(--card);
+            border-radius: 24px;
+            padding: 40px;
+            text-align: center;
+            animation: fadeIn 0.4s ease forwards;
+        }
+        
+        .profile-panel.active {
+            display: block;
+        }
+        
+        .profile-avatar {
+            width: 80px;
+            height: 80px;
+            background: var(--accent-light);
+            color: var(--accent);
+            border-radius: 50%;
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 32px;
+            font-weight: bold;
+            margin-bottom: 20px;
+        }
+        
+        .profile-panel h2 {
+            font-size: 28px;
+            color: var(--text);
+            margin-bottom: 8px;
+        }
+        
+        .profile-panel p {
+            color: var(--text-light);
+            margin-bottom: 30px;
+        }
+        
+        .profile-details {
+            background: var(--bg);
+            border-radius: 16px;
+            padding: 20px;
+            text-align: left;
+            margin-bottom: 30px;
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 16px;
+        }
+        
+        .detail-item label {
+            font-size: 12px;
+            margin-bottom: 4px;
+        }
+        
+        .detail-item div {
+            font-size: 14px;
+            color: var(--text);
+            font-weight: 500;
+        }
+        
+        .logout-btn {
+            background: transparent;
+            color: var(--danger);
+            border: 1px solid var(--danger);
+            padding: 10px 24px;
+            border-radius: 12px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.2s;
+        }
+        
+        .logout-btn:hover {
+            background: var(--danger-light);
+        }
+
+        /* Responsive */
+        @media (max-width: 768px) {
+            .auth-container {
+                flex-direction: column;
+                min-height: auto;
+            }
+            .brand-panel {
+                padding: 30px;
+            }
+            .brand-panel p, .feature {
+                display: none; /* Hide extra text on mobile */
+            }
+            .brand-logo { margin-bottom: 16px; }
+            .form-row { flex-direction: column; gap: 0; }
+        }
+    </style>
+</head>
+<body>
+
+    <!-- AUTHENTICATION CONTAINER -->
+    <div class="auth-container" id="auth-view">
+        <!-- Left Brand Panel -->
+        <div class="brand-panel">
+            <div class="brand-logo">🌍</div>
+            <h1>Traveloop</h1>
+            <p>Plan trips together.<br>Explore the world with friends.</p>
+            
+            <div class="feature">
+                <div class="feature-icon">👥</div>
+                <div class="feature-text">Collaborative planning</div>
+            </div>
+            <div class="feature">
+                <div class="feature-icon">🗺️</div>
+                <div class="feature-text">Smart itineraries</div>
+            </div>
+            <div class="feature">
+                <div class="feature-icon">💰</div>
+                <div class="feature-text">Split costs easily</div>
+            </div>
+        </div>
+
+        <!-- Right Form Panel -->
+        <div class="form-panel">
+            <!-- Tabs -->
+            <div class="toggle-tabs">
+                <div class="tab active" id="tab-register" onclick="switchTab('register')">Register</div>
+                <div class="tab" id="tab-login" onclick="switchTab('login')">Sign In</div>
+            </div>
+
+            <!-- Global Status Message -->
+            <div id="status-message" class="status-msg"></div>
+
+            <!-- REGISTER FORM -->
+            <form id="form-register" class="auth-form active" onsubmit="handleRegister(event)">
+                <div class="form-header">
+                    <h2>Create your account</h2>
+                    <p>Fill in your details to get started</p>
+                </div>
+
+                <div class="form-row">
+                    <div class="form-group">
+                        <label>First Name</label>
+                        <input type="text" id="reg-first" required>
+                    </div>
+                    <div class="form-group">
+                        <label>Last Name</label>
+                        <input type="text" id="reg-last" required>
+                    </div>
+                </div>
+
+                <div class="form-row">
+                    <div class="form-group">
+                        <label>Email</label>
+                        <input type="email" id="reg-email" required>
+                    </div>
+                    <div class="form-group">
+                        <label>Phone Number</label>
+                        <input type="tel" id="reg-phone">
+                    </div>
+                </div>
+
+                <div class="form-row">
+                    <div class="form-group">
+                        <label>City</label>
+                        <input type="text" id="reg-city">
+                    </div>
+                    <div class="form-group">
+                        <label>Country</label>
+                        <input type="text" id="reg-country">
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    <label>Username</label>
+                    <input type="text" id="reg-username" required>
+                </div>
+
+                <div class="form-group">
+                    <label>Password</label>
+                    <input type="password" id="reg-password" required>
+                </div>
+
+                <button type="submit" class="submit-btn" id="btn-register">Create Account</button>
+                
+                <div class="switch-prompt">
+                    Already have an account? <span onclick="switchTab('login')">Sign In</span>
+                </div>
+            </form>
+
+            <!-- LOGIN FORM -->
+            <form id="form-login" class="auth-form" onsubmit="handleLogin(event)">
+                <div class="form-header">
+                    <h2>Welcome back!</h2>
+                    <p>Enter your credentials to continue</p>
+                </div>
+
+                <div class="form-group">
+                    <label>Username</label>
+                    <input type="text" id="login-username" required>
+                </div>
+
+                <div class="form-group">
+                    <label>Password</label>
+                    <input type="password" id="login-password" required>
+                </div>
+
+                <button type="submit" class="submit-btn" id="btn-login">Sign In</button>
+                
+                <div class="switch-prompt">
+                    Don't have an account? <span onclick="switchTab('register')">Register</span>
+                </div>
+            </form>
+        </div>
+    </div>
+    
+    <!-- PROFILE DASHBOARD (Shown after login) -->
+    <div class="profile-panel" id="profile-view">
+        <div class="profile-avatar" id="prof-initial">U</div>
+        <h2 id="prof-name">User Name</h2>
+        <p id="prof-username">@username</p>
+        
+        <div class="profile-details">
+            <div class="detail-item">
+                <label>Email</label>
+                <div id="prof-email">-</div>
+            </div>
+            <div class="detail-item">
+                <label>Phone</label>
+                <div id="prof-phone">-</div>
+            </div>
+            <div class="detail-item">
+                <label>Location</label>
+                <div id="prof-location">-</div>
+            </div>
+        </div>
+        
+        <button class="logout-btn" onclick="handleLogout()">Log Out</button>
+    </div>
+
+    <script>
+        const BASE_URL = 'http://localhost:5000/api/auth';
+        let jwtToken = localStorage.getItem('traveloop_token');
+        
+        // Check if already logged in on page load
+        window.onload = () => {
+            if (jwtToken) {
+                fetchProfile();
+            }
+        };
+
+        // --- UI Switching Logic ---
+        function switchTab(tab) {
+            // Update tabs
+            document.getElementById('tab-register').className = tab === 'register' ? 'tab active' : 'tab';
+            document.getElementById('tab-login').className = tab === 'login' ? 'tab active' : 'tab';
+            
+            // Update forms
+            document.getElementById('form-register').className = tab === 'register' ? 'auth-form active' : 'auth-form';
+            document.getElementById('form-login').className = tab === 'login' ? 'auth-form active' : 'auth-form';
+            
+            // Clear messages
+            hideMessage();
+        }
+        
+        function showView(view) {
+            document.getElementById('auth-view').style.display = view === 'auth' ? 'flex' : 'none';
+            document.getElementById('profile-view').classList.toggle('active', view === 'profile');
+        }
+
+        // --- Message Handling ---
+        function showMessage(msg, isSuccess) {
+            const el = document.getElementById('status-message');
+            el.textContent = msg;
+            el.className = 'status-msg ' + (isSuccess ? 'success' : 'error');
+        }
+
+        function hideMessage() {
+            document.getElementById('status-message').className = 'status-msg';
+        }
+
+        // --- API Calls ---
+        
+        async function handleRegister(e) {
+            e.preventDefault();
+            const btn = document.getElementById('btn-register');
+            btn.disabled = true;
+            btn.textContent = 'Creating...';
+            hideMessage();
+
+            try {
+                const res = await fetch(`${BASE_URL}/register`, {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({
+                        first_name: document.getElementById('reg-first').value,
+                        last_name: document.getElementById('reg-last').value,
+                        email: document.getElementById('reg-email').value,
+                        phone: document.getElementById('reg-phone').value,
+                        city: document.getElementById('reg-city').value,
+                        country: document.getElementById('reg-country').value,
+                        username: document.getElementById('reg-username').value,
+                        password: document.getElementById('reg-password').value,
+                    })
+                });
+                
+                const data = await res.json();
+                
+                if (data.success) {
+                    showMessage('Account created successfully! Switching to login...', true);
+                    // Pre-fill login username
+                    document.getElementById('login-username').value = document.getElementById('reg-username').value;
+                    document.getElementById('login-password').value = '';
+                    
+                    setTimeout(() => {
+                        switchTab('login');
+                    }, 1500);
+                } else {
+                    showMessage(data.message || 'Registration failed', false);
+                }
+            } catch (error) {
+                showMessage('Network error. Is the server running?', false);
+            } finally {
+                btn.disabled = false;
+                btn.textContent = 'Create Account';
+            }
+        }
+
+        async function handleLogin(e) {
+            e.preventDefault();
+            const btn = document.getElementById('btn-login');
+            btn.disabled = true;
+            btn.textContent = 'Signing in...';
+            hideMessage();
+
+            try {
+                const res = await fetch(`${BASE_URL}/login`, {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({
+                        username: document.getElementById('login-username').value,
+                        password: document.getElementById('login-password').value,
+                    })
+                });
+                
+                const data = await res.json();
+                
+                if (data.success) {
+                    jwtToken = data.token;
+                    localStorage.setItem('traveloop_token', jwtToken);
+                    showMessage('Login successful!', true);
+                    
+                    setTimeout(() => {
+                        fetchProfile();
+                    }, 500);
+                } else {
+                    showMessage(data.message || 'Login failed', false);
+                }
+            } catch (error) {
+                showMessage('Network error. Is the server running?', false);
+            } finally {
+                btn.disabled = false;
+                btn.textContent = 'Sign In';
+            }
+        }
+        
+        async function fetchProfile() {
+            if (!jwtToken) return;
+            
+            try {
+                const res = await fetch(`${BASE_URL}/profile`, {
+                    method: 'GET',
+                    headers: { 'Authorization': `Bearer ${jwtToken}` }
+                });
+                
+                const data = await res.json();
+                
+                if (data.success) {
+                    const user = data.user;
+                    // Populate Profile UI
+                    document.getElementById('prof-initial').textContent = user.first_name.charAt(0).toUpperCase();
+                    document.getElementById('prof-name').textContent = `${user.first_name} ${user.last_name}`;
+                    document.getElementById('prof-username').textContent = `@${user.username}`;
+                    document.getElementById('prof-email').textContent = user.email || '-';
+                    document.getElementById('prof-phone').textContent = user.phone || '-';
+                    
+                    const location = [user.city, user.country].filter(Boolean).join(', ');
+                    document.getElementById('prof-location').textContent = location || '-';
+                    
+                    showView('profile');
+                } else {
+                    // Token might be expired
+                    handleLogout();
+                }
+            } catch (error) {
+                console.error("Profile fetch error", error);
+            }
+        }
+        
+        function handleLogout() {
+            jwtToken = null;
+            localStorage.removeItem('traveloop_token');
+            document.getElementById('form-login').reset();
+            showView('auth');
+            switchTab('login');
+        }
+    </script>
+</body>
+</html>
