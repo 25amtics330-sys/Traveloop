@@ -93,7 +93,7 @@ class _TripDetailScreenState extends State<TripDetailScreen> with SingleTickerPr
                           const SizedBox(width: 8),
                           _tag('${trip.durationDays} days'),
                           const SizedBox(width: 8),
-                          _tag('\$${trip.budget.toInt()} budget'),
+                          _tag('₹${trip.budget.toInt()} budget'),
                         ]),
                       ],
                     )),
@@ -175,7 +175,7 @@ class _ItineraryTab extends StatelessWidget {
                 Text('${stop.countryName} · ${stop.nights} nights', style: const TextStyle(color: AppColors.textLight, fontSize: 13)),
               ]),
               const Spacer(),
-              Text('\$${stop.totalCost.toInt()}', style: const TextStyle(color: AppColors.accent, fontWeight: FontWeight.w700)),
+              Text('₹${stop.totalCost.toInt()}', style: const TextStyle(color: AppColors.accent, fontWeight: FontWeight.w700)),
             ]),
             const SizedBox(height: 10),
             ...stop.activities.map((act) => Container(
@@ -196,7 +196,7 @@ class _ItineraryTab extends StatelessWidget {
                     Text('${act.durationHours}h · ${act.category}', style: const TextStyle(color: AppColors.textLight, fontSize: 12)),
                   ],
                 )),
-                Text(act.cost == 0 ? 'Free' : '\$${act.cost.toInt()}',
+                Text(act.cost == 0 ? 'Free' : '₹${act.cost.toInt()}',
                   style: TextStyle(fontWeight: FontWeight.w700, color: act.cost == 0 ? AppColors.teal : AppColors.text, fontSize: 13)),
               ]),
             )),
@@ -253,9 +253,9 @@ class _BudgetTab extends StatelessWidget {
             decoration: BoxDecoration(color: AppColors.primary, borderRadius: BorderRadius.circular(20)),
             child: Column(children: [
               Row(mainAxisAlignment: MainAxisAlignment.spaceBetween, children: [
-                _stat('Budget', '\$${trip.budget.toInt()}', Colors.white),
-                _stat('Spent', '\$${spent.toInt()}', AppColors.accent),
-                _stat('Remaining', '\$${remaining.toInt()}', remaining >= 0 ? AppColors.teal : AppColors.danger),
+                _stat('Budget', '₹${trip.budget.toInt()}', Colors.white),
+                _stat('Spent', '₹${spent.toInt()}', AppColors.accent),
+                _stat('Remaining', '₹${remaining.toInt()}', remaining >= 0 ? AppColors.teal : AppColors.danger),
               ]),
               const SizedBox(height: 16),
               ClipRRect(
@@ -294,7 +294,7 @@ class _BudgetTab extends StatelessWidget {
                   ),
                 ])),
                 const SizedBox(width: 10),
-                Text('\$${e.value.toInt()}', style: const TextStyle(fontWeight: FontWeight.w700, fontSize: 14)),
+                Text('₹${e.value.toInt()}', style: const TextStyle(fontWeight: FontWeight.w700, fontSize: 14)),
               ]),
             );
           }),
@@ -311,7 +311,7 @@ class _BudgetTab extends StatelessWidget {
               Text(stop.emoji, style: const TextStyle(fontSize: 24)),
               const SizedBox(width: 12),
               Expanded(child: Text(stop.cityName, style: const TextStyle(fontWeight: FontWeight.w700))),
-              Text('\$${stop.totalCost.toInt()}', style: const TextStyle(fontWeight: FontWeight.w800, color: AppColors.accent)),
+              Text('₹${stop.totalCost.toInt()}', style: const TextStyle(fontWeight: FontWeight.w800, color: AppColors.accent)),
             ]),
           )),
         ],
@@ -746,7 +746,7 @@ class _ActivitySearchScreenState extends State<ActivitySearchScreen> {
                         Row(children: [
                           _chip2('${act.durationHours}h', Icons.access_time_outlined),
                           const SizedBox(width: 6),
-                          _chip2(act.cost == 0 ? 'Free' : '\$${act.cost.toInt()}', Icons.attach_money),
+                          _chip2(act.cost == 0 ? 'Free' : '₹${act.cost.toInt()}', Icons.currency_rupee),
                           const SizedBox(width: 6),
                           _chip2(act.category, Icons.label_outline),
                         ]),

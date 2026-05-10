@@ -1,4 +1,4 @@
-﻿import 'package:flutter/material.dart';
+import 'package:flutter/material.dart';
 import 'package:webapp/Pages/root.dart';
 import '../main.dart';
 
@@ -70,13 +70,13 @@ class _CreateTripScreenState extends State<CreateTripScreen> {
             Row(children: [
               const Text('Budget', style: TextStyle(fontWeight: FontWeight.w600, fontSize: 13, color: AppColors.textLight)),
               const Spacer(),
-              Text('\$${budget.toInt()}', style: const TextStyle(fontWeight: FontWeight.w800, color: AppColors.accent, fontSize: 16)),
+              Text('₹${budget.toInt()}', style: const TextStyle(fontWeight: FontWeight.w800, color: AppColors.accent, fontSize: 16)),
             ]),
             Slider(
               value: budget,
-              min: 500,
-              max: 10000,
-              divisions: 19,
+              min: 5000,
+              max: 500000,
+              divisions: 99,
               activeColor: AppColors.accent,
               onChanged: (v) => setState(() => budget = v),
             ),

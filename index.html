@@ -13,201 +13,182 @@
             --primary-dark: #B06A1C;
             --accent: #4F4FAF;
             --bg: #F8F7F4;
-            --card: #FFFFFF;
+            --card: rgba(255, 255, 255, 0.9);
             --text: #1A1A2E;
             --text-light: #7B7B9A;
-            --border: #EAEAF0;
+            --border: rgba(234, 234, 240, 0.8);
             --teal: #2EC4B6;
             --teal-light: #E0F7F5;
             --danger: #E05C5C;
             --danger-light: #FCEAEA;
             --shadow: 0 10px 30px rgba(0,0,0,0.05);
+            --glass: rgba(255, 255, 255, 0.7);
         }
 
-        * { margin: 0; padding: 0; box-sizing: border-box; font-family: 'Inter', sans-serif; }
+        * { margin: 0; padding: 0; box-sizing: border-box; font-family: 'Inter', sans-serif; scroll-behavior: smooth; }
         body { background: var(--bg); color: var(--text); overflow-x: hidden; min-height: 100vh; }
-        h1, h2, h3, h4 { font-family: 'Plus Jakarta Sans', sans-serif; letter-spacing: -0.02em; }
+        h1, h2, h3, h4 { font-family: 'Plus Jakarta Sans', sans-serif; letter-spacing: -0.03em; }
+
+        /* MESH GRADIENT BACKGROUND */
+        .mesh-bg {
+            position: fixed; top: 0; left: 0; right: 0; bottom: 0; z-index: -1;
+            background: radial-gradient(at 0% 0%, rgba(217, 139, 44, 0.1) 0px, transparent 50%),
+                        radial-gradient(at 100% 0%, rgba(79, 79, 175, 0.1) 0px, transparent 50%),
+                        radial-gradient(at 100% 100%, rgba(46, 196, 182, 0.1) 0px, transparent 50%),
+                        radial-gradient(at 0% 100%, rgba(224, 92, 92, 0.1) 0px, transparent 50%);
+        }
 
         /* AUTH PAGES */
         #auth-page { 
-            position: fixed; inset: 0; background: linear-gradient(135deg, #1A1A2E 0%, #2D2D44 100%); z-index: 2000; 
+            position: fixed; inset: 0; background: linear-gradient(135deg, #0F0F1B 0%, #1A1A2E 100%); z-index: 2000; 
             display: flex; align-items: center; justify-content: center; 
-            transition: 0.8s cubic-bezier(0.85, 0, 0.15, 1);
+            transition: 1s cubic-bezier(0.85, 0, 0.15, 1);
         }
         .auth-container { 
             background: var(--card); width: 90%; max-width: 420px; 
             border-radius: 32px; padding: 40px; 
-            box-shadow: 0 30px 60px rgba(0,0,0,0.4);
+            box-shadow: 0 30px 60px rgba(0,0,0,0.5);
+            backdrop-filter: blur(20px); border: 1px solid rgba(255,255,255,0.1);
             transform: scale(1); transition: 0.5s;
         }
         .auth-header { text-align: center; margin-bottom: 32px; }
         .auth-header .logo-icon { 
-            width: 60px; height: 60px; background: var(--primary-light); 
-            border-radius: 18px; display: flex; align-items: center; justify-content: center; 
-            margin: 0 auto 16px; color: var(--primary); font-size: 28px;
+            width: 70px; height: 70px; background: linear-gradient(135deg, var(--primary) 0%, var(--primary-dark) 100%); 
+            border-radius: 22px; display: flex; align-items: center; justify-content: center; 
+            margin: 0 auto 16px; color: white; font-size: 32px;
+            box-shadow: 0 10px 20px rgba(217, 139, 44, 0.3);
+            animation: float 3s ease-in-out infinite;
         }
-        .auth-header h1 { font-size: 32px; color: var(--text); margin-bottom: 8px; }
-        .auth-header p { color: var(--text-light); font-size: 14px; }
+        @keyframes float { 0%, 100% { transform: translateY(0); } 50% { transform: translateY(-10px); } }
 
-        .form-group { margin-bottom: 18px; }
-        .form-group label { display: block; font-size: 13px; font-weight: 600; color: var(--text-light); margin-bottom: 8px; }
         .form-control { 
-            width: 100%; padding: 14px 18px; border-radius: 14px; 
-            border: 1.5px solid var(--border); background: var(--bg);
+            width: 100%; padding: 16px 20px; border-radius: 16px; 
+            border: 1.5px solid var(--border); background: rgba(255,255,255,0.5);
             font-size: 14px; transition: 0.3s;
         }
-        .form-control:focus { outline: none; border-color: var(--primary); background: white; box-shadow: 0 0 0 4px rgba(217, 139, 44, 0.1); }
+        .form-control:focus { outline: none; border-color: var(--primary); background: white; box-shadow: 0 0 0 5px rgba(217, 139, 44, 0.1); }
 
         .btn { 
-            width: 100%; padding: 16px; border-radius: 16px; border: none; 
-            font-weight: 700; cursor: pointer; transition: 0.3s; 
-            font-size: 15px; display: flex; align-items: center; justify-content: center; gap: 10px;
+            width: 100%; padding: 18px; border-radius: 18px; border: none; 
+            font-weight: 800; cursor: pointer; transition: 0.4s; 
+            font-size: 15px; display: flex; align-items: center; justify-content: center; gap: 12px;
         }
-        .btn-primary { background: var(--primary); color: white; box-shadow: 0 8px 20px rgba(217, 139, 44, 0.3); }
-        .btn-primary:hover { background: var(--primary-dark); transform: translateY(-2px); box-shadow: 0 12px 24px rgba(217, 139, 44, 0.4); }
-        .btn-secondary { background: var(--bg); color: var(--text); border: 1.5px solid var(--border); }
-        .btn-danger { background: var(--danger-light); color: var(--danger); }
+        .btn-primary { background: var(--primary); color: white; box-shadow: 0 10px 25px rgba(217, 139, 44, 0.3); }
+        .btn-primary:hover { background: var(--primary-dark); transform: translateY(-3px) scale(1.02); box-shadow: 0 15px 30px rgba(217, 139, 44, 0.4); }
 
         /* DASHBOARD */
-        #dashboard { display: none; padding-bottom: 100px; opacity: 0; }
+        #dashboard { display: none; padding-bottom: 120px; opacity: 0; }
         .top-bar { 
-            background: white; padding: 20px; border-bottom: 1px solid var(--border);
+            background: rgba(255, 255, 255, 0.8); backdrop-filter: blur(20px);
+            padding: 24px; border-bottom: 1px solid var(--border);
             position: sticky; top: 0; z-index: 100; display: flex; justify-content: space-between; align-items: center;
         }
-        .top-bar h2 { font-size: 20px; color: var(--primary); }
-        .user-pill { 
-            display: flex; align-items: center; gap: 10px; padding: 6px 12px; 
-            background: var(--bg); border-radius: 100px; border: 1px solid var(--border);
-        }
+        .top-bar h2 { font-size: 24px; color: var(--text); background: linear-gradient(45deg, var(--primary), var(--accent)); -webkit-background-clip: text; -webkit-text-fill-color: transparent; font-weight: 800; }
 
-        .container { max-width: 800px; margin: 0 auto; padding: 24px; }
+        .container { max-width: 900px; margin: 0 auto; padding: 24px; }
         
         .section { display: none; }
-        .section.active { display: block; animation: slideUp 0.5s cubic-bezier(0.2, 0.8, 0.2, 1); }
+        .section.active { display: block; animation: slideUpFade 0.6s cubic-bezier(0.23, 1, 0.32, 1); }
 
-        @keyframes slideUp { from { opacity: 0; transform: translateY(20px); } to { opacity: 1; transform: translateY(0); } }
+        @keyframes slideUpFade { from { opacity: 0; transform: translateY(30px); } to { opacity: 1; transform: translateY(0); } }
 
-        /* COMPONENTS */
+        /* CARDS */
         .card { 
-            background: var(--card); border-radius: 24px; padding: 24px; 
-            border: 1px solid var(--border); margin-bottom: 20px;
-            box-shadow: var(--shadow); transition: 0.3s;
+            background: var(--card); border-radius: 28px; padding: 28px; 
+            border: 1px solid var(--border); margin-bottom: 24px;
+            backdrop-filter: blur(10px);
+            box-shadow: var(--shadow); transition: 0.4s cubic-bezier(0.4, 0, 0.2, 1);
         }
-        .card:hover { transform: translateY(-4px); box-shadow: 0 15px 40px rgba(0,0,0,0.08); }
+        .card:hover { transform: translateY(-6px); box-shadow: 0 20px 40px rgba(0,0,0,0.08); border-color: var(--primary); }
 
-        .stat-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 12px; margin-bottom: 24px; }
-        .stat-item { background: var(--bg); padding: 16px; border-radius: 20px; text-align: center; border: 1px solid var(--border); }
-        .stat-val { font-size: 20px; font-weight: 800; color: var(--primary); }
-        .stat-lab { font-size: 11px; color: var(--text-light); text-transform: uppercase; font-weight: 700; margin-top: 4px; }
+        /* COOL STUFF: DYNAMIC CHIPS */
+        .chip-scroll { display: flex; gap: 12px; overflow-x: auto; padding: 10px 0 25px; scrollbar-width: none; }
+        .chip { 
+            padding: 12px 24px; background: white; border-radius: 100px; font-size: 14px; 
+            font-weight: 700; border: 1.5px solid var(--border); cursor: pointer; white-space: nowrap;
+            transition: 0.3s;
+        }
+        .chip:hover { border-color: var(--primary); color: var(--primary); }
+        .chip.active { background: var(--primary); color: white; border-color: var(--primary); box-shadow: 0 8px 15px rgba(217, 139, 44, 0.2); }
+
+        /* COOL STUFF: CURRENCY CONVERTER MOCK */
+        .tool-card { background: var(--accent); color: white; padding: 20px; border-radius: 24px; display: flex; align-items: center; gap: 15px; margin-bottom: 24px; }
+        .tool-icon { background: rgba(255,255,255,0.2); padding: 12px; border-radius: 16px; font-size: 24px; }
 
         /* BOTTOM NAV */
         .nav-container {
-            position: fixed; bottom: 0; left: 0; right: 0; padding: 10px 20px 30px;
-            background: linear-gradient(to top, rgba(248, 247, 244, 1) 70%, rgba(248, 247, 244, 0));
+            position: fixed; bottom: 0; left: 0; right: 0; padding: 10px 24px 35px;
+            background: linear-gradient(to top, var(--bg) 60%, transparent);
             z-index: 1000;
         }
         .nav { 
             max-width: 500px; margin: 0 auto;
-            background: #1A1A2E; padding: 12px 10px; border-radius: 24px; 
-            box-shadow: 0 15px 40px rgba(0,0,0,0.2); 
+            background: rgba(26, 26, 46, 0.95); backdrop-filter: blur(15px);
+            padding: 14px 12px; border-radius: 30px; 
+            box-shadow: 0 20px 50px rgba(0,0,0,0.3); 
             display: flex; justify-content: space-around; align-items: center;
+            border: 1px solid rgba(255,255,255,0.1);
         }
         .nav-item { 
             display: flex; flex-direction: column; align-items: center; 
-            gap: 6px; cursor: pointer; color: #7B7B9A; transition: 0.3s; padding: 8px 16px;
-            border-radius: 16px;
+            gap: 6px; cursor: pointer; color: #7B7B9A; transition: 0.4s; padding: 10px 20px;
+            border-radius: 20px;
         }
-        .nav-item i { font-size: 20px; }
-        .nav-item span { font-size: 11px; font-weight: 700; }
-        .nav-item.active { color: white; background: var(--primary); }
+        .nav-item i { font-size: 22px; }
+        .nav-item span { font-size: 11px; font-weight: 800; text-transform: uppercase; letter-spacing: 0.5px; }
+        .nav-item.active { color: white; background: var(--primary); transform: translateY(-5px); box-shadow: 0 10px 20px rgba(217, 139, 44, 0.4); }
 
-        /* PACKING */
-        .packing-item { 
-            display: flex; align-items: center; gap: 16px; padding: 18px; 
-            background: white; border-radius: 18px; border: 1.5px solid var(--border); margin-bottom: 12px;
-            cursor: pointer; transition: 0.3s cubic-bezier(0.4, 0, 0.2, 1);
-        }
-        .packing-item:hover { border-color: var(--primary); }
-        .check-circle { 
-            width: 24px; height: 24px; border-radius: 50%; border: 2px solid var(--border);
-            display: flex; align-items: center; justify-content: center; font-size: 14px; color: white;
-            transition: 0.3s;
-        }
-        .packing-item.checked { background: var(--teal-light); border-color: var(--teal); }
-        .packing-item.checked .check-circle { background: var(--teal); border-color: var(--teal); }
-        .packing-item.checked span.label { text-decoration: line-through; color: var(--text-light); }
+        /* INR FORMATTING */
+        .inr::before { content: "₹"; margin-right: 2px; }
 
-        /* TRIP PLANNER */
-        .trip-input-group { background: var(--bg); border-radius: 16px; padding: 16px; margin-bottom: 16px; }
-        .trip-item { display: flex; gap: 12px; margin-bottom: 12px; }
-
-        /* ADMIN PANEL */
-        .admin-badge { 
-            background: #FCEAEA; color: var(--danger); padding: 4px 10px; border-radius: 8px; 
-            font-size: 11px; font-weight: 800; text-transform: uppercase;
-        }
-
-        #notification { 
-            position: fixed; top: 30px; left: 50%; transform: translateX(-50%); 
-            padding: 16px 32px; border-radius: 100px; color: white; font-weight: 700;
-            box-shadow: 0 10px 30px rgba(0,0,0,0.2); z-index: 3000;
-            display: none; transition: 0.3s;
-        }
+        /* PACKING ANIMATION */
+        .packing-item { transition: 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275); }
+        .packing-item:active { transform: scale(0.95); }
     </style>
 </head>
 <body>
 
-    <div id="notification"></div>
+    <div class="mesh-bg"></div>
+    <div id="notification" style="position: fixed; top: 30px; left: 50%; transform: translateX(-50%); padding: 16px 32px; border-radius: 100px; color: white; font-weight: 700; box-shadow: 0 10px 30px rgba(0,0,0,0.2); z-index: 3000; display: none;"></div>
 
     <!-- AUTH PAGE -->
     <div id="auth-page">
         <div class="auth-container">
             <div class="auth-header">
-                <div class="logo-icon">🌍</div>
+                <div class="logo-icon">🗺️</div>
                 <h1>Traveloop</h1>
-                <p id="auth-subtitle">Adventure awaits. Join the journey.</p>
+                <p id="auth-subtitle">AI-Crafted Journeys for Modern Explorers</p>
             </div>
 
             <div id="login-fields">
                 <div class="form-group">
-                    <label>Username</label>
-                    <input type="text" id="l-username" class="form-control" placeholder="Enter username">
+                    <input type="text" id="l-username" class="form-control" placeholder="Username">
                 </div>
                 <div class="form-group">
-                    <label>Password</label>
-                    <input type="password" id="l-password" class="form-control" placeholder="••••••••">
+                    <input type="password" id="l-password" class="form-control" placeholder="Password">
                 </div>
-                <button class="btn btn-primary" onclick="handleLogin()">Sign In</button>
+                <button class="btn btn-primary" onclick="handleLogin()">Sign In <i data-lucide="arrow-right"></i></button>
             </div>
 
             <div id="register-fields" style="display: none;">
                 <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 12px;">
-                    <div class="form-group">
-                        <label>First Name</label>
-                        <input type="text" id="r-fname" class="form-control" placeholder="John">
-                    </div>
-                    <div class="form-group">
-                        <label>Last Name</label>
-                        <input type="text" id="r-lname" class="form-control" placeholder="Doe">
-                    </div>
+                    <input type="text" id="r-fname" class="form-control" placeholder="First Name">
+                    <input type="text" id="r-lname" class="form-control" placeholder="Last Name">
+                </div>
+                <div class="form-group" style="margin-top: 12px;">
+                    <input type="text" id="r-username" class="form-control" placeholder="Username">
                 </div>
                 <div class="form-group">
-                    <label>Username</label>
-                    <input type="text" id="r-username" class="form-control" placeholder="johndoe">
+                    <input type="email" id="r-email" class="form-control" placeholder="Email">
                 </div>
                 <div class="form-group">
-                    <label>Email</label>
-                    <input type="email" id="r-email" class="form-control" placeholder="john@example.com">
+                    <input type="password" id="r-password" class="form-control" placeholder="Password">
                 </div>
-                <div class="form-group">
-                    <label>Password</label>
-                    <input type="password" id="r-password" class="form-control" placeholder="••••••••">
-                </div>
-                <button class="btn btn-primary" onclick="handleRegister()">Create Account</button>
+                <button class="btn btn-primary" onclick="handleRegister()">Create Passport <i data-lucide="sparkles"></i></button>
             </div>
 
             <div class="auth-footer" style="margin-top: 24px; text-align: center; font-size: 14px; color: var(--text-light);">
-                <p id="toggle-text">New here? <span onclick="toggleAuth()" style="color: var(--primary); font-weight: 700; cursor: pointer;">Create an account</span></p>
+                <p id="toggle-text">New Explorer? <span onclick="toggleAuth()" style="color: var(--primary); font-weight: 700; cursor: pointer;">Join now</span></p>
             </div>
         </div>
     </div>
@@ -217,44 +198,54 @@
         <div class="top-bar">
             <h2>Traveloop</h2>
             <div class="user-pill">
-                <span id="user-initial" style="background: var(--primary); color: white; width: 28px; height: 28px; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 12px; font-weight: 800;">T</span>
-                <span id="user-name-pill" style="font-size: 13px; font-weight: 600;">Traveler</span>
+                <span id="user-initial" style="background: var(--primary); color: white; width: 32px; height: 32px; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 14px; font-weight: 800; box-shadow: 0 4px 10px rgba(217, 139, 44, 0.3);">T</span>
+                <span id="user-name-pill" style="font-size: 14px; font-weight: 700; padding: 0 8px;">Traveler</span>
             </div>
         </div>
 
         <div class="container">
             <!-- HOME SECTION -->
             <div id="sec-home" class="section active">
-                <div class="card" style="background: linear-gradient(135deg, var(--primary) 0%, var(--primary-dark) 100%); color: white; border: none;">
-                    <h2 style="font-size: 24px; margin-bottom: 8px;">Explore the World</h2>
-                    <p style="opacity: 0.9; font-size: 14px; margin-bottom: 24px;">AI-powered travel planning tailored for you.</p>
-                    <button class="btn btn-secondary" style="background: rgba(255,255,255,0.2); border: none; color: white; width: auto; padding: 12px 24px;" onclick="switchTab('plan', document.getElementById('nav-plan'))">Start Planning</button>
+                <div class="card" style="background: linear-gradient(135deg, var(--primary) 0%, var(--primary-dark) 100%); color: white; border: none; padding: 35px;">
+                    <h2 style="font-size: 28px; margin-bottom: 12px;">Where to Next?</h2>
+                    <p style="opacity: 0.9; font-size: 15px; margin-bottom: 30px; line-height: 1.6;">Our AI has detected premium rates for <b>Switzerland</b> this month. Ready to explore?</p>
+                    <button class="btn" style="background: white; color: var(--primary); width: auto; padding: 14px 28px;" onclick="switchTab('plan', document.getElementById('nav-plan'))">Plan Adventure <i data-lucide="arrow-right"></i></button>
                 </div>
 
-                <div class="stat-grid">
-                    <div class="stat-item">
-                        <div class="stat-val" id="stat-trips">2</div>
-                        <div class="stat-lab">Trips</div>
+                <!-- COOL STUFF: QUICK TOOLS -->
+                <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 15px; margin-bottom: 24px;">
+                    <div class="card" style="margin-bottom: 0; padding: 20px; display: flex; align-items: center; gap: 12px; background: var(--teal-light); border-color: var(--teal);">
+                        <div style="font-size: 24px;">🌡️</div>
+                        <div>
+                            <div style="font-weight: 800; font-size: 16px;">24°C</div>
+                            <div style="font-size: 11px; font-weight: 700; color: var(--teal);">Local Weather</div>
+                        </div>
                     </div>
-                    <div class="stat-item">
-                        <div class="stat-val" id="stat-cities">8</div>
-                        <div class="stat-lab">Cities</div>
-                    </div>
-                    <div class="stat-item">
-                        <div class="stat-val">12</div>
-                        <div class="stat-lab">Saved</div>
+                    <div class="card" style="margin-bottom: 0; padding: 20px; display: flex; align-items: center; gap: 12px; background: #E0E0FF; border-color: var(--accent);">
+                        <div style="font-size: 24px;">💱</div>
+                        <div>
+                            <div style="font-weight: 800; font-size: 16px;">₹83.4</div>
+                            <div style="font-size: 11px; font-weight: 700; color: var(--accent);">USD to INR</div>
+                        </div>
                     </div>
                 </div>
 
-                <h3>Upcoming Adventures</h3>
+                <div class="chip-scroll">
+                    <div class="chip active">Global</div>
+                    <div class="chip">🏜️ Desert Oasis</div>
+                    <div class="chip">🏔️ Alpine Peak</div>
+                    <div class="chip">🏙️ Urban Vibe</div>
+                    <div class="chip">🧘 Wellness</div>
+                </div>
+
+                <h3>Upcoming Itineraries</h3>
                 <div id="trips-list" style="margin-top: 16px;">
-                    <!-- Trips will be injected here -->
                     <div class="card">
-                        <div style="display: flex; gap: 16px; align-items: center;">
-                            <div style="font-size: 32px; background: var(--bg); padding: 12px; border-radius: 16px;">🇯🇵</div>
+                        <div style="display: flex; gap: 20px; align-items: center;">
+                            <div style="font-size: 36px; background: var(--bg); padding: 14px; border-radius: 20px; box-shadow: inset 0 2px 5px rgba(0,0,0,0.05);">🗼</div>
                             <div style="flex: 1;">
-                                <h4 style="font-size: 18px;">Tokyo & Kyoto</h4>
-                                <p style="color: var(--text-light); font-size: 13px;">Oct 12 - Oct 24 · 12 Days</p>
+                                <h4 style="font-size: 19px;">Parisian Nights</h4>
+                                <p style="color: var(--text-light); font-size: 13px; font-weight: 600;">₹<span class="inr-val">1,25,000</span> · 12 Days</p>
                             </div>
                             <div style="color: var(--primary);"><i data-lucide="chevron-right"></i></div>
                         </div>
@@ -264,37 +255,40 @@
 
             <!-- PLAN TRIP SECTION -->
             <div id="sec-plan" class="section">
-                <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 20px;">
-                    <h3>Plan New Trip</h3>
-                    <button class="btn btn-primary" style="width: auto; padding: 10px 20px;" onclick="saveTrip()">Create Trip</button>
+                <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 25px;">
+                    <h3>Architect Your Trip</h3>
+                    <button class="btn btn-primary" style="width: auto; padding: 12px 24px;" onclick="saveTrip()">Create Trip <i data-lucide="check"></i></button>
                 </div>
                 
                 <div class="card">
                     <div class="form-group">
-                        <label>Trip Name</label>
-                        <input type="text" id="trip-name" class="form-control" placeholder="Summer in Italy">
+                        <label>Adventure Name</label>
+                        <input type="text" id="trip-name" class="form-control" placeholder="e.g. Summer in Manali">
                     </div>
                     <div class="form-group">
-                        <label>Destination City</label>
-                        <input type="text" id="trip-dest" class="form-control" placeholder="Rome, Italy">
+                        <label>Primary Destination</label>
+                        <input type="text" id="trip-dest" class="form-control" placeholder="e.g. Manali, HP">
                     </div>
-                    <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 12px;">
+                    <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 15px;">
                         <div class="form-group">
-                            <label>Budget</label>
-                            <input type="number" id="trip-budget" class="form-control" placeholder="$2000">
+                            <label>Budget (INR)</label>
+                            <div style="position: relative;">
+                                <span style="position: absolute; left: 16px; top: 16px; font-weight: 700; color: var(--text-light);">₹</span>
+                                <input type="number" id="trip-budget" class="form-control" style="padding-left: 35px;" placeholder="50,000">
+                            </div>
                         </div>
                         <div class="form-group">
                             <label>Duration (Days)</label>
-                            <input type="number" id="trip-days" class="form-control" placeholder="7">
+                            <input type="number" id="trip-days" class="form-control" placeholder="5">
                         </div>
                     </div>
                     <div class="form-group">
-                        <label>Trip Category</label>
+                        <label>Vibe Category</label>
                         <select id="trip-cat" class="form-control">
-                            <option>Adventure</option>
-                            <option>Relaxation</option>
-                            <option>Culture</option>
-                            <option>Work</option>
+                            <option>🏔️ Adventure</option>
+                            <option>🏖️ Relaxation</option>
+                            <option>🏯 Culture</option>
+                            <option>💻 Work-ation</option>
                         </select>
                     </div>
                 </div>
@@ -302,94 +296,98 @@
 
             <!-- PACKING SECTION -->
             <div id="sec-packing" class="section">
-                <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 20px;">
-                    <h3>Packing Checklist</h3>
-                    <div style="font-size: 13px; color: var(--text-light); font-weight: 700;" id="packing-count">0/4 Packed</div>
+                <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 25px;">
+                    <h3>Smart Checklist</h3>
+                    <div style="background: var(--primary-light); color: var(--primary); padding: 6px 16px; border-radius: 100px; font-size: 13px; font-weight: 800;" id="packing-count">0/4 Packed</div>
                 </div>
                 
                 <div id="packing-list-container">
-                    <div class="packing-item" onclick="togglePack(this)">
-                        <div class="check-circle">✓</div>
-                        <span class="label">Passport & Travel Documents</span>
+                    <div class="packing-item card" style="padding: 20px; display: flex; align-items: center; gap: 16px; margin-bottom: 12px; cursor: pointer;" onclick="togglePack(this)">
+                        <div class="check-circle" style="width: 28px; height: 28px; border: 2px solid var(--border); border-radius: 50%; display: flex; align-items: center; justify-content: center; color: white;">✓</div>
+                        <span class="label" style="font-weight: 600; font-size: 15px;">Passport & Travel Visa</span>
                     </div>
-                    <div class="packing-item" onclick="togglePack(this)">
-                        <div class="check-circle">✓</div>
-                        <span class="label">Portable Power Bank</span>
-                    </div>
-                    <div class="packing-item" onclick="togglePack(this)">
-                        <div class="check-circle">✓</div>
-                        <span class="label">Comfortable Walking Shoes</span>
-                    </div>
-                    <div class="packing-item" onclick="togglePack(this)">
-                        <div class="check-circle">✓</div>
-                        <span class="label">Universal Travel Adapter</span>
+                    <div class="packing-item card" style="padding: 20px; display: flex; align-items: center; gap: 16px; margin-bottom: 12px; cursor: pointer;" onclick="togglePack(this)">
+                        <div class="check-circle" style="width: 28px; height: 28px; border: 2px solid var(--border); border-radius: 50%; display: flex; align-items: center; justify-content: center; color: white;">✓</div>
+                        <span class="label" style="font-weight: 600; font-size: 15px;">Universal Travel Adapter</span>
                     </div>
                 </div>
 
-                <div class="card" style="margin-top: 20px; padding: 16px;">
+                <div class="card" style="margin-top: 30px; padding: 20px; border-style: dashed; border-width: 2px;">
                     <div style="display: flex; gap: 12px;">
-                        <input type="text" id="new-item-input" class="form-control" placeholder="Add custom item...">
-                        <button class="btn btn-primary" style="width: auto; padding: 0 20px;" onclick="addPackingItem()">Add</button>
+                        <input type="text" id="new-item-input" class="form-control" placeholder="Add custom gear...">
+                        <button class="btn btn-primary" style="width: auto; padding: 0 24px;" onclick="addPackingItem()"><i data-lucide="plus"></i></button>
                     </div>
                 </div>
             </div>
 
             <!-- PROFILE SECTION -->
             <div id="sec-profile" class="section">
-                <h3>Profile</h3>
-                <div class="card" style="margin-top: 20px; text-align: center; padding: 48px 24px;">
-                    <div style="position: relative; width: 120px; height: 120px; margin: 0 auto 20px;">
-                        <div style="width: 100%; height: 100%; background: var(--primary-light); border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 50px; border: 5px solid white; box-shadow: 0 10px 30px rgba(0,0,0,0.1);" id="profile-avatar">👤</div>
-                        <div style="position: absolute; bottom: 5px; right: 5px; background: var(--teal); color: white; width: 32px; height: 32px; border-radius: 50%; display: flex; align-items: center; justify-content: center; border: 3px solid white;"><i data-lucide="edit-3" style="width: 14px;"></i></div>
+                <h3>Explorer Profile</h3>
+                <div class="card" style="margin-top: 20px; text-align: center; padding: 50px 30px; position: relative; overflow: hidden;">
+                    <div style="position: absolute; top: -50px; right: -50px; width: 150px; height: 150px; background: var(--primary); opacity: 0.1; border-radius: 50%;"></div>
+                    
+                    <div style="position: relative; width: 130px; height: 130px; margin: 0 auto 25px;">
+                        <div style="width: 100%; height: 100%; background: white; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 55px; border: 6px solid var(--bg); box-shadow: 0 15px 40px rgba(0,0,0,0.1);" id="profile-avatar">👤</div>
+                        <div style="position: absolute; bottom: 8px; right: 8px; background: var(--teal); color: white; width: 36px; height: 36px; border-radius: 50%; display: flex; align-items: center; justify-content: center; border: 4px solid white; cursor: pointer;"><i data-lucide="camera" style="width: 16px;"></i></div>
                     </div>
-                    <h2 id="prof-name" style="font-size: 24px;">User Name</h2>
-                    <p id="prof-email" style="color: var(--text-light); margin-bottom: 8px;">user@example.com</p>
-                    <div class="admin-badge" id="admin-tag" style="display: none; margin: 0 auto 24px; width: fit-content;">Administrator</div>
+                    
+                    <h2 id="prof-name" style="font-size: 26px; color: var(--text);">Explorer Name</h2>
+                    <p id="prof-email" style="color: var(--text-light); margin-bottom: 30px; font-weight: 500;">explorer@traveloop.com</p>
+                    
+                    <div id="admin-tag" style="display: none; background: var(--danger-light); color: var(--danger); padding: 8px 16px; border-radius: 100px; font-size: 12px; font-weight: 800; text-transform: uppercase; margin: 0 auto 30px; width: fit-content; letter-spacing: 1px;">Administrator Access</div>
 
-                    <div style="display: flex; flex-direction: column; gap: 12px; margin-top: 32px;">
-                        <button class="btn btn-secondary" style="justify-content: flex-start;" onclick="switchTab('admin', document.getElementById('nav-admin'))"><i data-lucide="shield"></i> Admin Dashboard</button>
-                        <button class="btn btn-secondary" style="justify-content: flex-start;"><i data-lucide="settings"></i> Account Settings</button>
-                        <button class="btn btn-danger" style="justify-content: flex-start; margin-top: 12px;" onclick="logout()"><i data-lucide="log-out"></i> Sign Out</button>
+                    <div style="display: grid; grid-template-columns: 1fr; gap: 12px; text-align: left;">
+                        <div class="card" style="margin-bottom: 0; padding: 16px 20px; cursor: pointer; display: flex; align-items: center; gap: 15px;" onclick="switchTab('admin', document.getElementById('nav-admin'))">
+                            <div style="background: var(--bg); padding: 10px; border-radius: 12px; color: var(--primary);"><i data-lucide="shield"></i></div>
+                            <div style="flex: 1; font-weight: 700;">Admin Dashboard</div>
+                            <i data-lucide="chevron-right" style="color: var(--text-light); width: 18px;"></i>
+                        </div>
+                        <div class="card" style="margin-bottom: 0; padding: 16px 20px; cursor: pointer; display: flex; align-items: center; gap: 15px;">
+                            <div style="background: var(--bg); padding: 10px; border-radius: 12px; color: var(--accent);"><i data-lucide="settings"></i></div>
+                            <div style="flex: 1; font-weight: 700;">Travel Preferences</div>
+                            <i data-lucide="chevron-right" style="color: var(--text-light); width: 18px;"></i>
+                        </div>
+                        <button class="btn btn-danger" style="margin-top: 20px; padding: 16px;" onclick="logout()"><i data-lucide="log-out"></i> Log Out of Traveloop</button>
                     </div>
                 </div>
             </div>
 
             <!-- ADMIN SECTION -->
             <div id="sec-admin" class="section">
-                <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 20px;">
-                    <h3>Admin Control</h3>
-                    <div class="admin-badge">System Live</div>
+                <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 30px;">
+                    <h3>System Intelligence</h3>
+                    <div style="background: var(--teal-light); color: var(--teal); padding: 6px 16px; border-radius: 100px; font-size: 12px; font-weight: 800;">LIVE ENGINE</div>
                 </div>
 
-                <div class="stat-grid">
-                    <div class="stat-item" style="background: white;">
-                        <div class="stat-val" style="color: var(--teal);">1,284</div>
-                        <div class="stat-lab">Total Users</div>
+                <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 15px; margin-bottom: 25px;">
+                    <div class="card" style="margin-bottom: 0; text-align: center;">
+                        <div style="font-size: 28px; font-weight: 900; color: var(--primary);">1.2k</div>
+                        <div style="font-size: 11px; font-weight: 800; color: var(--text-light); margin-top: 5px;">ACTIVE USERS</div>
                     </div>
-                    <div class="stat-item" style="background: white;">
-                        <div class="stat-val" style="color: var(--accent);">4,730</div>
-                        <div class="stat-lab">Trips Made</div>
-                    </div>
-                    <div class="stat-item" style="background: white;">
-                        <div class="stat-val" style="color: var(--danger);">$12.4k</div>
-                        <div class="stat-lab">Revenue</div>
+                    <div class="card" style="margin-bottom: 0; text-align: center;">
+                        <div style="font-size: 28px; font-weight: 900; color: var(--accent);">₹8.4M</div>
+                        <div style="font-size: 11px; font-weight: 800; color: var(--text-light); margin-top: 5px;">TOTAL VOLUME</div>
                     </div>
                 </div>
 
                 <div class="card">
-                    <h4 style="margin-bottom: 16px;">Recent User Activity</h4>
-                    <div style="display: flex; flex-direction: column; gap: 12px;">
-                        <div style="display: flex; justify-content: space-between; font-size: 13px; padding-bottom: 10px; border-bottom: 1px solid var(--border);">
-                            <span><b>@mike_travels</b> created "Swiss Alps"</span>
-                            <span style="color: var(--text-light);">2m ago</span>
+                    <h4 style="margin-bottom: 20px;">Real-time Activity</h4>
+                    <div style="display: flex; flex-direction: column; gap: 16px;">
+                        <div style="display: flex; gap: 15px; align-items: flex-start;">
+                            <div style="width: 8px; height: 8px; background: var(--teal); border-radius: 50%; margin-top: 6px;"></div>
+                            <div style="flex: 1;">
+                                <div style="font-size: 14px; font-weight: 700;">New User: @rahul_explorer</div>
+                                <div style="font-size: 12px; color: var(--text-light);">Registration completed from Mumbai, IN</div>
+                            </div>
+                            <div style="font-size: 11px; color: var(--text-light); font-weight: 700;">NOW</div>
                         </div>
-                        <div style="display: flex; justify-content: space-between; font-size: 13px; padding-bottom: 10px; border-bottom: 1px solid var(--border);">
-                            <span><b>@sara_adventure</b> joined Traveloop</span>
-                            <span style="color: var(--text-light);">15m ago</span>
-                        </div>
-                        <div style="display: flex; justify-content: space-between; font-size: 13px;">
-                            <span><b>@admin</b> updated API keys</span>
-                            <span style="color: var(--text-light);">1h ago</span>
+                        <div style="display: flex; gap: 15px; align-items: flex-start;">
+                            <div style="width: 8px; height: 8px; background: var(--primary); border-radius: 50%; margin-top: 6px;"></div>
+                            <div style="flex: 1;">
+                                <div style="font-size: 14px; font-weight: 700;">Trip Created: "Himachal Trek"</div>
+                                <div style="font-size: 12px; color: var(--text-light);">Budget set to ₹45,000</div>
+                            </div>
+                            <div style="font-size: 11px; color: var(--text-light); font-weight: 700;">5M AGO</div>
                         </div>
                     </div>
                 </div>
@@ -404,20 +402,20 @@
                     <span>Home</span>
                 </div>
                 <div class="nav-item" id="nav-plan" onclick="switchTab('plan', this)">
-                    <i data-lucide="plus-circle"></i>
-                    <span>Plan</span>
+                    <i data-lucide="compass"></i>
+                    <span>Explore</span>
                 </div>
                 <div class="nav-item" onclick="switchTab('packing', this)">
-                    <i data-lucide="luggage"></i>
+                    <i data-lucide="briefcase"></i>
                     <span>Pack</span>
                 </div>
                 <div class="nav-item" id="nav-admin" style="display: none;" onclick="switchTab('admin', this)">
-                    <i data-lucide="shield"></i>
-                    <span>Admin</span>
+                    <i data-lucide="shield-check"></i>
+                    <span>Core</span>
                 </div>
                 <div class="nav-item" onclick="switchTab('profile', this)">
-                    <i data-lucide="user"></i>
-                    <span>Profile</span>
+                    <i data-lucide="user-circle"></i>
+                    <span>Me</span>
                 </div>
             </div>
         </div>
@@ -434,16 +432,19 @@
         function toggleAuth() {
             isLogin = !isLogin;
             const container = document.querySelector('.auth-container');
-            container.style.transform = 'scale(0.95)';
+            container.style.transform = 'scale(0.9) translateY(20px)';
+            container.style.opacity = '0';
             setTimeout(() => {
                 document.getElementById('login-fields').style.display = isLogin ? 'block' : 'none';
                 document.getElementById('register-fields').style.display = isLogin ? 'none' : 'block';
-                document.getElementById('auth-subtitle').innerText = isLogin ? 'Adventure awaits. Join the journey.' : 'Create your Traveloop passport.';
+                document.getElementById('auth-subtitle').innerText = isLogin ? 'AI-Crafted Journeys for Modern Explorers' : 'Create your Traveloop passport.';
                 document.getElementById('toggle-text').innerHTML = isLogin 
-                    ? 'New here? <span onclick="toggleAuth()" style="color: var(--primary); font-weight: 700; cursor: pointer;">Create an account</span>' 
+                    ? 'New Explorer? <span onclick="toggleAuth()" style="color: var(--primary); font-weight: 700; cursor: pointer;">Join now</span>' 
                     : 'Already joined? <span onclick="toggleAuth()" style="color: var(--primary); font-weight: 700; cursor: pointer;">Sign In</span>';
-                container.style.transform = 'scale(1)';
-            }, 250);
+                container.style.transform = 'scale(1) translateY(0)';
+                container.style.opacity = '1';
+                lucide.createIcons();
+            }, 300);
         }
 
         function notify(text, type = 'success') {
@@ -451,18 +452,17 @@
             el.innerText = text;
             el.style.background = type === 'success' ? 'var(--teal)' : 'var(--danger)';
             el.style.display = 'block';
-            el.style.opacity = '1';
+            el.style.animation = 'slideDown 0.4s cubic-bezier(0.18, 0.89, 0.32, 1.28)';
             setTimeout(() => {
-                el.style.opacity = '0';
-                setTimeout(() => { el.style.display = 'none'; }, 300);
+                el.style.animation = 'slideUp 0.4s forwards';
+                setTimeout(() => { el.style.display = 'none'; }, 400);
             }, 3000);
         }
 
         async function handleLogin() {
             const username = document.getElementById('l-username').value;
             const password = document.getElementById('l-password').value;
-
-            if (!username || !password) return notify('Fill all fields!', 'error');
+            if (!username || !password) return notify('Fill all credentials', 'error');
 
             try {
                 const res = await fetch(`${API_URL}/login`, {
@@ -472,14 +472,12 @@
                 });
                 const data = await res.json();
                 if (data.success) {
-                    notify('Success! Landing in Traveloop...');
+                    notify('Welcome back to the skies!');
                     enterApp(data.user);
                 } else {
                     notify(data.message, 'error');
                 }
-            } catch (e) {
-                notify('Server Offline', 'error');
-            }
+            } catch (e) { notify('Backend Offline', 'error'); }
         }
 
         async function handleRegister() {
@@ -489,7 +487,7 @@
             const email = document.getElementById('r-email').value;
             const password = document.getElementById('r-password').value;
 
-            if (!username || !password || !email) return notify('Check your entries', 'error');
+            if (!username || !password || !email) return notify('Check your passport details', 'error');
 
             try {
                 const res = await fetch(`${API_URL}/register`, {
@@ -499,55 +497,58 @@
                 });
                 const data = await res.json();
                 if (data.success) {
-                    notify('Passport Created! Welcome.');
+                    notify('Passport Issued! Sign in to travel.');
                     toggleAuth();
                 } else {
                     notify(data.message, 'error');
                 }
-            } catch (e) {
-                notify('Server Offline', 'error');
-            }
+            } catch (e) { notify('Backend Offline', 'error'); }
         }
 
         function enterApp(user) {
             currentUser = user;
             const authPage = document.getElementById('auth-page');
-            authPage.style.transform = 'translateY(-100%)';
-            authPage.style.borderRadius = '0 0 100px 100px';
+            authPage.style.transform = 'translateY(-100%) skewY(-5deg)';
+            authPage.style.opacity = '0';
             
             document.getElementById('dashboard').style.display = 'block';
-            setTimeout(() => { document.getElementById('dashboard').style.opacity = '1'; }, 200);
+            setTimeout(() => { document.getElementById('dashboard').style.opacity = '1'; }, 300);
             
-            // Update UI with user data
             const name = user.first_name || user.username;
             document.getElementById('user-name-pill').innerText = name;
             document.getElementById('user-initial').innerText = name[0].toUpperCase();
             document.getElementById('prof-name').innerText = (user.first_name || '') + ' ' + (user.last_name || '');
             document.getElementById('prof-email').innerText = user.email;
             
-            // Emoji logic
-            const emojis = ['🌍', '✈️', '🏝️', '🏯', '🏔️', '🏙️'];
+            const emojis = ['🌏', '✈️', '🧭', '🛖', '🏔️', '🌆'];
             document.getElementById('profile-avatar').innerText = emojis[Math.floor(Math.random() * emojis.length)];
 
-            // Admin Logic
             if (user.role === 'admin' || user.username.toLowerCase().includes('admin')) {
                 document.getElementById('admin-tag').style.display = 'block';
                 document.getElementById('nav-admin').style.display = 'flex';
             }
+            lucide.createIcons();
         }
 
         function switchTab(tabId, el) {
             document.querySelectorAll('.section').forEach(s => s.classList.remove('active'));
             document.getElementById('sec-' + tabId).classList.add('active');
-            
             document.querySelectorAll('.nav-item').forEach(i => i.classList.remove('active'));
             el.classList.add('active');
-            
             window.scrollTo({ top: 0, behavior: 'smooth' });
+            lucide.createIcons();
         }
 
         function togglePack(el) {
             el.classList.toggle('checked');
+            const check = el.querySelector('.check-circle');
+            if (el.classList.contains('checked')) {
+                check.style.background = 'var(--teal)';
+                check.style.borderColor = 'var(--teal)';
+            } else {
+                check.style.background = 'transparent';
+                check.style.borderColor = 'var(--border)';
+            }
             updatePackingProgress();
         }
 
@@ -560,16 +561,13 @@
         function addPackingItem() {
             const input = document.getElementById('new-item-input');
             if (!input.value) return;
-            
-            const newItem = document.createElement('div');
-            newItem.className = 'packing-item';
-            newItem.onclick = function() { togglePack(this); };
-            newItem.innerHTML = `
-                <div class="check-circle">✓</div>
-                <span class="label">${input.value}</span>
-            `;
-            
-            document.getElementById('packing-list-container').appendChild(newItem);
+            const container = document.getElementById('packing-list-container');
+            const div = document.createElement('div');
+            div.className = 'packing-item card';
+            div.style = 'padding: 20px; display: flex; align-items: center; gap: 16px; margin-bottom: 12px; cursor: pointer;';
+            div.onclick = function() { togglePack(this); };
+            div.innerHTML = `<div class="check-circle" style="width: 28px; height: 28px; border: 2px solid var(--border); border-radius: 50%; display: flex; align-items: center; justify-content: center; color: white;">✓</div><span class="label" style="font-weight: 600; font-size: 15px;">${input.value}</span>`;
+            container.appendChild(div);
             input.value = '';
             updatePackingProgress();
         }
@@ -577,40 +575,24 @@
         function saveTrip() {
             const name = document.getElementById('trip-name').value;
             const dest = document.getElementById('trip-dest').value;
-            if (!name || !dest) return notify('Trip name and destination required!', 'error');
+            const budget = document.getElementById('trip-budget').value;
+            if (!name || !dest) return notify('Trip identity required', 'error');
             
-            notify('Trip "' + name + '" planned!');
-            
-            const tripCard = document.createElement('div');
-            tripCard.className = 'card';
-            tripCard.innerHTML = `
-                <div style="display: flex; gap: 16px; align-items: center;">
-                    <div style="font-size: 32px; background: var(--bg); padding: 12px; border-radius: 16px;">📍</div>
-                    <div style="flex: 1;">
-                        <h4 style="font-size: 18px;">${name}</h4>
-                        <p style="color: var(--text-light); font-size: 13px;">${dest} · Planned</p>
-                    </div>
-                    <div style="color: var(--primary);"><i data-lucide="chevron-right"></i></div>
-                </div>
-            `;
-            
-            document.getElementById('trips-list').prepend(tripCard);
+            const card = document.createElement('div');
+            card.className = 'card';
+            card.innerHTML = `<div style="display: flex; gap: 20px; align-items: center;"><div style="font-size: 36px; background: var(--bg); padding: 14px; border-radius: 20px;">📍</div><div style="flex: 1;"><h4 style="font-size: 19px;">${name}</h4><p style="color: var(--text-light); font-size: 13px; font-weight: 600;">₹${parseInt(budget).toLocaleString()} · ${dest}</p></div><div style="color: var(--primary);"><i data-lucide="chevron-right"></i></div></div>`;
+            document.getElementById('trips-list').prepend(card);
             lucide.createIcons();
-            
-            // Clear inputs
+            notify('Itinerary saved for ' + name);
             document.getElementById('trip-name').value = '';
             document.getElementById('trip-dest').value = '';
-            
-            // Switch back to home
+            document.getElementById('trip-budget').value = '';
             switchTab('home', document.querySelector('.nav-item:first-child'));
         }
 
-        function logout() {
-            location.reload();
-        }
+        function logout() { location.reload(); }
 
-        // Initial Progress
-        updatePackingProgress();
+        window.onload = () => { updatePackingProgress(); lucide.createIcons(); };
     </script>
 </body>
 </html>
