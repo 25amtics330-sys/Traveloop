@@ -25,13 +25,36 @@ CREATE TABLE users (
 );
 
 -- ============================================================
+-- SCREEN 3 & 8 & 12: Cities (dedicated table for City Search + Admin Popular Cities)
+-- ============================================================
+
+CREATE TABLE cities (
+    city_id      SERIAL PRIMARY KEY,
+    name         VARCHAR(150) NOT NULL,
+    country      VARCHAR(100) NOT NULL,
+    region       VARCHAR(100),                        -- e.g. "Western Europe"
+    description  TEXT,
+    cover_image  TEXT,
+    latitude     NUMERIC(9, 6),
+    longitude    NUMERIC(9, 6),
+    is_popular   BOOLEAN DEFAULT FALSE,               -- Admin "Popular Cities" tab
+    visit_count  INT     DEFAULT 0,                   -- tracks trending for Admin analytics
+    created_at   TIMESTAMP WITH TIME ZONE DEFAULT NOW()
+);
+
+CREATE INDEX idx_cities_country    ON cities(country);
+CREATE INDEX idx_cities_popular    ON cities(is_popular);
+CREATE INDEX idx_cities_name       ON cities(name);
+
+-- ============================================================
 -- SCREEN 3: Main Landing Page – Regions / Places
 -- ============================================================
 
 CREATE TABLE places (
     place_id    SERIAL PRIMARY KEY,
     name        VARCHAR(200)  NOT NULL,
-    city        VARCHAR(100),
+    city_id     INT REFERENCES cities(city_id) ON DELETE SET NULL,  -- FK to cities table
+    city        VARCHAR(100),                         -- denormalized fallback
     country     VARCHAR(100),
     region      VARCHAR(100),                         -- for "Top Regional Selections"
     description TEXT,
@@ -70,8 +93,37 @@ CREATE TABLE trip_members (
     UNIQUE (trip_id, user_id)
 );
 
--- Suggested places/activities for a trip (Screen 4 grid)
-CREATE TABLE trip_suggestions (
+-- Multi-city stops per trip (Screen 13: "Rome stop", invoice: "4 cities")
+CREATE TABLE trip_stops (
+    stop_id     SERIAL PRIMARY KEY,
+    trip_id     INT          NOT NULL REFERENCES trips(trip_id) ON DELETE CASCADE,
+    city_id     INT          REFERENCES cities(city_id) ON DELETE SET NULL,
+    stop_label  VARCHAR(100) NOT NULL,               -- e.g. "Rome stop", "Paris stop"
+    stop_order  INT          NOT NULL DEFAULT 1,
+    arrival_date  DATE,
+    departure_date DATE,
+    CONSTRAINT chk_stop_dates CHECK (departure_date IS NULL OR departure_date >= arrival_date)
+);
+
+CREATE INDEX idx_stops_trip ON trip_stops(trip_id);
+
+-- Trip invitations / join requests (Screen 4: "+428 Join" button)
+CREATE TABLE trip_invitations (
+    invitation_id SERIAL PRIMARY KEY,
+    trip_id       INT         NOT NULL REFERENCES trips(trip_id) ON DELETE CASCADE,
+    invited_by    INT         NOT NULL REFERENCES users(user_id) ON DELETE CASCADE,
+    invited_user  INT         REFERENCES users(user_id) ON DELETE CASCADE,
+    invite_email  VARCHAR(255),                       -- invite by email if user not registered yet
+    status        VARCHAR(20) NOT NULL DEFAULT 'pending'
+                      CHECK (status IN ('pending', 'accepted', 'declined')),
+    invited_at    TIMESTAMP WITH TIME ZONE DEFAULT NOW(),
+    responded_at  TIMESTAMP WITH TIME ZONE
+);
+
+CREATE INDEX idx_invitations_trip ON trip_invitations(trip_id);
+CREATE INDEX idx_invitations_user ON trip_invitations(invited_user);
+
+
     suggestion_id SERIAL PRIMARY KEY,
     trip_id       INT  NOT NULL REFERENCES trips(trip_id) ON DELETE CASCADE,
     place_id      INT  REFERENCES places(place_id) ON DELETE SET NULL,
@@ -170,12 +222,22 @@ CREATE TABLE trip_notes (
     trip_id    INT NOT NULL REFERENCES trips(trip_id) ON DELETE CASCADE,
     user_id    INT NOT NULL REFERENCES users(user_id) ON DELETE CASCADE,
     day_id     INT REFERENCES itinerary_days(day_id) ON DELETE SET NULL,  -- NULL = general note
+    stop_id    INT REFERENCES trip_stops(stop_id) ON DELETE SET NULL,     -- link to city stop
     stop_label VARCHAR(100),                          -- e.g. "Rome stop"
     title      VARCHAR(255) NOT NULL,
     content    TEXT,
-    attachment TEXT,                                  -- file URL
     created_at TIMESTAMP WITH TIME ZONE DEFAULT NOW(),
     updated_at TIMESTAMP WITH TIME ZONE DEFAULT NOW()
+);
+
+-- Multiple attachments per note (Screen 13: paperclip icon)
+CREATE TABLE note_attachments (
+    attachment_id SERIAL PRIMARY KEY,
+    note_id       INT         NOT NULL REFERENCES trip_notes(note_id) ON DELETE CASCADE,
+    file_url      TEXT        NOT NULL,
+    file_name     VARCHAR(255),
+    file_type     VARCHAR(50),                        -- 'image', 'pdf', 'doc', etc.
+    uploaded_at   TIMESTAMP WITH TIME ZONE DEFAULT NOW()
 );
 
 -- ============================================================
@@ -391,14 +453,3 @@ VALUES
     (1, 1, 1, 'Paris is breathtaking! The Eiffel Tower at sunset is something else.'),
     (2, 2, 5, 'Bali temples are incredibly peaceful. Highly recommend Tirta Empul!'),
     (3, 3, 2, 'The Colosseum exceeded all my expectations. Book tickets in advance!');
-    CREATE TABLE IF NOT EXISTS activities  (
-    snapshot_id    SERIAL PRIMARY KEY,
-    snapshot_date  DATE    NOT NULL DEFAULT CURRENT_DATE,
-    total_users    INT     DEFAULT 0,
-    total_trips    INT     DEFAULT 0,
-    active_trips   INT     DEFAULT 0,
-    top_city_id    INT     REFERENCES places(place_id) ON DELETE SET NULL,
-    top_activity_id INT    REFERENCES activities(activity_id) ON DELETE SET NULL,
-    notes          TEXT,
-    created_at     TIMESTAMP WITH TIME ZONE DEFAULT NOW()
-);
